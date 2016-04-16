@@ -1,0 +1,8 @@
+tests react to height before width : bug?
+in big container, labels get out of it : replace container padding with gauge calculus
+config should be relative to the size (x / 300) (or floated to the container's edges, letting space in between?
+
+add value display
+non linear scale
+add 'mirroring'
+add pointerSlowness for 'fill'

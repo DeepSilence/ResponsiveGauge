@@ -17,24 +17,12 @@
 </head>
 <body>
 
-	<h2>Pointer styles</h2>
-	<div>
-		<figure class="example">
-			<figcaption>Slow gauge</figcaption>
-			<span id="slow-pointer-gauge" class="gauge-container"> </span>
-		</figure>
-		<figure class="example">
-			<figcaption>Thin pointer gauge</figcaption>
-			<span id="thin-pointer-gauge" class="gauge-container"> </span>
-		</figure>
-		<figure class="example">
-			<figcaption>Filled pointer gauge</figcaption>
-			<span id="filled-pointer-gauge" class="gauge-container"> </span>
-		</figure>
-	</div>
-
 	<h2>Gauge color</h2>
 	<div>
+		<figure class="example">
+			<figcaption>Smooth gradient</figcaption>
+			<span id="gradient-gauge" class="gauge-container"> </span>
+		</figure>
 		<figure class="example">
 			<figcaption>Gradient on sectors</figcaption>
 			<span id="sector-gradient-gauge" class="gauge-container"> </span>
@@ -43,9 +31,47 @@
 			<figcaption>Custom sectors (with border)</figcaption>
 			<span id="custom-sectors-gauge" class="gauge-container"> </span>
 		</figure>
+	</div>
+
+	<h2>Pointer styles</h2>
+	<div>
 		<figure class="example">
-			<figcaption>With border</figcaption>
-			<span id="border-gauge" class="gauge-container"> </span>
+			<figcaption>Needle pointer</figcaption>
+			<span id="needle-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Filament pointer</figcaption>
+			<span id="filament-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Filled pointer</figcaption>
+			<span id="filler-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Slow pointer</figcaption>
+			<span id="slow-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
+
+	<h2>Gauge borders</h2>
+	<div>
+		<figure class="example">
+			<span id="without-border-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<span id="with-border-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
+
+	<h2>Labels and ticks</h2>
+	<div>
+		<figure class="example">
+			<figcaption>Custom ticks</figcaption>
+			<span id="custom-labels-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Without label</figcaption>
+			<span id="no-label-gauge" class="gauge-container"> </span>
 		</figure>
 	</div>
 
@@ -58,6 +84,10 @@
 		<figure class="example">
 			<figcaption>Inner labels gauge</figcaption>
 			<span id="inner-label-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Line gauge</figcaption>
+			<span id="no-gauge" class="gauge-container"> </span>
 		</figure>
 	</div>
 
@@ -86,13 +116,15 @@
 			class="gauge-container"> </span>
 	</div>
 
-	<h2>Full gauge</h2>
+	<h2>Full gauges</h2>
 	<div>
 		<span id="fgauge" class="gauge-container"></span>
 	</div>
 
 	<script>
-	ReactiveGauge.defaultConfig.pointerFillingColor = '#d50000';
+	ReactiveGauge.defaultConfig.gradient = 'smooth';
+	ReactiveGauge.defaultConfig.minAngle = 0;
+	ReactiveGauge.defaultConfig.maxAngle = 90;
 	
 	var gauges = [];
 		// quarters
@@ -155,77 +187,81 @@
 			maxAngle : 360,
 		}));
 
-		// no gradient
+		/* COLORS / GRADIENTS */
+		gauges.push(ReactiveGauge('#gradient-gauge', {
+			gradient : 'smooth'
+		}));
 		gauges.push(ReactiveGauge('#sector-gradient-gauge', {
-			minAngle : 0,
-			maxAngle : 90,
 			gradient : 'sectors'
 		}));
-
-		// with sectors
 		gauges.push(ReactiveGauge('#custom-sectors-gauge', {
-			minAngle : 0,
-			maxAngle : 90,
-			gradient : [ '#fff', '#fff', '#fff', '#ffebee', '#d50000' ],
+			gradient : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
 			border : true
 		}));
 
-		// with border
-		gauges.push(ReactiveGauge('#border-gauge', {
-			minAngle : 0,
-			maxAngle : 90,
+		/* BORDERS */
+		gauges.push(ReactiveGauge('#without-border-gauge', {
+			gradient : [ '#FFF']
+		}));
+		gauges.push(ReactiveGauge('#with-border-gauge', {
+			gradient : [ '#FFF'],
 			border : true
 		}));
 
-		// wide gauge
+		/* SIZE AND POSITION */
 		gauges.push(ReactiveGauge('#wide-gauge', {
 			ringInset : 0,
 			ringWidth : 40,
 			labelInset : 25,
-			pointerLengthInset : 45,
-
-			minAngle : 0,
-			maxAngle : 90
+			pointerType : 'filament'
 		}));
-
-		// inner label gauge
 		gauges.push(ReactiveGauge('#inner-label-gauge', {
 			ringInset : 0,
 			ringWidth : 20,
 			labelInset : 35,
-			pointerLengthInset : 45,
-
-			minAngle : 0,
-			maxAngle : 90
+			needleLengthInset : 45
 		}));
+		gauges.push(ReactiveGauge('#no-gauge', {
+			labelInset : 0,
+			ringInset : 15,
+			ringWidth : 1,
+			fillerWidth : 20,
+			fillerInset : 5,
+			pointerType : 'filler',
+			gradient : false
+		}));
+		
+		/* LABELS */
+		gauges.push(ReactiveGauge('#no-label-gauge', {
+			ringInset : 0,
+			labelNumber : 0,
+			gradient : 'sectors'
+		}));
+		gauges.push(ReactiveGauge('#custom-labels-gauge', {
+			labelNumber : 2,
+			gradient : 'sectors'
+		}));		
 
-		// slow pointer gauge
+		/* POINTERS */ 
+		gauges.push(ReactiveGauge('#needle-pointer-gauge', {
+			pointerType : 'needle'
+		}));
+		gauges.push(ReactiveGauge('#filament-pointer-gauge', {
+			pointerType : 'filament'
+		}));
+		gauges.push(ReactiveGauge('#filler-pointer-gauge', {
+			pointerType : 'filler',
+			gradient : false
+		}));
 		gauges.push(ReactiveGauge('#slow-pointer-gauge', {
-			pointerSlowness : 1000,
-
-			minAngle : 0,
-			maxAngle : 90
+			pointerSlowness : 1000
 		}));
 
-		// thin pointer gauge
-		gauges.push(ReactiveGauge('#thin-pointer-gauge', {
-			pointerType : 'thin',
-			minAngle : 0,
-			maxAngle : 90
-		}));
-
-		// filled pointer gauge
-		gauges.push(ReactiveGauge('#filled-pointer-gauge', {
-			pointerType : 'filled',
-			gradient : [ '#ddd'],
-			minAngle : 0,
-			maxAngle : 90
-		}));
 		
 		var refresh = ()=>gauges.forEach(g=>g.update(Math.random() * 10));
 		
 		refresh();
-		setInterval(refresh, 2000);
+		setInterval(refresh, 5000);
 	</script>
 
 </body>

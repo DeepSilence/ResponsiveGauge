@@ -21,11 +21,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
-// TODO :
-// add value display
-// non linear scale
-// add 'mirroring'
-// add pointerSlowness for 'fill'
 ReactiveGauge = function(container, configuration) {
 	var radius = ReactiveGauge.GAUGE_DIAMETER / 2;
 	var range = undefined;
@@ -34,9 +29,8 @@ ReactiveGauge = function(container, configuration) {
 	var svg = undefined;
 	var arcData = undefined;
 	var fullArcData = undefined;
-	var pointerArcData = undefined;
 	var scale = undefined;
-	var ticks = undefined;
+	var labelData = undefined;
 	var gradient = undefined;
 	var arcColorFn = undefined;
 	var pointer = undefined;
@@ -82,6 +76,9 @@ ReactiveGauge = function(container, configuration) {
 		}
 		for ( var prop in configuration) {
 			config[prop] = configuration[prop];
+			if (ReactiveGauge.defaultConfig[prop] == undefined) {
+				console.warn('Config property ' + prop + ' is unknwon');
+			}
 		}
 
 		range = config.maxAngle - config.minAngle;
@@ -90,31 +87,38 @@ ReactiveGauge = function(container, configuration) {
 		// a linear scale that maps domain values to a percent from 0..1
 		scale = d3.scale.linear().range([ 0, 1 ]).domain([ config.minValue, config.maxValue ]);
 
-		// ticks
-		ticks = scale.ticks(config.ticksNumber);
+		// label ticks
+		if (isNaN(config.labelNumber)) {
+			config.labelNumber = config.sectorsNumber;
+			labelData = scale.ticks(config.labelNumber);
+		} else {
+			labelData = scale.ticks(config.labelNumber - 1);
+		}
 
 		// coloring / gradient
 		if (config.gradient.constructor === Array) {
-			gradient = d3.range(config.ticksNumber).map(function() {
-				return 1 / config.ticksNumber
+			gradient = d3.range(config.sectorsNumber).map(function() {
+				return 1 / config.sectorsNumber
 			});
 			arcColorFn = function(i) {
 				/* fix me : ugly */
-				var index = Math.floor(i * config.ticksNumber);
+				var index = Math.floor(i * config.sectorsNumber);
 				index = Math.min(index, config.gradient.length - 1);
 				return config.gradient[index];
 			}
-		} else {
+		} else if (config.gradient) {
 			if (config.gradient === 'smooth') {
 				gradient = d3.range(ReactiveGauge.GRADIENT_ELT_NUMBER).map(function() {
 					return 1 / ReactiveGauge.GRADIENT_ELT_NUMBER
 				});
 			} else {
-				gradient = d3.range(config.ticksNumber).map(function() {
-					return 1 / config.ticksNumber
+				gradient = d3.range(config.sectorsNumber).map(function() {
+					return 1 / config.sectorsNumber
 				});
 			}
 			arcColorFn = d3.interpolateHsl(d3.rgb(config.startColor), d3.rgb(config.endColor));
+		} else {
+			gradient = [ 1 ];
 		}
 
 		// sectors of the arc
@@ -125,21 +129,27 @@ ReactiveGauge = function(container, configuration) {
 		}, function(d, i) {
 			var ratio = d * (i + 1);
 			return deg2rad(config.minAngle + (ratio * range));
-		});
+		}, config.ringWidth, config.ringInset);
 
 		// complete arc for the border drawing
 		if (config.border) {
-			fullArcData = getArcData(deg2rad(config.minAngle), deg2rad(config.maxAngle));
+			fullArcData = getArcData(deg2rad(config.minAngle), deg2rad(config.maxAngle), config.ringWidth, config.ringInset);
+		}
+
+		// Pointer
+		if (config.pointerType === 'filler' && isNaN(config.fillerWidth)) {
+			config.fillerWidth = config.ringWidth;
+			config.fillerInset = config.ringInset;
 		}
 	}
 
 	/**
 	 * Creates an arc data starting and ending at the specified angles
 	 */
-	function getArcData(startAngle, endAngle) {
+	function getArcData(startAngle, endAngle, width, inset) {
 		return d3.svg.arc()//
-		.innerRadius(radius - config.ringWidth - config.ringInset)//
-		.outerRadius(radius - config.ringInset)//
+		.innerRadius(radius - width - inset)//
+		.outerRadius(radius - inset)//
 		.startAngle(startAngle)//
 		.endAngle(endAngle);
 	}
@@ -203,6 +213,7 @@ ReactiveGauge = function(container, configuration) {
 
 		svg = d3.select(container)//
 		.classed('gauge-vertical', isVertical)//
+		.classed('gauge-360', (range === 360))//
 		.append('svg:svg')//
 		.attr('class', 'gauge')//
 		.attr('viewBox', '0 0 ' + width + ' ' + height)//
@@ -216,14 +227,15 @@ ReactiveGauge = function(container, configuration) {
 		.attr('transform', centerTx);
 
 		// gauge sectors
-		arcs.selectAll('path')//
-		.data(gradient)//
-		.enter()//
+		var sectors = arcs.selectAll('path')//
+		.data(gradient).enter()//
 		.append('path')//
-		.attr('fill', function(d, i) {
-			return arcColorFn(d * i);
-		})//
 		.attr('d', arcData);
+		if (config.gradient) {
+			sectors.attr('fill', function(d, i) {
+				return arcColorFn(d * i);
+			});
+		}
 
 		// gauge border
 		if (config.border) {
@@ -234,24 +246,22 @@ ReactiveGauge = function(container, configuration) {
 		}
 
 		// pointer
-		if (config.pointerType === 'filled') {
+		if (config.pointerType === 'filler') {
 			pointer = svg.append('g')//
 			.attr('class', 'pointer ' + config.pointerType)//
 			.attr('transform', centerTx)//
-			.append('path')//
-			.attr('fill', config.pointerFillingColor)//
-			.attr('d', pointerArcData);
+			.append('path');
 		} else {
 			if (config.pointerType === 'needle') {
-				var pointerHeadLength = Math.round(radius - config.pointerLengthInset);
-				var lineData = [ [ config.pointerWidth / 2, 0 ],//
-				[ 0, -pointerHeadLength ],//
-				[ -(config.pointerWidth / 2), 0 ],//
-				[ 0, config.pointerTailLength ],//
-				[ config.pointerWidth / 2, 0 ] ];
-			} else if (config.pointerType === 'thin') {
-				var lineData = [ [ 0, -(radius - config.ringInset - config.ringWidth - config.pointerLengthMargin) ],//
-				[ 0, -(radius - config.ringInset + config.pointerLengthMargin) ] ];
+				var needleHeadLength = Math.round(radius - config.needleLengthInset);
+				var lineData = [ [ config.needleWidth / 2, 0 ],//
+				[ 0, -needleHeadLength ],//
+				[ -(config.needleWidth / 2), 0 ],//
+				[ 0, config.needleTailLength ],//
+				[ config.needleWidth / 2, 0 ] ];
+			} else if (config.pointerType === 'filament') {
+				var lineData = [ [ 0, -(radius - config.ringInset - config.ringWidth - config.filamentLengthMargin) ],//
+				[ 0, -(radius - config.ringInset + config.filamentLengthMargin) ] ];
 			}
 			var pointerLine = d3.svg.line().interpolate('monotone');
 			pointer = svg//
@@ -268,7 +278,7 @@ ReactiveGauge = function(container, configuration) {
 		.attr('class', 'label')//
 		.attr('transform', centerTx);
 		lg.selectAll('text')//
-		.data(ticks)//
+		.data(labelData)//
 		.enter()//
 		.append('text')//
 		.attr('transform', function(d) {
@@ -289,8 +299,10 @@ ReactiveGauge = function(container, configuration) {
 	}
 
 	function renderPointer(newValue) {
-		if (config.pointerType === 'filled') {
-			var pointerArcData = getArcData(deg2rad(config.minAngle), deg2rad(getPointerRotation(newValue)));
+		if (config.pointerType === 'filler') {
+			var pointerArcData = getArcData(deg2rad(config.minAngle),//
+			deg2rad(getPointerRotation(newValue)),//
+			config.fillerWidth, config.fillerInset);
 			pointer.attr('d', pointerArcData);
 		} else {
 			pointer.//
@@ -350,41 +362,45 @@ ReactiveGauge.GRADIENT_ELT_NUMBER = 70;
 /* DEFAULT CONFIGURATION */
 ReactiveGauge.defaultConfig = {
 	/* ring size */
-	ringInset : 20,
+	ringInset : 10,
 	ringWidth : 20,
 	minAngle : -90,
 	maxAngle : 90,
 
-	/* pointer types: 'needle', 'thin', 'filled' */
+	/* pointer types: 'needle', 'filament', 'filler' */
 	pointerType : 'needle',
 	pointerSlowness : 200,
 	// for 'needle' pointers
-	pointerWidth : ReactiveGauge.DEFAULT_POINTER_WIDTH,
-	pointerTailLength : ReactiveGauge.DEFAULT_POINTER_WIDTH / 2,
-	// for 'thin'
-	pointerLengthMargin : 5,
-	// for 'needle' pointers
-	pointerLengthInset : 25,
-	// for 'filled' pointers
-	pointerFillingColor : '#d50000',
+	needleWidth : ReactiveGauge.DEFAULT_POINTER_WIDTH,
+	needleTailLength : ReactiveGauge.DEFAULT_POINTER_WIDTH / 2,
+	needleLengthInset : 15,
+	// for 'filament'
+	filamentLengthMargin : 5,
+	// for 'filler'
+	fillerWidth : NaN, /* by default, as wide as ring */
+	fillerInset : 0,
 
 	/* gauge scale */
 	minValue : 0,
 	maxValue : 10,
 
-	/* ticks and their labels */
-	ticksNumber : 5,
+	/* sectors */
+	sectorsNumber : 5,
+
+	/* labels */
+	labelNumber : NaN, /* by default, as many as sectors */
 	labelFormat : d3.format(',g'),
-	labelInset : 10,
+	labelInset : 0,
 
 	/* colors */
 	// 'smooth' for a smooth color gradient
 	// 'sectors' for coloring on each sector (gradient)
 	// [#111, #222, ...] for specifying the color of each sector
-	gradient : 'smooth',
+	// false (default) : uses the CSS color
+	gradient : false,
 	startColor : '#ffebee',
 	endColor : '#d50000',
 
-	/* color of the border */
+	/* enables the border */
 	border : false
 };

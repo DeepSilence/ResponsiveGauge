@@ -16,14 +16,24 @@
 /* POINTERS */
 .gauge-container .pointer.needle {
 	fill: #e85116;
-	stroke: #b64011;
+	stroke: none;
 }
-.gauge-container .pointer.thin {
-/* 	fill: #e85116; */
+
+.gauge-container .pointer.filament {
 	stroke: black;
 }
 
+.gauge-container .pointer.filler {
+	fill: #d50000;
+}
+
 /* GAUGE */
+.gauge-container .arc {
+	/* setting 'fill' on the path elements would override the
+	 gradients if any; setting 'fill' on parent allows a correct override */
+	fill: #ddd;
+}
+
 .gauge-container .arc-border {
 	stroke: black;
 	stroke-width: 0.3px;
@@ -37,8 +47,9 @@
 }
 /* shifts the first and last labels so that they are not out of the container*/
 .gauge-container .label text:first-child {
-    text-anchor: start;
+	text-anchor: start;
 }
+
 .gauge-container .label text:last-child {
-    text-anchor: end;
+	text-anchor: end;
 }
