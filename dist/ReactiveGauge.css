@@ -1,0 +1,44 @@
+/* LAYOUT */
+.gauge-container {
+	display: inline-block;
+	padding: 20px;
+	box-sizing: padding-box;
+	text-align: center;
+	overflow: hidden;
+}
+
+.gauge-container .gauge {
+	display: inline-block;
+	overflow: visible; /*avoid cutting texts */
+	height: 100%; /* to react to the parent height*/
+}
+
+/* POINTERS */
+.gauge-container .pointer.needle {
+	fill: #e85116;
+	stroke: #b64011;
+}
+.gauge-container .pointer.thin {
+/* 	fill: #e85116; */
+	stroke: black;
+}
+
+/* GAUGE */
+.gauge-container .arc-border {
+	stroke: black;
+	stroke-width: 0.3px;
+}
+
+/* LABELS */
+.gauge-container .label {
+	text-anchor: middle;
+	font-weight: bold;
+	fill: black;
+}
+/* shifts the first and last labels so that they are not out of the container*/
+.gauge-container .label text:first-child {
+    text-anchor: start;
+}
+.gauge-container .label text:last-child {
+    text-anchor: end;
+}

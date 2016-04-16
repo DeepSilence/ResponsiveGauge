@@ -1,0 +1,28 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+.example {
+	display: inline-block;
+	margin-right: 50px;
+}
+
+.gauge-container {
+	height: 200px;
+}
+
+.gauge-container.gauge-vertical {
+	height: 400px;
+}
+
+/* Vertical layout */
+.vertical-layout {
+	vertical-align: top;
+	display: inline-block;
+}
+
+.vertical-layout .gauge-container {
+	display: block;
+}

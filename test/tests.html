@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset=" UTF-8" />
+<!-- Tries to allow fullscreen in browser -->
+<meta name="viewport"
+	content="minimal-ui, width=device-width, initial-scale=1">
+
+<title>reactive-gauge demo page</title>
+
+<script src="d3.js"></script>
+<script src="../src/ReactiveGauge.js"></script>
+<link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
+
+<link href="css/tests.css" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+
+	<h2>Pointer styles</h2>
+	<div>
+		<figure class="example">
+			<figcaption>Slow gauge</figcaption>
+			<span id="slow-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Thin pointer gauge</figcaption>
+			<span id="thin-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Filled pointer gauge</figcaption>
+			<span id="filled-pointer-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
+
+	<h2>Gauge color</h2>
+	<div>
+		<figure class="example">
+			<figcaption>Gradient on sectors</figcaption>
+			<span id="sector-gradient-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Custom sectors (with border)</figcaption>
+			<span id="custom-sectors-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>With border</figcaption>
+			<span id="border-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
+
+	<h2>Elements size and position</h2>
+	<div>
+		<figure class="example">
+			<figcaption>Wide gauge</figcaption>
+			<span id="wide-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Inner labels gauge</figcaption>
+			<span id="inner-label-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
+
+	<h2>Quarters of gauges</h2>
+	<div>
+		<span id="qgauge1" class="gauge-container"></span> <span id="qgauge2"
+			class="gauge-container"> </span> <span id="qgauge3"
+			class="gauge-container"> </span> <span id="qgauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<h2>Halves of gauges</h2>
+	<div>
+		<span class="vertical-layout"> <span id="hgauge1"
+			class="gauge-container"></span> <span id="hgauge2"
+			class="gauge-container"></span>
+		</span> <span id="hgauge3" class="gauge-container"></span> <span id="hgauge4"
+			class="gauge-container"></span>
+	</div>
+
+	<h2>Three quarters gauges</h2>
+	<div>
+		<span id="tgauge1" class="gauge-container"></span> <span id="tgauge2"
+			class="gauge-container"> </span> <span id="tgauge3"
+			class="gauge-container"> </span> <span id="tgauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<h2>Full gauge</h2>
+	<div>
+		<span id="fgauge" class="gauge-container"></span>
+	</div>
+
+	<script>
+	ReactiveGauge.defaultConfig.pointerFillingColor = '#d50000';
+	
+	var gauges = [];
+		// quarters
+		gauges.push(ReactiveGauge('#qgauge1', {
+			minAngle : -90,
+			maxAngle : 0,
+		}));
+		gauges.push(ReactiveGauge('#qgauge2', {
+			minAngle : 0,
+			maxAngle : 90,
+		}));
+		gauges.push(ReactiveGauge('#qgauge3', {
+			minAngle : 90,
+			maxAngle : 180,
+		}));
+		gauges.push(ReactiveGauge('#qgauge4', {
+			minAngle : 180,
+			maxAngle : 270,
+		}));
+
+		// halves
+		gauges.push(ReactiveGauge('#hgauge1', {
+			minAngle : -90,
+			maxAngle : 90,
+		}));
+		gauges.push(ReactiveGauge('#hgauge2', {
+			minAngle : 90,
+			maxAngle : 270,
+		}));
+		gauges.push(ReactiveGauge('#hgauge3', {
+			minAngle : 180,
+			maxAngle : 360,
+		}));
+		gauges.push(ReactiveGauge('#hgauge4', {
+			minAngle : 0,
+			maxAngle : 180,
+		}));
+
+		// three quarters
+		gauges.push(ReactiveGauge('#tgauge1', {
+			minAngle : -90,
+			maxAngle : 180,
+		}));
+		gauges.push(ReactiveGauge('#tgauge2', {
+			minAngle : 0,
+			maxAngle : 270,
+		}));
+		gauges.push(ReactiveGauge('#tgauge3', {
+			minAngle : 90,
+			maxAngle : 360,
+		}));
+		gauges.push(ReactiveGauge('#tgauge4', {
+			minAngle : 180,
+			maxAngle : 450,
+		}));
+
+		//full
+		gauges.push(ReactiveGauge('#fgauge', {
+			minAngle : 0,
+			maxAngle : 360,
+		}));
+
+		// no gradient
+		gauges.push(ReactiveGauge('#sector-gradient-gauge', {
+			minAngle : 0,
+			maxAngle : 90,
+			gradient : 'sectors'
+		}));
+
+		// with sectors
+		gauges.push(ReactiveGauge('#custom-sectors-gauge', {
+			minAngle : 0,
+			maxAngle : 90,
+			gradient : [ '#fff', '#fff', '#fff', '#ffebee', '#d50000' ],
+			border : true
+		}));
+
+		// with border
+		gauges.push(ReactiveGauge('#border-gauge', {
+			minAngle : 0,
+			maxAngle : 90,
+			border : true
+		}));
+
+		// wide gauge
+		gauges.push(ReactiveGauge('#wide-gauge', {
+			ringInset : 0,
+			ringWidth : 40,
+			labelInset : 25,
+			pointerLengthInset : 45,
+
+			minAngle : 0,
+			maxAngle : 90
+		}));
+
+		// inner label gauge
+		gauges.push(ReactiveGauge('#inner-label-gauge', {
+			ringInset : 0,
+			ringWidth : 20,
+			labelInset : 35,
+			pointerLengthInset : 45,
+
+			minAngle : 0,
+			maxAngle : 90
+		}));
+
+		// slow pointer gauge
+		gauges.push(ReactiveGauge('#slow-pointer-gauge', {
+			pointerSlowness : 1000,
+
+			minAngle : 0,
+			maxAngle : 90
+		}));
+
+		// thin pointer gauge
+		gauges.push(ReactiveGauge('#thin-pointer-gauge', {
+			pointerType : 'thin',
+			minAngle : 0,
+			maxAngle : 90
+		}));
+
+		// filled pointer gauge
+		gauges.push(ReactiveGauge('#filled-pointer-gauge', {
+			pointerType : 'filled',
+			gradient : [ '#ddd'],
+			minAngle : 0,
+			maxAngle : 90
+		}));
+		
+		var refresh = ()=>gauges.forEach(g=>g.update(Math.random() * 10));
+		
+		refresh();
+		setInterval(refresh, 2000);
+	</script>
+
+</body>
+</html>
