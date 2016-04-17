@@ -1,7 +1,6 @@
 /* LAYOUT */
 .gauge-container {
 	display: inline-block;
-	padding: 20px;
 	box-sizing: padding-box;
 	text-align: center;
 	overflow: hidden;
@@ -9,6 +8,7 @@
 
 .gauge-container .gauge {
 	display: inline-block;
+    font-size: 4px;
 	overflow: visible; /*avoid cutting texts */
 	height: 100%; /* to react to the parent height*/
 	width: 100%; /* to react to the parent width*/
@@ -16,8 +16,8 @@
 
 /* POINTERS */
 .gauge-needle {
-	fill: #e85116;
-	stroke: none;
+/* 	fill: #e85116; */
+	stroke: #cf4814;
 }
 
 .gauge-filament {

@@ -177,51 +177,57 @@ ReactiveGauge = function(container, configuration) {
 
 	/**
 	 * Note : calculates ideal size of the gauge depending its min&max angles
-	 * along with the required translations to draw it. To ehance : grows size
-	 * by quarters of circle, and assumes minAngle < maxAngle
+	 * along with the required translations to draw it. FIXME : naïve algo that
+	 * grows size by quarters of circle, and assumes minAngle < maxAngle
 	 */
 	function computeLayout() {
-		var padding = 0;// ReactiveGauge.GAUGE_DIAMETER / 20;// manage space
-		// for long labels
+		// manage space for long labels
+		var padding = ReactiveGauge.PADDING;
+		var baseSize = radius + padding * 2;
 
 		// Actual size depends on the min&max angles
 		var angle = Math.abs(range);
 
 		// size
 		if (angle <= 90) {
-			width = radius;
-			height = radius;
+			width = baseSize;
+			height = baseSize;
 		} else if (angle > 90 && angle <= 180) {
 			isRectangular = true;
 			// handles vertical display
 			if (config.minAngle % 180 === 0) {
 				isVertical = true;
-				width = radius + padding;
-				height = radius * 2;
+				width = baseSize;
+				height = baseSize + radius;
 			} else {
-				width = radius * 2;
-				height = radius + padding;
+				width = baseSize + radius;
+				height = baseSize;
 			}
 		}
 		if (angle > 180) {
 			isWide = true;
-			width = radius * 2;
-			height = radius * 2;
+			width = baseSize * 2;
+			height = baseSize * 2;
 		}
 
 		// TRANSLATION
-		// simple case : gauge is centered
-		tx = 150;
-		ty = 150;
+		baseSize = radius + padding;
+		ty = baseSize;
+		tx = baseSize;
+		// 3/4 or full gauges : gauge is centered
+		if (isWide) {
+			tx = width / 2;
+			ty = height / 2;
+		}
 		// complex case : only a quarter or a half of circle
 		if (angle <= 90 || angle === 180) {
 			// 'left' space is not used
 			if (config.minAngle == 0 || config.maxAngle == 180) {
-				tx = 0;
+				tx = padding;
 			}
 			// 'bottom' space is not used
 			if (config.minAngle == 90 || config.maxAngle == 270) {
-				ty = 0;
+				ty = padding;
 			}
 		}
 	}
@@ -272,14 +278,16 @@ ReactiveGauge = function(container, configuration) {
 		} else {
 			if (config.pointerType === 'needle') {
 				var needleHeadLength = Math.round(radius - config.needleLengthInset);
-				var lineData = [ [ config.needleWidth / 2, 0 ],//
-				[ 0, -needleHeadLength ],//
-				[ -(config.needleWidth / 2), 0 ],//
-				[ 0, config.needleTailLength ],//
-				[ config.needleWidth / 2, 0 ] ];
+				// var lineData = [ [ config.needleWidth / 2, 0 ],//
+				// [ 0, -needleHeadLength ],//
+				// [ -(config.needleWidth / 2), 0 ],//
+				// [ 0, config.needleTailLength ],//
+				// [ config.needleWidth / 2, 0 ] ];
+				var lineData = [ [ 0, 0 ], [ 0, -needleHeadLength ] ];
 			} else if (config.pointerType === 'filament') {
-				var lineData = [ [ 0, -(radius - config.ringInset - config.ringWidth - config.filamentLengthMargin) ],//
-				[ 0, -(radius - config.ringInset + config.filamentLengthMargin) ] ];
+				var top = radius - config.ringInset - config.ringWidth - config.filamentLengthMargin;
+				var bottom = radius - config.ringInset + config.filamentLengthMargin;
+				var lineData = [ [ 0, -top ], [ 0, -bottom ] ];
 			}
 			var pointerLine = d3.svg.line().interpolate('monotone');
 			pointer = svg//
@@ -399,13 +407,14 @@ ReactiveGauge = function(container, configuration) {
 };
 
 /* PRIVATE CONSTANTS */
-ReactiveGauge.DEFAULT_POINTER_WIDTH = 10;
+ReactiveGauge.PADDING = 6;
+ReactiveGauge.DEFAULT_POINTER_WIDTH = 3;
 // diameter of the gauge (including ticks and labels), used only as
 // reference for drawing
 // the actual size on screen depends on the size of the gauge container
-ReactiveGauge.GAUGE_DIAMETER = 300;
+ReactiveGauge.GAUGE_DIAMETER = 100;
 // Number of parts of gauge to simulate a color gradient
-ReactiveGauge.GRADIENT_ELT_NUMBER = 70;
+ReactiveGauge.GRADIENT_ELT_NUMBER = 40;
 
 // formatter that will try to optimize the display on labels:
 // uses SI prefixes (G, M, k, µ, ...), and round values
@@ -425,11 +434,11 @@ ReactiveGauge.DEFAULT_FORMAT = function(value) {
 	return numbro().set(value).format(format);
 }
 
-/* DEFAULT CONFIGURATION */
+/* DEFAULT CONFIGURATION, all size/position values are in % */
 ReactiveGauge.defaultConfig = {
 	/* ring size */
-	ringInset : 10,
-	ringWidth : 20,
+	ringInset : 3,
+	ringWidth : 7,
 	minAngle : -90,
 	maxAngle : 90,
 
@@ -439,9 +448,9 @@ ReactiveGauge.defaultConfig = {
 	// for 'needle' pointers
 	needleWidth : ReactiveGauge.DEFAULT_POINTER_WIDTH,
 	needleTailLength : ReactiveGauge.DEFAULT_POINTER_WIDTH / 2,
-	needleLengthInset : 15,
+	needleLengthInset : 5,
 	// for 'filament'
-	filamentLengthMargin : 5,
+	filamentLengthMargin : 2,
 	// for 'filler'
 	fillerWidth : NaN, /* by default, as wide as ring */
 	fillerInset : 0,
@@ -466,7 +475,7 @@ ReactiveGauge.defaultConfig = {
 	 * If no custom labelFormat specified, limits the number of decimal digits
 	 * of labels
 	 */
-	labelDecimalsMax : 2,
+	labelDecimalsMax : 0,
 	labelInset : 0,
 
 	/* colors */
@@ -483,5 +492,5 @@ ReactiveGauge.defaultConfig = {
 
 	/* enable value display */
 	showValue : false,
-	valueInset : 40,
+	valueInset : 16,
 };

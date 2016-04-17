@@ -127,7 +127,7 @@
 	ReactiveGauge.defaultConfig.minAngle = 0;
 	ReactiveGauge.defaultConfig.maxAngle = 90;
 	ReactiveGauge.defaultConfig.showValue = true;
-	ReactiveGauge.defaultConfig.maxValue = 8000;
+	ReactiveGauge.defaultConfig.maxValue = 800;
 	
 	var gauges = [];
 		// quarters
@@ -214,22 +214,22 @@
 		/* SIZE AND POSITION */
 		gauges.push(ReactiveGauge('#wide-gauge', {
 			ringInset : 0,
-			ringWidth : 40,
-			labelInset : 25,
+			ringWidth : 14,
+			labelInset : 8,
 			pointerType : 'filament'
 		}));
 		gauges.push(ReactiveGauge('#inner-label-gauge', {
 			ringInset : 0,
-			ringWidth : 20,
-			labelInset : 35,
-			needleLengthInset : 45
+			ringWidth : 7,
+			labelInset : 12,
+			needleLengthInset : 15
 		}));
 		gauges.push(ReactiveGauge('#no-gauge', {
 			labelInset : 0,
-			ringInset : 15,
-			ringWidth : 1,
-			fillerWidth : 20,
-			fillerInset : 5,
+			ringInset : 5,
+			ringWidth : 0.5,
+			fillerWidth : 7,
+			fillerInset : 2,
 			pointerType : 'filler',
 			colors : false
 		}));
