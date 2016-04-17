@@ -22,20 +22,26 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 ReactiveGauge = function(container, configuration) {
-	var radius = ReactiveGauge.GAUGE_DIAMETER / 2;
-	var range = undefined;
-	var value = 0;
-
-	var svg = undefined;
-	var arcData = undefined;
-	var fullArcData = undefined;
-	var scale = undefined;
-	var labelData = undefined;
-	var gradient = undefined;
-	var arcColorFn = undefined;
-	var pointer = undefined;
 	var config = {};
 
+	/* MISC VALUES */
+	var radius = ReactiveGauge.GAUGE_DIAMETER / 2;
+	var range = undefined;
+	var scale = undefined;
+
+	/* ELEMENTS */
+	var valueLabel = undefined;
+	var svg = undefined;
+	var pointer = undefined;
+
+	/* DATA */
+	var arcData = undefined;
+	var fullArcData = undefined;
+	var labelData = undefined;
+
+	/* COLORS */
+	var gradient = undefined;
+	var arcColorFn = undefined;
 	/**
 	 * Indicates the gauge will have a rectangular layout
 	 */
@@ -202,13 +208,14 @@ ReactiveGauge = function(container, configuration) {
 			if (config.minAngle == 0 || config.maxAngle == 180) {
 				tx = 0;
 			}
+			// 'bottom' space is not used
 			if (config.minAngle == 90 || config.maxAngle == 270) {
 				ty = 0;
 			}
 		}
 	}
 
-	function render(newValue, configuration) {
+	function render(configuration) {
 		configure(configuration);
 
 		svg = d3.select(container)//
@@ -276,8 +283,8 @@ ReactiveGauge = function(container, configuration) {
 		// labels
 		var lg = svg.append('g')//
 		.attr('class', 'label')//
-		.attr('transform', centerTx);
-		lg.selectAll('text')//
+		.attr('transform', centerTx)//
+		.selectAll('text')//
 		.data(labelData)//
 		.enter()//
 		.append('text')//
@@ -285,8 +292,7 @@ ReactiveGauge = function(container, configuration) {
 			var ratio = scale(d);
 			var newAngle = config.minAngle + (ratio * range);
 			var transform = 'rotate(' + newAngle + ') translate(0,' + (config.labelInset - radius) + ')';
-			// if gauge is wide, scale up the labels so
-			// appearance matches with smaller gauges
+			/* more space = zoom out = need bigger font */
 			if (isWide) {
 				transform += ' scale(2,2)';
 			}
@@ -295,10 +301,34 @@ ReactiveGauge = function(container, configuration) {
 		})//
 		.text(config.labelFormat);
 
-		renderPointer(newValue === undefined ? 0 : newValue);
+		// value display
+		if (config.showValue) {
+			var valueTx = config.valueInset;
+			var valueTy = -config.valueInset;
+			var angle = config.minAngle;
+			var fontScale = 3;
+			if (isWide) {
+				fontScale *= 2; /* more space = zoom out = need bigger font */
+				valueTx = 0; /* do not shift vertically */
+				angle = 0; /* keep centered */
+			}
+			if (isRectangular) {
+				valueTy = 0; /* do not shift laterally */
+			}
+			var translationTf = 'translate(' + valueTx + ',' + valueTy + ')';
+
+			valueLabel = svg.append('g')//
+			.attr('class', 'value')//
+			.attr('transform', centerTx)//
+			.append('text').attr('transform', 'rotate(' + angle + ') ' //
+					+ translationTf //
+					+ ' scale(' + fontScale + ',' + fontScale + ')' //
+					+ ' rotate(' + -angle + ')');
+		}
 	}
 
 	function renderPointer(newValue) {
+		// pointer
 		if (config.pointerType === 'filler') {
 			var pointerArcData = getArcData(deg2rad(config.minAngle),//
 			deg2rad(getPointerRotation(newValue)),//
@@ -318,13 +348,20 @@ ReactiveGauge = function(container, configuration) {
 	 * 
 	 */
 	function update(newValue, newConfiguration) {
+		newValue === undefined ? 0 : newValue;
+
 		// if update is actually the first gauge display or need a full
 		// redraw
 		if (!isRendered() || newConfiguration) {
-			render(newValue, newConfiguration);
-			// if update is really an update
-		} else {
-			renderPointer(newValue);
+			render(newConfiguration);
+		}
+
+		// update pointer position
+		renderPointer(newValue);
+
+		// updates value label
+		if (config.showValue) {
+			valueLabel.text(newValue);
 		}
 	}
 
@@ -340,12 +377,11 @@ ReactiveGauge = function(container, configuration) {
 		return config.minAngle + (ratio * range);
 	}
 
-	render(0, configuration);
+	render(configuration);
+	update(0);
 
 	return {
-		configure : configure,
 		isRendered : isRendered,
-		render : render,
 		update : update
 	}
 };
@@ -402,5 +438,9 @@ ReactiveGauge.defaultConfig = {
 	endColor : '#d50000',
 
 	/* enables the border */
-	border : false
+	border : false,
+
+	/* enable value display */
+	showValue : false,
+	valueInset : 40
 };

@@ -17,6 +17,36 @@
 </head>
 <body>
 
+	<h2>Quarters of gauges</h2>
+	<div>
+		<span id="qgauge1" class="gauge-container"></span> <span id="qgauge2"
+			class="gauge-container"> </span> <span id="qgauge3"
+			class="gauge-container"> </span> <span id="qgauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<h2>Halves of gauges</h2>
+	<div>
+		<span class="vertical-layout"> <span id="hgauge1"
+			class="gauge-container"></span> <span id="hgauge2"
+			class="gauge-container"></span>
+		</span> <span id="hgauge3" class="gauge-container"></span> <span id="hgauge4"
+			class="gauge-container"></span>
+	</div>
+
+	<h2>Three quarters gauges</h2>
+	<div>
+		<span id="tgauge1" class="gauge-container"></span> <span id="tgauge2"
+			class="gauge-container"> </span> <span id="tgauge3"
+			class="gauge-container"> </span> <span id="tgauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<h2>Full gauges</h2>
+	<div>
+		<span id="fgauge" class="gauge-container"></span>
+	</div>
+
 	<h2>Gauge color</h2>
 	<div>
 		<figure class="example">
@@ -91,40 +121,12 @@
 		</figure>
 	</div>
 
-	<h2>Quarters of gauges</h2>
-	<div>
-		<span id="qgauge1" class="gauge-container"></span> <span id="qgauge2"
-			class="gauge-container"> </span> <span id="qgauge3"
-			class="gauge-container"> </span> <span id="qgauge4"
-			class="gauge-container"> </span>
-	</div>
-
-	<h2>Halves of gauges</h2>
-	<div>
-		<span class="vertical-layout"> <span id="hgauge1"
-			class="gauge-container"></span> <span id="hgauge2"
-			class="gauge-container"></span>
-		</span> <span id="hgauge3" class="gauge-container"></span> <span id="hgauge4"
-			class="gauge-container"></span>
-	</div>
-
-	<h2>Three quarters gauges</h2>
-	<div>
-		<span id="tgauge1" class="gauge-container"></span> <span id="tgauge2"
-			class="gauge-container"> </span> <span id="tgauge3"
-			class="gauge-container"> </span> <span id="tgauge4"
-			class="gauge-container"> </span>
-	</div>
-
-	<h2>Full gauges</h2>
-	<div>
-		<span id="fgauge" class="gauge-container"></span>
-	</div>
-
 	<script>
 	ReactiveGauge.defaultConfig.gradient = 'smooth';
 	ReactiveGauge.defaultConfig.minAngle = 0;
 	ReactiveGauge.defaultConfig.maxAngle = 90;
+	ReactiveGauge.defaultConfig.showValue = true;
+	ReactiveGauge.defaultConfig.maxValue = 800;
 	
 	var gauges = [];
 		// quarters
@@ -258,10 +260,13 @@
 		}));
 
 		
-		var refresh = ()=>gauges.forEach(g=>g.update(Math.random() * 10));
+		var refresh = ()=>gauges.forEach(g=>{
+			var value = Math.random() * ReactiveGauge.defaultConfig.maxValue;
+			g.update(Math.round(value));
+		});
 		
 		refresh();
-		setInterval(refresh, 5000);
+// 		setInterval(refresh, 5000);
 	</script>
 
 </body>

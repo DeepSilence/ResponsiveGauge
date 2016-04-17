@@ -11,6 +11,7 @@
 	display: inline-block;
 	overflow: visible; /*avoid cutting texts */
 	height: 100%; /* to react to the parent height*/
+	width: 100%; /* to react to the parent width*/
 }
 
 /* POINTERS */
@@ -52,4 +53,9 @@
 
 .gauge-container .label text:last-child {
 	text-anchor: end;
+}
+
+.gauge-container .value text {
+	dominant-baseline: central;
+	text-anchor: middle;
 }

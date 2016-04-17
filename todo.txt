@@ -1,8 +1,12 @@
-tests react to height before width : bug?
 in big container, labels get out of it : replace container padding with gauge calculus
 config should be relative to the size (x / 300) (or floated to the container's edges, letting space in between?
 
-add value display
+keep in mind : 
+	wide rings must be twice the size of others
+	make sizes relative, then add functionality to size down if values > 999
+
+prefix CSS classes with 'gauge-'
 non linear scale
 add 'mirroring'
 add pointerSlowness for 'fill'
+have a more modern size for needle? 
