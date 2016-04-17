@@ -15,47 +15,47 @@
 }
 
 /* POINTERS */
-.gauge-container .pointer.needle {
+.gauge-needle {
 	fill: #e85116;
 	stroke: none;
 }
 
-.gauge-container .pointer.filament {
+.gauge-filament {
 	stroke: black;
 }
 
-.gauge-container .pointer.filler {
+.gauge-filler {
 	fill: #d50000;
 }
 
 /* GAUGE */
-.gauge-container .arc {
+.gauge-arc {
 	/* setting 'fill' on the path elements would override the
 	 gradients if any; setting 'fill' on parent allows a correct override */
 	fill: #ddd;
 }
 
-.gauge-container .arc-border {
+.gauge-arc-border {
 	stroke: black;
 	stroke-width: 0.3px;
 }
 
 /* LABELS */
-.gauge-container .label {
+.gauge-label {
 	text-anchor: middle;
 	font-weight: bold;
 	fill: black;
 }
 /* shifts the first and last labels so that they are not out of the container*/
-.gauge-container .label text:first-child {
+.gauge-label text:first-child {
 	text-anchor: start;
 }
 
-.gauge-container .label text:last-child {
+.gauge-label text:last-child {
 	text-anchor: end;
 }
 
-.gauge-container .value text {
+.gauge-value text {
 	dominant-baseline: central;
 	text-anchor: middle;
 }

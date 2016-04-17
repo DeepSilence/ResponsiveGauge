@@ -1,6 +1,6 @@
 
 
-Based on D3, uses SVG
+Based on D3 and Numbro, uses SVG
 
 
 ## Capabilities

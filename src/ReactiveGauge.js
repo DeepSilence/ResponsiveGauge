@@ -40,7 +40,7 @@ ReactiveGauge = function(container, configuration) {
 	var labelData = undefined;
 
 	/* COLORS */
-	var gradient = undefined;
+	var colors = undefined;
 	var arcColorFn = undefined;
 	/**
 	 * Indicates the gauge will have a rectangular layout
@@ -72,6 +72,20 @@ ReactiveGauge = function(container, configuration) {
 		return deg * Math.PI / 180;
 	}
 
+	function computeTicks() {
+		if (isNaN(config.labelNumber)) {
+			config.labelNumber = config.sectorsNumber;
+		}
+		if (config.labelNumber === 0) {
+			return [];
+		}
+
+		var step = (config.maxValue - config.minValue) / (config.labelNumber - 1);
+		var ticks = d3.range(config.minValue, config.maxValue, step);
+		ticks.push(config.maxValue);
+		return ticks;
+	}
+
 	/**
 	 * Do config related computations
 	 */
@@ -86,6 +100,8 @@ ReactiveGauge = function(container, configuration) {
 				console.warn('Config property ' + prop + ' is unknwon');
 			}
 		}
+		// reset format
+		config.FORMAT == undefined;
 
 		range = config.maxAngle - config.minAngle;
 		computeLayout();
@@ -94,37 +110,32 @@ ReactiveGauge = function(container, configuration) {
 		scale = d3.scale.linear().range([ 0, 1 ]).domain([ config.minValue, config.maxValue ]);
 
 		// label ticks
-		if (isNaN(config.labelNumber)) {
-			config.labelNumber = config.sectorsNumber;
-			labelData = scale.ticks(config.labelNumber);
-		} else {
-			labelData = scale.ticks(config.labelNumber - 1);
-		}
+		labelData = computeTicks();
 
 		// coloring / gradient
-		if (config.gradient.constructor === Array) {
-			gradient = d3.range(config.sectorsNumber).map(function() {
+		if (config.colors.constructor === Array) {
+			colors = d3.range(config.sectorsNumber).map(function() {
 				return 1 / config.sectorsNumber
 			});
 			arcColorFn = function(i) {
 				/* fix me : ugly */
 				var index = Math.floor(i * config.sectorsNumber);
-				index = Math.min(index, config.gradient.length - 1);
-				return config.gradient[index];
+				index = Math.min(index, config.colors.length - 1);
+				return config.colors[index];
 			}
-		} else if (config.gradient) {
-			if (config.gradient === 'smooth') {
-				gradient = d3.range(ReactiveGauge.GRADIENT_ELT_NUMBER).map(function() {
+		} else if (config.colors) {
+			if (config.colors === 'gradient') {
+				colors = d3.range(ReactiveGauge.GRADIENT_ELT_NUMBER).map(function() {
 					return 1 / ReactiveGauge.GRADIENT_ELT_NUMBER
 				});
 			} else {
-				gradient = d3.range(config.sectorsNumber).map(function() {
+				colors = d3.range(config.sectorsNumber).map(function() {
 					return 1 / config.sectorsNumber
 				});
 			}
 			arcColorFn = d3.interpolateHsl(d3.rgb(config.startColor), d3.rgb(config.endColor));
 		} else {
-			gradient = [ 1 ];
+			colors = [ 1 ];
 		}
 
 		// sectors of the arc
@@ -230,15 +241,15 @@ ReactiveGauge = function(container, configuration) {
 
 		// gauge arc
 		var arcs = svg.append('g')//
-		.attr('class', 'arc')//
+		.attr('class', 'gauge-arc')//
 		.attr('transform', centerTx);
 
 		// gauge sectors
 		var sectors = arcs.selectAll('path')//
-		.data(gradient).enter()//
+		.data(colors).enter()//
 		.append('path')//
 		.attr('d', arcData);
-		if (config.gradient) {
+		if (config.colors) {
 			sectors.attr('fill', function(d, i) {
 				return arcColorFn(d * i);
 			});
@@ -248,14 +259,14 @@ ReactiveGauge = function(container, configuration) {
 		if (config.border) {
 			arcs.append('path')//
 			.attr('fill', 'none')//
-			.attr('class', 'arc-border')//
+			.attr('class', 'gauge-arc-border')//
 			.attr('d', fullArcData);
 		}
 
 		// pointer
 		if (config.pointerType === 'filler') {
 			pointer = svg.append('g')//
-			.attr('class', 'pointer ' + config.pointerType)//
+			.attr('class', 'gauge-pointer gauge-' + config.pointerType)//
 			.attr('transform', centerTx)//
 			.append('path');
 		} else {
@@ -274,7 +285,7 @@ ReactiveGauge = function(container, configuration) {
 			pointer = svg//
 			.append('g')//
 			.data([ lineData ])//
-			.attr('class', 'pointer ' + config.pointerType)//
+			.attr('class', 'gauge-pointer gauge-' + config.pointerType)//
 			.attr('transform', centerTx)//
 			.append('path')//
 			.attr('d', pointerLine);
@@ -282,7 +293,7 @@ ReactiveGauge = function(container, configuration) {
 
 		// labels
 		var lg = svg.append('g')//
-		.attr('class', 'label')//
+		.attr('class', 'gauge-label')//
 		.attr('transform', centerTx)//
 		.selectAll('text')//
 		.data(labelData)//
@@ -299,7 +310,7 @@ ReactiveGauge = function(container, configuration) {
 
 			return transform;
 		})//
-		.text(config.labelFormat);
+		.text(config.labelFormat.bind(config));
 
 		// value display
 		if (config.showValue) {
@@ -318,9 +329,10 @@ ReactiveGauge = function(container, configuration) {
 			var translationTf = 'translate(' + valueTx + ',' + valueTy + ')';
 
 			valueLabel = svg.append('g')//
-			.attr('class', 'value')//
+			.attr('class', 'gauge-value')//
 			.attr('transform', centerTx)//
-			.append('text').attr('transform', 'rotate(' + angle + ') ' //
+			.append('text')//
+			.attr('transform', 'rotate(' + angle + ') ' //
 					+ translationTf //
 					+ ' scale(' + fontScale + ',' + fontScale + ')' //
 					+ ' rotate(' + -angle + ')');
@@ -361,7 +373,7 @@ ReactiveGauge = function(container, configuration) {
 
 		// updates value label
 		if (config.showValue) {
-			valueLabel.text(newValue);
+			valueLabel.text(config.labelFormat(newValue));
 		}
 	}
 
@@ -395,6 +407,24 @@ ReactiveGauge.GAUGE_DIAMETER = 300;
 // Number of parts of gauge to simulate a color gradient
 ReactiveGauge.GRADIENT_ELT_NUMBER = 70;
 
+// formatter that will try to optimize the display on labels:
+// uses SI prefixes (G, M, k, µ, ...), and round values
+// depending the available space (related to config.labelNumber)
+ReactiveGauge.DEFAULT_FORMAT = function(value) {
+	if (this.FORMAT === undefined) {
+		// sets the format regex
+		if (this.labelDecimalsMax === 0) {
+			this.FORMAT = this.labelMantissaMax + '.a';
+		} else {
+			var format = new Array(this.labelDecimalsMax + 1).join('0');
+			this.FORMAT = this.labelMantissaMax + '.[' + format + ']a';
+		}
+	}
+
+	var format = this.FORMAT;
+	return numbro().set(value).format(format);
+}
+
 /* DEFAULT CONFIGURATION */
 ReactiveGauge.defaultConfig = {
 	/* ring size */
@@ -425,15 +455,26 @@ ReactiveGauge.defaultConfig = {
 
 	/* labels */
 	labelNumber : NaN, /* by default, as many as sectors */
-	labelFormat : d3.format(',g'),
+	/* format function to apply (can use d3.format). context is the config */
+	labelFormat : ReactiveGauge.DEFAULT_FORMAT,
+	/*
+	 * If no custom labelFormat specified, number of mantissa digits before
+	 * using SI units (Mega, Kilo...)
+	 */
+	labelMantissaMax : 3,
+	/*
+	 * If no custom labelFormat specified, limits the number of decimal digits
+	 * of labels
+	 */
+	labelDecimalsMax : 2,
 	labelInset : 0,
 
 	/* colors */
-	// 'smooth' for a smooth color gradient
+	// 'smooth' for a gradient color gradient
 	// 'sectors' for coloring on each sector (gradient)
 	// [#111, #222, ...] for specifying the color of each sector
-	// false (default) : uses the CSS color
-	gradient : false,
+	// false (default) : no color (CSS color can be used)
+	colors : false,
 	startColor : '#ffebee',
 	endColor : '#d50000',
 
@@ -442,5 +483,5 @@ ReactiveGauge.defaultConfig = {
 
 	/* enable value display */
 	showValue : false,
-	valueInset : 40
+	valueInset : 40,
 };

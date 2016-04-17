@@ -9,6 +9,7 @@
 <title>reactive-gauge demo page</title>
 
 <script src="d3.js"></script>
+<script src="../lib/numbro.min.js"></script>
 <script src="../src/ReactiveGauge.js"></script>
 <link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
 
@@ -16,6 +17,18 @@
 
 </head>
 <body>
+
+	<h2>Labels and ticks</h2>
+	<div>
+		<figure class="example">
+			<figcaption>Custom ticks</figcaption>
+			<span id="custom-labels-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Without label</figcaption>
+			<span id="no-label-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
 
 	<h2>Quarters of gauges</h2>
 	<div>
@@ -93,18 +106,6 @@
 		</figure>
 	</div>
 
-	<h2>Labels and ticks</h2>
-	<div>
-		<figure class="example">
-			<figcaption>Custom ticks</figcaption>
-			<span id="custom-labels-gauge" class="gauge-container"> </span>
-		</figure>
-		<figure class="example">
-			<figcaption>Without label</figcaption>
-			<span id="no-label-gauge" class="gauge-container"> </span>
-		</figure>
-	</div>
-
 	<h2>Elements size and position</h2>
 	<div>
 		<figure class="example">
@@ -122,11 +123,11 @@
 	</div>
 
 	<script>
-	ReactiveGauge.defaultConfig.gradient = 'smooth';
+	ReactiveGauge.defaultConfig.colors = 'gradient';
 	ReactiveGauge.defaultConfig.minAngle = 0;
 	ReactiveGauge.defaultConfig.maxAngle = 90;
 	ReactiveGauge.defaultConfig.showValue = true;
-	ReactiveGauge.defaultConfig.maxValue = 800;
+	ReactiveGauge.defaultConfig.maxValue = 8000;
 	
 	var gauges = [];
 		// quarters
@@ -191,22 +192,22 @@
 
 		/* COLORS / GRADIENTS */
 		gauges.push(ReactiveGauge('#gradient-gauge', {
-			gradient : 'smooth'
+			colors : 'gradient'
 		}));
 		gauges.push(ReactiveGauge('#sector-gradient-gauge', {
-			gradient : 'sectors'
+			colors : 'sectors'
 		}));
 		gauges.push(ReactiveGauge('#custom-sectors-gauge', {
-			gradient : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
+			colors : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
 			border : true
 		}));
 
 		/* BORDERS */
 		gauges.push(ReactiveGauge('#without-border-gauge', {
-			gradient : [ '#FFF']
+			colors : [ '#FFF']
 		}));
 		gauges.push(ReactiveGauge('#with-border-gauge', {
-			gradient : [ '#FFF'],
+			colors : [ '#FFF'],
 			border : true
 		}));
 
@@ -230,18 +231,18 @@
 			fillerWidth : 20,
 			fillerInset : 5,
 			pointerType : 'filler',
-			gradient : false
+			colors : false
 		}));
 		
 		/* LABELS */
 		gauges.push(ReactiveGauge('#no-label-gauge', {
 			ringInset : 0,
 			labelNumber : 0,
-			gradient : 'sectors'
+			colors : 'sectors'
 		}));
 		gauges.push(ReactiveGauge('#custom-labels-gauge', {
-			labelNumber : 2,
-			gradient : 'sectors'
+ 			labelNumber : 2,
+			colors : 'sectors'
 		}));		
 
 		/* POINTERS */ 
@@ -253,7 +254,7 @@
 		}));
 		gauges.push(ReactiveGauge('#filler-pointer-gauge', {
 			pointerType : 'filler',
-			gradient : false
+			colors : false
 		}));
 		gauges.push(ReactiveGauge('#slow-pointer-gauge', {
 			pointerSlowness : 1000
@@ -262,11 +263,11 @@
 		
 		var refresh = ()=>gauges.forEach(g=>{
 			var value = Math.random() * ReactiveGauge.defaultConfig.maxValue;
-			g.update(Math.round(value));
+			g.update(value);
 		});
 		
 		refresh();
-// 		setInterval(refresh, 5000);
+		setInterval(refresh, 5000);
 	</script>
 
 </body>

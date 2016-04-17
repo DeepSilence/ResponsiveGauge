@@ -20,7 +20,7 @@ figcaption {
     vertical-align: top; /* keep gauges aligned when testing sizes */
 }
 
-.gauge-container.gauge-vertical {
+.gauge-vertical {
 	height: 400px;
 }
 
