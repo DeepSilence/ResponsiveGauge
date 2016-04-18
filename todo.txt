@@ -6,5 +6,4 @@ bug : do not shrink on Chr
 non linear scale
 add 'mirroring'
 add pointerSlowness for 'fill'
-have a more modern size for needle? 
 add language support for formatters

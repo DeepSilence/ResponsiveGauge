@@ -16,8 +16,8 @@
 
 /* POINTERS */
 .gauge-needle {
-/* 	fill: #e85116; */
 	stroke: #cf4814;
+	fill: transparent;
 }
 
 .gauge-filament {
