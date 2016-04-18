@@ -1,9 +1,15 @@
+Archi : 
+	add minifier
+	add TU
+	test for module.js, ender, requireJS...
 
-see https://github.com/adamwdraper/Numeral-js/blob/master/numeral.js for architecture
+App : 
+	choose color scheme
+	non linear scale
+	add 'mirroring'
+	add pointerSlowness for 'fill'
+	add language support for formatters
 
-bug : do not shrink on Chr
 
-non linear scale
-add 'mirroring'
-add pointerSlowness for 'fill'
-add language support for formatters
+Bugs : 
+	bug : tests do not shrink on Chr (Chr limitation?)

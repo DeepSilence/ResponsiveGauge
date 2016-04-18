@@ -1,18 +1,17 @@
-
+# WORK IN PROGRESS
 
 Based on D3 and Numbro, uses SVG
 
 
 ## Capabilities
 
-
 * gauge resizes with its container
-* different pointers (needle, thin, filling)
+* gauge can start and end at any angle
+* different pointers style (needle, filament, filling)
 * different gauge colorations (smooth gradient, gradient by sectors, custom sectors)
-* borders
-* different gauge sizes (quarter, half, three quarters and full circles) 
+* borders 
 * different labels vs gauge position
-* default config for several gauges
+* default config for not several gauges
 * efficient updates (no full rerender)
  	
 ##CSS classes added to the container
@@ -22,7 +21,6 @@ Based on D3 and Numbro, uses SVG
  	
 ##known bugs 
 
-* gauge size calculation only works for mod(90°) sizes
 * pointerSlowness not implmented for 'filled' pointers
 	
 	
