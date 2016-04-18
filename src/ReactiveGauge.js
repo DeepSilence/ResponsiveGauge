@@ -6,10 +6,9 @@
  */
 (function() {
 	'use strict';
-	
+
 	/* PRIVATE CONSTANTS */
-	var PADDING = 6,
-	NEEDLE_RADIUS = 2,
+	var PADDING = 6, NEEDLE_RADIUS = 2,
 	// diameter of the gauge (including ticks and labels), used only as
 	// reference for drawing; the actual size on screen depends on the size of
 	// the gauge container
@@ -35,7 +34,6 @@
 		var format = this.FORMAT;
 		return FORMATTER.set(value).format(format);
 	};
-	
 
 	/* DEFAULT CONFIGURATION, all size/position values are in % */
 	var defaultConfig = {
@@ -95,7 +93,6 @@
 		showValue : false,
 		valueInset : 22,
 	}
-	
 
 	var ReactiveGauge = function(container, configuration) {
 		var config = {};
@@ -118,11 +115,7 @@
 		/* COLORS */
 		var colors = undefined;
 		var arcColorFn = undefined;
-
-		/**
-		 * Indicates the gauge will have a vertical rectangular layout
-		 */
-		var isVertical = false;
+		
 		/**
 		 * Indicates the gauge size is wide (more than an half circle)
 		 */
@@ -139,12 +132,17 @@
 		var tx = 0;
 		var ty = 0;
 
-		var donut = d3.layout.pie();
-
+		/**
+		 * Transfom degree angles to radian
+		 */
 		function deg2rad(deg) {
 			return deg * Math.PI / 180;
 		}
 
+		/**
+		 * Due to the way d3 computes ticks (only modulo 10), we need to rewrite
+		 * this...
+		 */
 		function computeTicks() {
 			if (isNaN(config.labelNumber)) {
 				config.labelNumber = config.sectorsNumber;
@@ -244,6 +242,9 @@
 			.endAngle(endAngle);
 		}
 
+		/**
+		 * Return TRUE if the gauge is already rendered
+		 */
 		function isRendered() {
 			return (svg !== undefined);
 		}
@@ -259,8 +260,11 @@
 			var minAngle = config.minAngle;
 			var maxAngle = config.maxAngle;
 
+			function biggestSpace(angleShift) {
+				return Math.max(0, size(minAngle + angleShift), size(maxAngle + angleShift))
+			}
 			function size(angle) {
-				return Math.max(0, Math.sin(deg2rad(angle))) * radius;
+				return radius * Math.sin(deg2rad(angle));
 			}
 
 			var leftSpace = 0;
@@ -312,36 +316,38 @@
 			// computes quarters not totally covered by the gauge
 			if (leftSpace == 0) {
 				// left space is the space needed to display the left part of
-				// the
-				// gauge,
-				// ie the part between 0° and minAngle, or the part between 180°
-				// and
-				// maxAngle
-				leftSpace = size(Math.max(-minAngle, maxAngle - 180));
+				// the gauge, ie the part between 0° and minAngle, or the part
+				// between 180° and maxAngle
+				leftSpace = biggestSpace(180);
 			}
 			if (rightSpace == 0) {
-				rightSpace = size(Math.max(minAngle, maxAngle));
+				rightSpace = biggestSpace(0);
 			}
 			if (topSpace == 0) {
-				topSpace = size(Math.max(-minAngle - 90, maxAngle - 270));
+				topSpace = biggestSpace(90);
 			}
 			if (bottomSpace == 0) {
-				bottomSpace = size(Math.max(minAngle - 90, maxAngle - 90));
+				bottomSpace = biggestSpace(-90);
 			}
+			// console.log('leftSpace', leftSpace);
+			// console.log('topSpace', topSpace);
+			// console.log('rightSpace', rightSpace);
+			// console.log('bottomSpace', bottomSpace);
 
 			width = leftSpace + rightSpace + padding * 2;
 			height = topSpace + bottomSpace + padding * 2;
+			// console.log('width', width);
+			// console.log('height', height);
 
 			ty = topSpace + padding;
 			tx = leftSpace + padding;
+			// console.log('ty', ty);
+			// console.log('tx', tx);
 
 			// computes some flags
 			var fullSize = radius * 2 + padding * 2;
 			if (fullSize == height && fullSize == width) {
 				isWide = true;
-			}
-			if (height > width) {
-				isVertical = true;
 			}
 		}
 
@@ -349,7 +355,6 @@
 			configure(configuration);
 
 			svg = d3.select(container)//
-			.classed('gauge-vertical', isVertical)//
 			.classed('gauge-360', (range === 360))//
 			.append('svg:svg')//
 			.attr('class', 'gauge')//
@@ -510,32 +515,28 @@
 			update : update
 		}
 	}
-	
-	
-	
 
+	/***************************************************************************
+	 * Exposing ReactiveGauge
+	 **************************************************************************/
+	ReactiveGauge.config = defaultConfig;
 
-    /************************************
-        Exposing ReactiveGauge
-    ************************************/
-	ReactiveGauge.config = defaultConfig; 
+	// CommonJS module is defined
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = ReactiveGauge;
+	} else {
+		/* global ender:false */
+		if (typeof ender === 'undefined') {
+			// here, `this` means `window` in the browser, or `global` on the
+			// server
+			this.ReactiveGauge = ReactiveGauge;
+		}
 
-
-    // CommonJS module is defined
-    if (typeof module !== 'undefined' && module.exports) {
-        module.exports = ReactiveGauge;
-    } else {
-        /*global ender:false */
-        if (typeof ender === 'undefined') {
-            // here, `this` means `window` in the browser, or `global` on the server
-            this.ReactiveGauge = ReactiveGauge;
-        }
-
-        /*global define:false */
-        if (typeof define === 'function' && define.amd) {
-            define([], function() {
-                return ReactiveGauge;
-            });
-        }
-    }
+		/* global define:false */
+		if (typeof define === 'function' && define.amd) {
+			define([], function() {
+				return ReactiveGauge;
+			});
+		}
+	}
 }.call(typeof window === 'undefined' ? this : window));

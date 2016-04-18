@@ -18,16 +18,12 @@
 </head>
 <body>
 
-	<h2>Labels and ticks</h2>
+	<h2>Random gauges</h2>
 	<div>
-		<figure class="example">
-			<figcaption>Custom ticks</figcaption>
-			<span id="custom-labels-gauge" class="gauge-container"> </span>
-		</figure>
-		<figure class="example">
-			<figcaption>Without label</figcaption>
-			<span id="no-label-gauge" class="gauge-container"> </span>
-		</figure>
+		<span id="custom-angles-gauge1" class="gauge-container"></span> <span id="custom-angles-gauge2"
+			class="gauge-container"> </span> <span id="custom-angles-gauge3"
+			class="gauge-container"> </span> <span id="custom-angles-gauge4"
+			class="gauge-container"> </span>
 	</div>
 
 	<h2>Quarters of gauges</h2>
@@ -43,8 +39,9 @@
 		<span class="vertical-layout"> <span id="hgauge1"
 			class="gauge-container"></span> <span id="hgauge2"
 			class="gauge-container"></span>
-		</span> <span id="hgauge3" class="gauge-container"></span> <span id="hgauge4"
-			class="gauge-container"></span>
+		</span> 
+		<span id="hgauge3" class="gauge-container gauge-vertical"></span> 
+		<span id="hgauge4" class="gauge-container gauge-vertical"></span>
 	</div>
 
 	<h2>Three quarters gauges</h2>
@@ -122,6 +119,19 @@
 		</figure>
 	</div>
 
+
+	<h2>Labels and ticks</h2>
+	<div>
+		<figure class="example">
+			<figcaption>Custom ticks</figcaption>
+			<span id="custom-labels-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Without label</figcaption>
+			<span id="no-label-gauge" class="gauge-container"> </span>
+		</figure>
+	</div>
+
 	<script>
 	ReactiveGauge.config.colors = 'gradient';
 	ReactiveGauge.config.minAngle = 0;
@@ -130,22 +140,42 @@
 	ReactiveGauge.config.maxValue = 800;
 	
 	var gauges = [];
+	
+		gauges.push(ReactiveGauge('#custom-angles-gauge1', {
+			minAngle : -80,
+			maxAngle : -10
+		}));
+		gauges.push(ReactiveGauge('#custom-angles-gauge2', {
+			minAngle : 20,
+			maxAngle : 70,
+		}));
+		gauges.push(ReactiveGauge('#custom-angles-gauge3', {
+			minAngle : 100,
+			maxAngle : 170,
+		}));
+		gauges.push(ReactiveGauge('#custom-angles-gauge4', {
+			minAngle : 210,
+			maxAngle : 230,
+			labelNumber : 2
+		}));
+	
+	
 		// quarters
 		gauges.push(ReactiveGauge('#qgauge1', {
 			minAngle : -90,
-			maxAngle : 0,
+			maxAngle : 0
 		}));
 		gauges.push(ReactiveGauge('#qgauge2', {
-			minAngle : 20,
-			maxAngle : 70,
+			minAngle : 0,
+			maxAngle : 90,
 		}));
 		gauges.push(ReactiveGauge('#qgauge3', {
 			minAngle : 90,
 			maxAngle : 180,
 		}));
 		gauges.push(ReactiveGauge('#qgauge4', {
-			minAngle : 210,
-			maxAngle : 240,
+			minAngle : 180,
+			maxAngle : 270,
 		}));
 
 		// halves
@@ -190,7 +220,7 @@
 			maxAngle : 360,
 		}));
 
-		/* COLORS / GRADIENTS */
+		// COLORS / GRADIENTS
 		gauges.push(ReactiveGauge('#gradient-gauge', {
 			colors : 'gradient'
 		}));
@@ -202,7 +232,7 @@
 			border : true
 		}));
 
-		/* BORDERS */
+		// BORDERS 
 		gauges.push(ReactiveGauge('#without-border-gauge', {
 			colors : [ '#FFF']
 		}));
@@ -211,7 +241,7 @@
 			border : true
 		}));
 
-		/* SIZE AND POSITION */
+		// SIZE AND POSITION
 		gauges.push(ReactiveGauge('#wide-gauge', {
 			ringInset : 0,
 			ringWidth : 14,
@@ -234,7 +264,7 @@
 			colors : false
 		}));
 		
-		/* LABELS */
+		// LABELS
 		gauges.push(ReactiveGauge('#no-label-gauge', {
 			ringInset : 0,
 			labelNumber : 0,
@@ -245,7 +275,7 @@
 			colors : 'sectors'
 		}));		
 
-		/* POINTERS */ 
+		// POINTERS 
 		gauges.push(ReactiveGauge('#needle-pointer-gauge', {
 			pointerType : 'needle'
 		}));
@@ -267,7 +297,7 @@
 		});
 		
 		refresh();
-		setInterval(refresh, 5000);
+		//setInterval(refresh, 5000);
 	</script>
 
 </body>
