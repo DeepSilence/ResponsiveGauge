@@ -42,10 +42,7 @@ ReactiveGauge = function(container, configuration) {
 	/* COLORS */
 	var colors = undefined;
 	var arcColorFn = undefined;
-	/**
-	 * Indicates the gauge will have a rectangular layout
-	 */
-	var isRectangular = false;
+	
 	/**
 	 * Indicates the gauge will have a vertical rectangular layout
 	 */
@@ -253,20 +250,12 @@ ReactiveGauge = function(container, configuration) {
 		if (bottomSpace == 0) {
 			bottomSpace = size(Math.max(minAngle - 90, maxAngle - 90));
 		}
-		console.log('leftSpace', leftSpace);
-		console.log('topSpace', topSpace);
-		console.log('rightSpace', rightSpace);
-		console.log('bottomSpace', bottomSpace);
 
 		width = leftSpace + rightSpace + padding * 2;
 		height = topSpace + bottomSpace + padding * 2;
-		console.log('width', width);
-		console.log('height', height);
 
 		ty = topSpace + padding;
 		tx = leftSpace + padding;
-		console.log('ty', ty);
-		console.log('tx', tx);
 
 		// computes some flags
 		var fullSize = radius * 2 + padding * 2;
