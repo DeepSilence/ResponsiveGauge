@@ -19,6 +19,13 @@
 <body>
 	<h1>VISUAL CHECK PAGE</h1>
 
+	<h2>Speedberry gauges</h2>
+	<div>
+		<span id="speedberry-voltage-gauge" class="gauge-container"></span>
+		<span id="speedberry-oiltemp-gauge" class="gauge-container"></span>
+		<span id="speedberry-coolanttemp-gauge" class="gauge-container"></span>
+	</div>
+
 	<h2>Quarters of gauges</h2>
 	<div>
 		<span id="qgauge1" class="gauge-container"></span> <span id="qgauge2"
@@ -291,8 +298,35 @@
 			colors : false
 		}));
 		gauges.push(ReactiveGauge('#slow-pointer-gauge', {
-			pointerSlowness : 1000
+			pointerSlowness : 1000			
 		}));
+
+
+		// SPEEDBERRY TESTS
+		// voltage
+		gauges.push(ReactiveGauge('#speedberry-voltage-gauge', {
+			pointerType : 'filament',
+			minAngle : -90,
+			maxAngle : 0,
+			minValue : 10,
+			maxValue : 13,
+			colors : [ '#D50000', '#FF7C88', '#FFF', '#69f0ae', '#00e676'],
+			border : true,
+			labelNumber : 4,
+			labelDecimalsMax : 1
+		}));
+		// temperatures
+		gauges.push(ReactiveGauge('#speedberry-oiltemp-gauge', {
+			pointerType : 'filler',
+			minAngle : 0,
+			maxAngle : 180,
+			minValue : 70,
+			maxValue : 120,
+//			colors : [ '#D50000', '#FF7C88', '#FFF', '#69f0ae', '#00e676'],
+//			border : true,
+			labelNumber : 5
+		}));
+		gauges.push(ReactiveGauge('#speedberry-coolanttemp-gauge', getAngleCheckConfig(180, 0)));
 
 		
 		// display and refresh the gauges
@@ -303,7 +337,7 @@
 			g.update(value);
 		});		
 		refresh();
-		setInterval(refresh, 5000);
+		//setInterval(refresh, 5000);
 
 		// display gauges options on over
  		gauges.forEach(g=>{
