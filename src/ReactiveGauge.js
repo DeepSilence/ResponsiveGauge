@@ -104,6 +104,7 @@
 
 		/* ELEMENTS */
 		var valueLabel = undefined;
+		var svgContainer = undefined;
 		var svg = undefined;
 		var pointer = undefined;
 
@@ -328,12 +329,16 @@
 			}
 		}
 
+		/**
+		 * Render the gauge
+		 */
 		function render(configuration) {
 			configure(configuration);
 
-			svg = d3.select(container)//
-			.classed('gauge-360', (range === 360))//
-			.append('svg:svg')//
+			svgContainer = d3.select(container)//
+			.classed('gauge-360', (range === 360));
+
+			svg = svgContainer.append('svg:svg')//
 			.attr('class', 'gauge')//
 			.attr('viewBox', '0 0 ' + width + ' ' + height)//
 			.attr('preserveAspectRatio', 'xMinYMin meet');
@@ -434,6 +439,9 @@
 			}
 		}
 
+		/**
+		 * Render the pointer part of the gauge
+		 */
 		function renderPointer(newValue) {
 			// pointer
 			if (config.pointerType === 'filler') {
@@ -490,7 +498,8 @@
 		return {
 			isRendered : isRendered,
 			update : update,
-			getConfig : getReadOnlyConfig
+			getConfig : getReadOnlyConfig,
+			container : svgContainer
 		}
 	}
 
