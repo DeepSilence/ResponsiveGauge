@@ -4,6 +4,8 @@ Archi :
 	test for module.js, ender, requireJS...
 
 App : 
+	use gradient for filled pointer
+	add unit suffix
 	choose color scheme
 	non linear scale
 	add 'mirroring'
