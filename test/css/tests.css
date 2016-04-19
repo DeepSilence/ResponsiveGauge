@@ -2,6 +2,11 @@ body {
 	font-family: Helvetica, Arial, sans-serif;
 	margin: 0;
 	padding: 0;
+	text-align : center;
+}
+
+h2 {
+    border-top: 1px solid lightgray;
 }
 
 .example {
@@ -32,4 +37,25 @@ figcaption {
 
 .vertical-layout .gauge-container {
 	display: block;
+}
+
+/* Config display */
+.gauge-config {
+	width : 400px;
+	height : 400px;
+	position : absolute;
+	display: none;
+	text-align: left;
+	white-space: pre;
+	background-color : #FFF;
+	overflow : hidden;
+	columns: 2;
+	-moz-columns: 2;
+	-webkit-columns: 2;
+	column-gap : 3rem;
+	-webkit-column-gap : 3rem;
+	-moz-column-gap : 3rem;
+}
+.gauge-config.visible {
+	display : block;
 }
