@@ -250,6 +250,15 @@
 		}
 
 		/**
+		* Returns a readonly access to the actual config (use update() to modify the config)
+		*/
+		function getReadOnlyConfig(){
+			var configClone = JSON.parse(JSON.stringify(config));
+			Object.freeze(configClone);
+			return configClone;
+		}
+
+		/**
 		 * Note : calculates ideal size of the gauge depending its min&max
 		 * angles along with the required translations to draw it. Assumes
 		 * minAngle>=-90 and maxAngle<=450, and range <=360
@@ -260,8 +269,11 @@
 			var minAngle = config.minAngle;
 			var maxAngle = config.maxAngle;
 
-			function biggestSpace(angleShift) {
-				return Math.max(0, size(minAngle + angleShift), size(maxAngle + angleShift))
+			function spaces(angleShift) {
+				// space is the space needed to display the part of
+				// the gauge, ie for the right space, the part between 0° and minAngle, or the part
+				// between 180° and maxAngle
+				return [size(minAngle + angleShift), size(maxAngle + angleShift)];
 			}
 			function size(angle) {
 				return radius * Math.sin(deg2rad(angle));
@@ -271,64 +283,29 @@
 			var rightSpace = 0;
 			var topSpace = 0;
 			var bottomSpace = 0;
-			// computes quarters totally covered by the gauges :
+			// computes axis totally covered by the gauges :
 			// if min and max angles are on both sides of an axis,
 			// then the summit of the arc require all available space
-			// FIXME : more elegant way to do this (xxxSpaces in an array with
-			// indexes mapped to angles?)
-			if (minAngle <= 0) {
-				if (maxAngle >= 0) {
-					topSpace = radius;
+			var firstCrossedAxisIndex = Math.floor(minAngle / 90); //top of the vertical axis is at index 0
+			var lastCrossedAxisIndex = Math.floor(maxAngle / 90);
+			for (var crossedAxisIndex = firstCrossedAxisIndex; crossedAxisIndex <= lastCrossedAxisIndex; crossedAxisIndex++){
+				switch (crossedAxisIndex % 4){ // % 4 to handle angles >= 360
+					case 0 : topSpace = radius; break;
+					case 1 : rightSpace = radius; break;
+					case 2 : bottomSpace = radius; break;
+					case 3 : leftSpace = radius; break;
 				}
-				if (maxAngle >= 90) {
-					rightSpace = radius;
-				}
-				if (maxAngle >= 180) {
-					bottomSpace = radius;
-				}
-				if (maxAngle >= 270) {
-					leftSpace = radius;
-				}
-			} else if (minAngle <= 90) {
-				if (maxAngle >= 90) {
-					rightSpace = radius;
-				}
-				if (maxAngle >= 180) {
-					bottomSpace = radius;
-				}
-				if (maxAngle >= 270) {
-					leftSpace = radius;
-				}
-			} else if (minAngle <= 180) {
-				if (maxAngle >= 180) {
-					bottomSpace = radius;
-				}
-				if (maxAngle >= 270) {
-					leftSpace = radius;
-				}
-				if (maxAngle >= 360) {
-					topSpace = radius;
-				}
-			} else if (minAngle <= 270 && maxAngle >= 270) {
-				leftSpace = radius;
 			}
 
-			// computes quarters not totally covered by the gauge
-			if (leftSpace == 0) {
-				// left space is the space needed to display the left part of
-				// the gauge, ie the part between 0° and minAngle, or the part
-				// between 180° and maxAngle
-				leftSpace = biggestSpace(180);
-			}
-			if (rightSpace == 0) {
-				rightSpace = biggestSpace(0);
-			}
-			if (topSpace == 0) {
-				topSpace = biggestSpace(90);
-			}
-			if (bottomSpace == 0) {
-				bottomSpace = biggestSpace(-90);
-			}
+			// in case an axis is not totally covered by the gauge,
+			// computes space needed (depending the min and max angles)
+			var horizontalSpaces = spaces(0);
+			// same operation, shifted by -90 to be like horizontal computation
+			var verticalSpaces = spaces(-90);
+			leftSpace = Math.abs(Math.min(-leftSpace, horizontalSpaces[0], horizontalSpaces[1]));
+			rightSpace = Math.max(rightSpace, horizontalSpaces[0], horizontalSpaces[1]);
+			topSpace = Math.abs(Math.min(-topSpace, verticalSpaces[0], verticalSpaces[1]));
+			bottomSpace = Math.max(bottomSpace, verticalSpaces[0], verticalSpaces[1]);
 			// console.log('leftSpace', leftSpace);
 			// console.log('topSpace', topSpace);
 			// console.log('rightSpace', rightSpace);
@@ -512,7 +489,8 @@
 
 		return {
 			isRendered : isRendered,
-			update : update
+			update : update,
+			getConfig : getReadOnlyConfig
 		}
 	}
 
