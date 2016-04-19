@@ -17,14 +17,7 @@
 
 </head>
 <body>
-
-	<h2>Random gauges</h2>
-	<div>
-		<span id="custom-angles-gauge1" class="gauge-container"></span> <span id="custom-angles-gauge2"
-			class="gauge-container"> </span> <span id="custom-angles-gauge3"
-			class="gauge-container"> </span> <span id="custom-angles-gauge4"
-			class="gauge-container"> </span>
-	</div>
+	<h1>VISUAL CHECK PAGE</h1>
 
 	<h2>Quarters of gauges</h2>
 	<div>
@@ -56,6 +49,32 @@
 	<div>
 		<span id="fgauge" class="gauge-container"></span>
 	</div>
+
+	<h2>Random quarter gauges</h2>
+	<div>
+		<span id="custom-quarter-gauge1" class="gauge-container"></span> <span id="custom-quarter-gauge2"
+			class="gauge-container"> </span> <span id="custom-quarter-gauge3"
+			class="gauge-container"> </span> <span id="custom-quarter-gauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<h2>Random halves of gauges</h2>
+	<div>
+		<span id="custom-half-gauge1" class="gauge-container"></span> <span id="custom-half-gauge2"
+			class="gauge-container"> </span> <span id="custom-half-gauge3"
+			class="gauge-container"> </span> <span id="custom-half-gauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<h2>Random three quarters gauges</h2>
+	<div>
+		<span id="custom-three-gauge1" class="gauge-container"></span> <span id="custom-three-gauge2"
+			class="gauge-container"> </span> <span id="custom-three-gauge3"
+			class="gauge-container"> </span> <span id="custom-three-gauge4"
+			class="gauge-container"> </span>
+	</div>
+
+	<hr>
 
 	<h2>Gauge color</h2>
 	<div>
@@ -123,8 +142,12 @@
 	<h2>Labels and ticks</h2>
 	<div>
 		<figure class="example">
-			<figcaption>Custom ticks</figcaption>
+			<figcaption>Custom labels</figcaption>
 			<span id="custom-labels-gauge" class="gauge-container"> </span>
+		</figure>
+		<figure class="example">
+			<figcaption>Long labels</figcaption>
+			<span id="long-label-gauge" class="gauge-container"> </span>
 		</figure>
 		<figure class="example">
 			<figcaption>Without label</figcaption>
@@ -133,92 +156,71 @@
 	</div>
 
 	<script>
-	ReactiveGauge.config.colors = 'gradient';
-	ReactiveGauge.config.minAngle = 0;
-	ReactiveGauge.config.maxAngle = 90;
-	ReactiveGauge.config.showValue = true;
-	ReactiveGauge.config.maxValue = 800;
+		// default config for the tests
+		ReactiveGauge.config.colors = 'gradient';
+		ReactiveGauge.config.minAngle = 0;
+		ReactiveGauge.config.maxAngle = 90;
+		ReactiveGauge.config.showValue = true;
+		ReactiveGauge.config.maxValue = 800;
+
+		/**
+		 * Generate configs for angles checks gauges.
+		 */
+		function getAngleCheckConfig(minAngle, maxAngle, otherConfig){
+			var config = {
+				minAngle : minAngle,
+				maxAngle : maxAngle,
+				minValue : minAngle,
+				maxValue : maxAngle
+			};
+
+			for ( var prop in otherConfig) {
+				config[prop] = otherConfig[prop];
+			}
+		
+			return config;
+		}
 	
-	var gauges = [];
-	
-		gauges.push(ReactiveGauge('#custom-angles-gauge1', {
-			minAngle : -80,
-			maxAngle : -10
-		}));
-		gauges.push(ReactiveGauge('#custom-angles-gauge2', {
-			minAngle : 20,
-			maxAngle : 70,
-		}));
-		gauges.push(ReactiveGauge('#custom-angles-gauge3', {
-			minAngle : 100,
-			maxAngle : 170,
-		}));
-		gauges.push(ReactiveGauge('#custom-angles-gauge4', {
-			minAngle : 210,
-			maxAngle : 230,
-			labelNumber : 2
-		}));
-	
-	
+
+		var gauges = [];
 		// quarters
-		gauges.push(ReactiveGauge('#qgauge1', {
-			minAngle : -90,
-			maxAngle : 0
-		}));
-		gauges.push(ReactiveGauge('#qgauge2', {
-			minAngle : 0,
-			maxAngle : 90,
-		}));
-		gauges.push(ReactiveGauge('#qgauge3', {
-			minAngle : 90,
-			maxAngle : 180,
-		}));
-		gauges.push(ReactiveGauge('#qgauge4', {
-			minAngle : 180,
-			maxAngle : 270,
-		}));
+		gauges.push(ReactiveGauge('#qgauge1', getAngleCheckConfig(-90, 0)));
+		gauges.push(ReactiveGauge('#qgauge2', getAngleCheckConfig(0, 90)));
+		gauges.push(ReactiveGauge('#qgauge3', getAngleCheckConfig(90, 180)));
+		gauges.push(ReactiveGauge('#qgauge4', getAngleCheckConfig(180, 270)));
 
 		// halves
-		gauges.push(ReactiveGauge('#hgauge1', {
-			minAngle : -90,
-			maxAngle : 90,
-		}));
-		gauges.push(ReactiveGauge('#hgauge2', {
-			minAngle : 90,
-			maxAngle : 270,
-		}));
-		gauges.push(ReactiveGauge('#hgauge3', {
-			minAngle : 180,
-			maxAngle : 360,
-		}));
-		gauges.push(ReactiveGauge('#hgauge4', {
-			minAngle : 0,
-			maxAngle : 180,
-		}));
+		gauges.push(ReactiveGauge('#hgauge1', getAngleCheckConfig(-90, 90)));
+		gauges.push(ReactiveGauge('#hgauge2', getAngleCheckConfig(90, 270)));
+		gauges.push(ReactiveGauge('#hgauge3', getAngleCheckConfig(180, 360)));
+		gauges.push(ReactiveGauge('#hgauge4', getAngleCheckConfig(0, 180)));
 
 		// three quarters
-		gauges.push(ReactiveGauge('#tgauge1', {
-			minAngle : -90,
-			maxAngle : 180,
-		}));
-		gauges.push(ReactiveGauge('#tgauge2', {
-			minAngle : 0,
-			maxAngle : 270,
-		}));
-		gauges.push(ReactiveGauge('#tgauge3', {
-			minAngle : 90,
-			maxAngle : 360,
-		}));
-		gauges.push(ReactiveGauge('#tgauge4', {
-			minAngle : 180,
-			maxAngle : 450,
-		}));
+		gauges.push(ReactiveGauge('#tgauge1', getAngleCheckConfig(-90, 180)));
+		gauges.push(ReactiveGauge('#tgauge2', getAngleCheckConfig(0, 270)));
+		gauges.push(ReactiveGauge('#tgauge3', getAngleCheckConfig(90, 360)));
+		gauges.push(ReactiveGauge('#tgauge4', getAngleCheckConfig(180, 450)));
 
 		//full
-		gauges.push(ReactiveGauge('#fgauge', {
-			minAngle : 0,
-			maxAngle : 360,
-		}));
+		gauges.push(ReactiveGauge('#fgauge', getAngleCheckConfig(0, 360)));
+
+		// custom angles (quarters)
+		gauges.push(ReactiveGauge('#custom-quarter-gauge1', getAngleCheckConfig(-80, -10)));
+		gauges.push(ReactiveGauge('#custom-quarter-gauge2', getAngleCheckConfig(20, 70)));
+		gauges.push(ReactiveGauge('#custom-quarter-gauge3', getAngleCheckConfig(100, 170)));
+		gauges.push(ReactiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210,  230, {labelNumber : 2})));
+
+		// custom angles (halves)
+		gauges.push(ReactiveGauge('#custom-half-gauge1', getAngleCheckConfig(-80, 45)));
+		gauges.push(ReactiveGauge('#custom-half-gauge2', getAngleCheckConfig(20, 130)));
+		gauges.push(ReactiveGauge('#custom-half-gauge3', getAngleCheckConfig(100, 223)));
+		gauges.push(ReactiveGauge('#custom-half-gauge4', getAngleCheckConfig(210, 300)));
+
+		// custom angles (three quarters)
+		gauges.push(ReactiveGauge('#custom-three-gauge1', getAngleCheckConfig(-80, 130)));
+		gauges.push(ReactiveGauge('#custom-three-gauge2', getAngleCheckConfig(20, 223)));
+		gauges.push(ReactiveGauge('#custom-three-gauge3', getAngleCheckConfig(100, 300)));
+		gauges.push(ReactiveGauge('#custom-three-gauge4', getAngleCheckConfig(210, 390)));
 
 		// COLORS / GRADIENTS
 		gauges.push(ReactiveGauge('#gradient-gauge', {
@@ -266,9 +268,11 @@
 		
 		// LABELS
 		gauges.push(ReactiveGauge('#no-label-gauge', {
-			ringInset : 0,
-			labelNumber : 0,
-			colors : 'sectors'
+			labelNumber : 0
+		}));
+		gauges.push(ReactiveGauge('#long-label-gauge', {
+			labelNumber : 8,
+			maxValue : 100000
 		}));
 		gauges.push(ReactiveGauge('#custom-labels-gauge', {
  			labelNumber : 2,
@@ -291,13 +295,29 @@
 		}));
 
 		
+		// display and refresh the gauges
 		var refresh = ()=>gauges.forEach(g=>{
-			var value = Math.random() * ReactiveGauge.config.maxValue;
+			var config = g.getConfig();
+			var range = config.maxValue - config.minValue;
+			var value = config.minValue + (Math.random() * range);
 			g.update(value);
-		});
-		
+		});		
 		refresh();
-		//setInterval(refresh, 5000);
+		setInterval(refresh, 5000);
+
+		// display gauges options on over
+ 		gauges.forEach(g=>{
+			var cont = g.container;
+ 			cont.append('div')//
+				.attr('class', 'gauge-config')
+				.text(JSON.stringify(g.getConfig(), null, 4));
+			cont.on('mouseover', ()=>{
+				d3.select(d3.event.currentTarget).select('div').classed('visible', true);
+			});
+			cont.on('mouseout', ()=>{
+				d3.select(d3.event.currentTarget).select('div').classed('visible', false);
+			});
+ 		});
 	</script>
 
 </body>
