@@ -2,12 +2,13 @@
  * ResponsiveGauge
  * version : 0.1.0
  * license : MIT
+ * author : Mikaël Restoux
  * 
  */
 var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	'use strict';
 
-	// handle injection using requireJS
+	// handle dependencies injection using requireJS
 	if (typeof d3 === 'undefined') {
 		d3 = _d3;
 	}
@@ -517,17 +518,30 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 		render(configuration);
 		update(0);
+		
+		
 
 		return {
 			isRendered : isRendered,
 			update : update,
 			getConfig : getReadOnlyConfig,
-			container : svgContainer
+			container : svgContainer, 
+
+			
+			/*
+			 * Expose private functions for testing. Do not change the starting
+			 * and ending comments; they are used to strip private functions
+			 * from distribution file.
+			 */
+			/* start-test-code */
+			deg2rad : deg2rad,
+			computeTicks : computeTicks
+			/* end-test-code */
 		}
 	}
 
 	/***************************************************************************
-	 * Exposing ReactiveGauge (part 2)
+	 * Exposing ReactiveGauge
 	 **************************************************************************/
 	ReactiveGauge.config = defaultConfig;
 
@@ -547,11 +561,18 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 });
 
 /*******************************************************************************
- * Exposing ReactiveGauge (part 1)
+ * Initializing ReactiveGauge dependencies
  ******************************************************************************/
 
-// RequireJS : sets the depedencies url and define the module
-if (typeof requirejs !== 'undefined') {
+// CommonJS : sets the dependencies
+if (typeof module !== 'undefined' && module.exports) {
+	const d3 = require('d3');
+	const numbro = require('numbro');
+	
+	ReactiveGaugeFactory(d3, numbro)
+
+	// RequireJS : sets the dependencies url and define the module
+} else if (typeof requirejs !== 'undefined') {
 
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
@@ -569,7 +590,7 @@ if (typeof requirejs !== 'undefined') {
 		return ReactiveGaugeFactory(d3, numbro);
 	});
 
-	// CommonJS and vanilla : start the factory 
+	// CommonJS and vanilla : start the factory
 } else {
 	ReactiveGaugeFactory.call(typeof window === 'undefined' ? this : window);
 }

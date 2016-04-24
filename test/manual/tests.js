@@ -29,7 +29,7 @@ var mode = document.location.search.slice(1)
 var head = document.head;
 // requireJS : loads the lib, require the gauges and start the tests
 if (mode === 'requireJS'){
-	createScript('lib/require.min.js', '../src/ReactiveGauge.js').then(()=>{
+	createScript('lib/require.min.js', '../../dist/ReactiveGauge.min.js').then(()=>{
 		require(['ReactiveGauge'], (ReactiveGauge)=>{
 			this.ReactiveGauge = ReactiveGauge;
 			startTests();
@@ -47,7 +47,7 @@ if (mode === 'requireJS'){
 	var promNumbro = createScript(protocol + "//cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js");
 
 	Promise.all([promD3, promNumbro]).then(()=>{
-		createScript('../src/ReactiveGauge.js').then(setTimeout(startTests, 100));
+		createScript('../../dist/ReactiveGauge.min.js').then(setTimeout(startTests, 100));
 	});
 }
 

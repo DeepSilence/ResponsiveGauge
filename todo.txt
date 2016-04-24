@@ -1,6 +1,5 @@
 Archi : 
-	add minifier
-	add TU
+	add CSS to requireJS module
 	test for module.js
 
 App : 
