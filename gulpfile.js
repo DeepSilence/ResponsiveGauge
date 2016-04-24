@@ -5,6 +5,7 @@ var rename = require('gulp-rename');
 var jest = require('gulp-jest');
 var stripCode = require('gulp-strip-code');
 var uglify = require('gulp-uglify');
+var plumber = require("gulp-plumber");
 
 var paths = {
 	srcJs : 'src/**/*.js',
@@ -29,6 +30,9 @@ gulp.task("default", function() {
  */
 gulp.task('buildJs', () => {
 	 return gulp.src(paths.srcJs)
+     	.pipe(plumber(function (error) { // avoid exiting loop on error
+	         util.log(error.message);
+	     }))
 	 	.pipe(stripCode({ // remove test code
 	      start_comment: "start-test-code",
 	      end_comment: "end-test-code"

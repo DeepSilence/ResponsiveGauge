@@ -59,3 +59,6 @@
 	dominant-baseline: central;
 	text-anchor: middle;
 }
+.unit {
+    font-size: 60%;
+}

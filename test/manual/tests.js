@@ -181,7 +181,11 @@ function startTests(){
 	gauges.push(ReactiveGauge('#custom-labels-gauge', {
 		labelNumber : 2,
 		colors : 'sectors'
-	}));		
+	}))
+	gauges.push(ReactiveGauge('#suffixed-label-gauge', {
+		valueSuffix : 'km/h'
+	}));	
+	
 	
 	// POINTERS
 	gauges.push(ReactiveGauge('#needle-pointer-gauge', {
@@ -210,7 +214,8 @@ function startTests(){
 		colors : [ '#D50000', '#FF7C88', '#FFF', '#69f0ae', '#00e676'],
 		border : true,
 		labelNumber : 4,
-		labelDecimalsMax : 1
+		labelDecimalsMax : 1,
+		valueSuffix : 'volts'
 	}));
 	// temperatures
 	gauges.push(ReactiveGauge('#speedberry-oiltemp-gauge', {

@@ -101,6 +101,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		/* enable value display */
 		showValue : false,
 		valueInset : 22,
+		// suffix for the displayed value
+		valueSuffix : ''
 	}
 
 	var ReactiveGauge = function(container, configuration) {
@@ -453,16 +455,24 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				}
 				var translationTf = 'translate(0, ' + -valueTx + ')';
 
-				valueLabel = svg.append('g')//
+				var valueZone = svg.append('g')//
 				.attr('class', 'gauge-value')//
 				.attr('transform', centerTx + ' rotate(' + angle + ')')//
 				.append('text')//
 				.attr('transform', translationTf //
 						+ ' scale(' + fontScale + ',' + fontScale + ')' //
 						+ ' rotate(' + -angle + ')');
+				// value
+				valueLabel = valueZone.append('tspan');
+				// value suffix
+				valueZone.append('tspan')//
+				.text(config.valueSuffix)//
+				.attr('class', 'unit')//
+				.attr('x', 0)//
+				.attr('dy', '1em');
 			}
 		}
-
+ 
 		/**
 		 * Render the pointer part of the gauge
 		 */
