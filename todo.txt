@@ -1,7 +1,7 @@
 Archi : 
 	add minifier
 	add TU
-	test for module.js, ender, requireJS...
+	test for module.js
 
 App : 
 	use gradient for filled pointer
@@ -15,3 +15,11 @@ App :
 
 Bugs : 
 	bug : tests do not shrink on Chr (Chr limitation?)
+
+	
+	
+Release : 
+	1. build & test with gulp
+	2. visually check vanilla test.html on FF/Chr/...
+	3. visually check requireJS test.html
+	3. visually check requireJS test.html

@@ -4,8 +4,16 @@
  * license : MIT
  * 
  */
-(function() {
+var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	'use strict';
+
+	// handle injection using requireJS
+	if (typeof d3 === 'undefined') {
+		d3 = _d3;
+	}
+	if (typeof numbro === 'undefined') {
+		numbro = _numbro;
+	}
 
 	/* PRIVATE CONSTANTS */
 	var PADDING = 6, NEEDLE_RADIUS = 2,
@@ -116,7 +124,7 @@
 		/* COLORS */
 		var colors = undefined;
 		var arcColorFn = undefined;
-		
+
 		/**
 		 * Indicates the gauge size is wide (more than an half circle)
 		 */
@@ -251,9 +259,10 @@
 		}
 
 		/**
-		* Returns a readonly access to the actual config (use update() to modify the config)
-		*/
-		function getReadOnlyConfig(){
+		 * Returns a readonly access to the actual config (use update() to
+		 * modify the config)
+		 */
+		function getReadOnlyConfig() {
 			var configClone = JSON.parse(JSON.stringify(config));
 			Object.freeze(configClone);
 			return configClone;
@@ -272,9 +281,10 @@
 
 			function spaces(angleShift) {
 				// space is the space needed to display the part of
-				// the gauge, ie for the right space, the part between 0° and minAngle, or the part
+				// the gauge, ie for the right space, the part between 0° and
+				// minAngle, or the part
 				// between 180° and maxAngle
-				return [size(minAngle + angleShift), size(maxAngle + angleShift)];
+				return [ size(minAngle + angleShift), size(maxAngle + angleShift) ];
 			}
 			function size(angle) {
 				return radius * Math.sin(deg2rad(angle));
@@ -287,14 +297,27 @@
 			// computes axis totally covered by the gauges :
 			// if min and max angles are on both sides of an axis,
 			// then the summit of the arc require all available space
-			var firstCrossedAxisIndex = Math.floor(minAngle / 90); //top of the vertical axis is at index 0
+			var firstCrossedAxisIndex = Math.floor(minAngle / 90); // top of
+			// the
+			// vertical
+			// axis is
+			// at index
+			// 0
 			var lastCrossedAxisIndex = Math.floor(maxAngle / 90);
-			for (var crossedAxisIndex = firstCrossedAxisIndex; crossedAxisIndex <= lastCrossedAxisIndex; crossedAxisIndex++){
-				switch (crossedAxisIndex % 4){ // % 4 to handle angles >= 360
-					case 0 : topSpace = radius; break;
-					case 1 : rightSpace = radius; break;
-					case 2 : bottomSpace = radius; break;
-					case 3 : leftSpace = radius; break;
+			for (var crossedAxisIndex = firstCrossedAxisIndex; crossedAxisIndex <= lastCrossedAxisIndex; crossedAxisIndex++) {
+				switch (crossedAxisIndex % 4) { // % 4 to handle angles >= 360
+				case 0:
+					topSpace = radius;
+					break;
+				case 1:
+					rightSpace = radius;
+					break;
+				case 2:
+					bottomSpace = radius;
+					break;
+				case 3:
+					leftSpace = radius;
+					break;
 				}
 			}
 
@@ -504,26 +527,49 @@
 	}
 
 	/***************************************************************************
-	 * Exposing ReactiveGauge
+	 * Exposing ReactiveGauge (part 2)
 	 **************************************************************************/
 	ReactiveGauge.config = defaultConfig;
 
 	// CommonJS module is defined
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = ReactiveGauge;
-	} else {
-		/* global ender:false */
-		if (typeof ender === 'undefined') {
-			// here, `this` means `window` in the browser, or `global` on the
-			// server
-			this.ReactiveGauge = ReactiveGauge;
-		}
 
-		/* global define:false */
-		if (typeof define === 'function' && define.amd) {
-			define([], function() {
-				return ReactiveGauge;
-			});
-		}
+	} else if (typeof requirejs !== 'undefined') {
+		return ReactiveGauge;
+
+		// vanilla JS
+	} else {
+		// here, `this` means `window` in the browser, or `global` on the
+		// server
+		this.ReactiveGauge = ReactiveGauge;
 	}
-}.call(typeof window === 'undefined' ? this : window));
+});
+
+/*******************************************************************************
+ * Exposing ReactiveGauge (part 1)
+ ******************************************************************************/
+
+// RequireJS : sets the depedencies url and define the module
+if (typeof requirejs !== 'undefined') {
+
+	// retrieve the protocol to allow use in a https page
+	var protocol = document.location.protocol;
+	// required when testing locally
+	protocol = (protocol === 'file:' ? 'http:' : protocol);
+
+	requirejs.config({
+		"paths" : {
+			"d3" : protocol + "//cdn.jsdelivr.net/d3js/3.5.16/d3.min",
+			"numbro" : protocol + "//cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min"
+		}
+	});
+
+	define([ 'd3', 'numbro' ], function(d3, numbro) {
+		return ReactiveGaugeFactory(d3, numbro);
+	});
+
+	// CommonJS and vanilla : start the factory 
+} else {
+	ReactiveGaugeFactory.call(typeof window === 'undefined' ? this : window);
+}
