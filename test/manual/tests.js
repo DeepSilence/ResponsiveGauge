@@ -226,7 +226,7 @@ function startTests(){
 		maxValue : 120,
 		labelNumber : 5
 	}));
-	gauges.push(ReactiveGauge('#speedberry-coolanttemp-gauge', getAngleCheckConfig(180, 0)));
+	gauges.push(ReactiveGauge('#speedberry-coolanttemp-gauge', getAngleCheckConfig(90, -90)));
 	
 	/***************************************************************************
 	 * DISPLAY AND REFRESH THE GAUGES

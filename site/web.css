@@ -1,0 +1,93 @@
+/**
+ *	#5fc2c9 : light blue
+ *	#3faeb5: middle blue
+ *	#33898f : dark blue
+ *	#f7f7f7 : light gray
+ *	#adadad :dark grey
+ */
+/*
+ * STRUCTURAL STYLES
+ */
+body {
+	font-family: 'Roboto', sans-serif;
+	color: #666;
+	font-size: 16px;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	color: #33898f;
+	outline: none;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #33898f;
+}
+
+h2 {
+	color: #33898f;
+	border-bottom: 1px solid #33898f;
+}
+
+h2>a {
+	float: right;
+}
+
+body>div {
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+p {
+	text-indent: 15px;
+}
+
+/*
+ * ELEMENTS STYLES
+ */
+.header {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #5fc2c9;
+	color: #fff;
+	text-align: center;
+}
+
+.header h1 {
+	font-size: 30px;
+}
+
+.header small {
+	font-size: 22px;
+}
+
+.menu {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.menu a {
+	display: inline-block;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-left: 5px;
+	padding-right: 25px;
+}
+
+.code {
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 15px;
+	background-color: #f7f7f7;
+	border: 1px solid #adadad;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+	color: #333;
+	padding: 15px;
+	margin: 10px;
+}
+
+.TODO {
+	background-color: yellow;
+}

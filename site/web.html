@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Responsive gauges</title>
+
+<link href="web.css" type="text/css" rel="stylesheet" />
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
+
+<body>
+	<div id="menu" class="menu">
+		<a href="#examples">Examples</a> <a href="#quick-start">Quick start</a> <a href="#configuration">Configuration</a> <a
+			href="#compatibility">Compatibility</a> <a href="#licence">Licence</a>
+	</div>
+
+
+	<div class="header">
+		<h1>
+			<span class="TODO">XXXXXX GAUGE EXAMPLE XXXXXXXXXXX</span>
+			<br>
+			Responsive gauge is a Javascript library to create responsive gauges,
+			<br>
+			<small>based on D3 and SVG</small>
+		</h1>
+	</div>
+
+
+	<div id="example">
+		<h2>
+			Examples <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+		<span class="TODO">Styles :
+			http://blogs.u2u.be/diederik/post/2013/06/24/A-Modern-UI-radial-gauge-control-for-Windows-8-Store-apps.aspx</span>
+	</div>
+
+
+	<div id="quick-start">
+		<h2>
+			Quick start <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+		You can use responsive-gauge via several ways :
+
+		<h3>Vanilla JS</h3>
+		Download the library files and add them to your site.
+		<div class="code">
+			&lt;link href="folder_containing_the_library/ReactiveGauge.css" type="text/css" rel="stylesheet" /&gt;
+			<br>
+			&lt;script src="folder_containing_the_library/ReactiveGauge.min.js"&gt;&lt;/script&gt;
+		</div>
+
+		<h3>RequireJS</h3>
+
+		Configure requireJS to retrieve responsive-gauge from the CDN :
+		<div class="code">
+			requirejs.config({
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;"paths" : {
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gauges" : <span class="TODO">"https://CDN_TO_COMPLETE"</span>
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;}
+			<br />
+			});
+		</div>
+		Then add its injection to any module that need it :
+		<div class="code">
+			define([ 'gauge' ], function(gauge) {
+			<br />
+			&nbsp;&nbsp;// use the responsive-gauge library
+			<br>
+			&nbsp;&nbsp;... }
+		</div>
+
+		<h3>Node.js / CommonJS</h3>
+		npm is a package manager for node projects; install responsive-gauge locally :
+		<div class="code">~ $ npm install responsive-gauge</div>
+		Then add the dependency to it anywhere you need :
+		<div class="code">var gauges = require('responsive-gauge');</div>
+	</div>
+
+
+	<div id="configuration">
+		<h2>
+			Configuration <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+	</div>
+
+
+	<div id="compatibility">
+		<h2>
+			Compatibility <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+	</div>
+
+
+	<div id="licence">
+		<h2>
+			Licence <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+		<p>
+			Responsive-gauge is distributed under the MIT license; its code can be found <a target="_blank"
+				href="//github.com/DeepSilence/ReactiveGauge"> on GitHub <i class="fa fa-github-square"></i>
+			</a>
+		</p>
+	</div>
+</body>
+</html>
