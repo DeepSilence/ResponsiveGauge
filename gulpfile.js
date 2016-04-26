@@ -18,6 +18,7 @@ var paths = {
 
 
 gulp.task("default", function() {	 
+	gulp.start('buildJs');
 	// watch for changes
 	gulp.watch([paths.srcJs], function() {
 		gulp.start('buildJs');

@@ -47,7 +47,9 @@ if (mode === 'requireJS'){
 	var promNumbro = createScript(protocol + "//cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js");
 
 	Promise.all([promD3, promNumbro]).then(()=>{
-		createScript('../../dist/ReactiveGauge.min.js').then(setTimeout(startTests, 100));
+			createScript('../../src/ReactiveGauge.js').then(setTimeout(startTests, 100));
+// createScript('../../dist/ReactiveGauge.min.js').then(setTimeout(startTests,
+// 100));
 	});
 }
 
@@ -86,7 +88,24 @@ function startTests(){
 	 * GAUGES INITIALIZATION
 	 **************************************************************************/
 	
-	var gauges = [];
+	var gauges = [];	
+// gauges.push(ReactiveGauge('#fgauge', {
+// minAngle : 0,
+// maxAngle : 360,
+// minValue : 0,
+// maxValue : 360,
+// labelNumber :0,
+// labelFormat : (v)=>Math.floor(v)+'°',
+// labelInset : 0,
+// ringInset : 5,
+// ringWidth : 0.5,
+// fillerWidth : 7,
+// fillerInset : 2,
+// pointerType : 'filler',
+// value :225,
+// colors : false
+// }));
+	
 	// quarters
 	gauges.push(ReactiveGauge('#qgauge1', getAngleCheckConfig(-90, 0)));
 	gauges.push(ReactiveGauge('#qgauge2', getAngleCheckConfig(0, 90)));
@@ -115,13 +134,13 @@ function startTests(){
 	gauges.push(ReactiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210,  230, {labelNumber : 2})));
 	
 	// custom angles (halves)
-	gauges.push(ReactiveGauge('#custom-half-gauge1', getAngleCheckConfig(-80, 45)));
+	gauges.push(ReactiveGauge('#custom-half-gauge1', getAngleCheckConfig(-45, 45)));
 	gauges.push(ReactiveGauge('#custom-half-gauge2', getAngleCheckConfig(20, 130)));
 	gauges.push(ReactiveGauge('#custom-half-gauge3', getAngleCheckConfig(100, 223)));
 	gauges.push(ReactiveGauge('#custom-half-gauge4', getAngleCheckConfig(210, 300)));
 	
 	// custom angles (three quarters)
-	gauges.push(ReactiveGauge('#custom-three-gauge1', getAngleCheckConfig(-80, 130)));
+	gauges.push(ReactiveGauge('#custom-three-gauge1', getAngleCheckConfig(260, 550)));
 	gauges.push(ReactiveGauge('#custom-three-gauge2', getAngleCheckConfig(20, 223)));
 	gauges.push(ReactiveGauge('#custom-three-gauge3', getAngleCheckConfig(100, 300)));
 	gauges.push(ReactiveGauge('#custom-three-gauge4', getAngleCheckConfig(210, 390)));
@@ -203,53 +222,6 @@ function startTests(){
 	}));
 	
 	
-	// SPEEDBERRY TESTS
-	// voltage
-	gauges.push(ReactiveGauge('#example-voltage-gauge', {
-		pointerType : 'filament',
-		minAngle : -90,
-		maxAngle : 0,
-		minValue : 10,
-		maxValue : 13,
-		colors : [ '#D50000', '#FF7C88', '#FFF', '#72FD98', '#2ecc71'],
-		border : true,
-		labelNumber : 4,
-		labelDecimalsMax : 1,
-		valueSuffix : 'volts'
-	}));
-	// mails count
-	gauges.push(ReactiveGauge('#example-mail-count-gauge', {
-		minAngle : -90,
-		maxAngle : 90,
-		minValue : 0,
-		maxValue : 1000000,
-		labelNumber : 11,
-		pointerType : 'filler',
-		ringInset : 1,
-		ringWidth : 20,
-		colors : false,
-		valueSuffix : 'mails',
-		valueInset : 10,
-		labelDecimalsMax : 3,
-		labelMantissaMax : 4
-	}));
-	// tweet count
-	gauges.push(ReactiveGauge('#example-tweet-count-gauge', {
-		minAngle : -90,
-		maxAngle : 90,
-		minValue : 0,
-		maxValue : 100000,
-		labelNumber : 0,
-		labelInset : 20,
-		pointerType : 'filler',
-		ringInset : 0,
-		ringWidth : 45,
-		colors : false,
-		valueSuffix : 'messages in queue',
-		labelMantissaMax : 8
-	}));
-	//gauges.push(ReactiveGauge('#speedberry-coolanttemp-gauge', getAngleCheckConfig(90, -90)));
-	
 	/***************************************************************************
 	 * DISPLAY AND REFRESH THE GAUGES
 	 **************************************************************************/
@@ -259,8 +231,8 @@ function startTests(){
 		var value = config.minValue + (Math.random() * range);
 		g.update(value);
 	});		
-	refresh();
-	setInterval(refresh, 5000);
+// refresh();
+// setInterval(refresh, 5000);
 	
 	// display gauges options on over
 	gauges.forEach(g=>{

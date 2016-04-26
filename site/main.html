@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Responsive gauges</title>
+
+<link href="site.css" type="text/css" rel="stylesheet" />
+<link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="http://cdn.jsdelivr.net/d3js/3.5.16/d3.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js"></script>
+<script type="text/javascript" src="../dist/ReactiveGauge.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
+
+<body>
+	<div id="menu" class="menu">
+		<a href="main.html#examples">Examples</a> <a href="quick-start.html">Quick start</a> <a href="main.html#configuration">Configuration</a> <a
+			href="main.html#compatibility">Compatibility</a> <a href="main.html#licence">Licence</a>
+	</div>
+
+
+	<div class="header">
+		<div id="example-header-gauge" class="gauge-container"></div>
+		<h1>
+			Responsive gauge is a Javascript library to create responsive gauges,
+			<br>
+			<small>based on D3 and SVG</small>
+		</h1>
+	</div>
+
+
+	<div id="example">
+		<p>
+			This library allows to create SVG gauges of different flavours, that can grow or shrink depending the gauge container size.
+			<br>
+			Here are some example of gauges:
+		</p>
+
+
+		<div class="examples">
+			<figure>
+				<span class="gauge-container" id="example-voltage-gauge"></span>
+				<figcaption>Classic voltmeter, with sectors and pointer</figcaption>
+			</figure>
+
+
+			<figure>
+				<span class="gauge-container" id="example-half-gauge"></span>
+				<figcaption>Gauge with gradient, custom angles and 'filament' pointer</figcaption>
+			</figure>
+		</div>
+
+
+		<div class="examples">
+			<figure>
+				<span class="gauge-container" id="example-mail-count-gauge"></span>
+				<figcaption>Modern gauge with 'filled' pointer</figcaption>
+			</figure>
+
+
+			<figure>
+				<span class="gauge-container" id="example-message-count-gauge"></span>
+				<figcaption>Modern gauge, without labels, with intelligent number format</figcaption>
+			</figure>
+
+
+			<figure>
+				<span class="gauge-container wide-gauge" id="example-full-gauge"></span>
+				<figcaption>Full circle gauge</figcaption>
+			</figure>
+		</div>
+	</div>
+
+
+	<div id="compatibility">
+		<h2>
+			Compatibility <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+	</div>
+
+
+	<div id="licence">
+		<h2>
+			Licence <a href="#menu"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+		</h2>
+		<p>
+			Responsive-gauge is distributed under the MIT license; its code can be found <a target="_blank"
+				href="//github.com/DeepSilence/ReactiveGauge"> on GitHub <i class="fa fa-github-square"></i>
+			</a>
+		</p>
+	</div>
+
+	<script type="text/javascript">
+		window.onload = ()=>{
+			// header
+			ReactiveGauge('#example-header-gauge', {
+				minAngle : -90,
+				maxAngle : 90,
+				minValue : 0,
+				maxValue : 1000000,
+				labelNumber : 11,
+				pointerType : 'filler',
+				ringInset : 1,
+				ringWidth : 20,
+				colors : false,
+				value : 318093,
+				valueInset : 4,
+				labelMantissaMax : 4
+			});
+			// half gauge
+			ReactiveGauge('#example-half-gauge', {
+				pointerType : 'filament',
+				minAngle : -45,
+				maxAngle : 45,
+				minValue : 0,
+				maxValue : 100,
+				colors : 'gradient',
+				startColor : '#FFF',
+				endColor : '#63c4ca',
+				value : 44,
+				valueInset : 30,
+				labelFormat : (value) => {return value + '%'}
+			});
+			// voltage
+			ReactiveGauge('#example-voltage-gauge', {
+				minAngle : -90,
+				maxAngle : 0,
+				minValue : 10,
+				maxValue : 13,
+				colors : [ '#FFE4E4', '#FFA3AC', '#E14C4C', '#FFF', '#FFF'],
+				border : true,
+				labelNumber : 4,
+				labelDecimalsMax : 1,
+				value:12.2,
+				valueSuffix : 'volts'
+			});
+			// mails count
+			ReactiveGauge('#example-mail-count-gauge', {
+				minAngle : -90,
+				maxAngle : 90,
+				minValue : 0,
+				maxValue : 1000,
+				labelNumber : 5,
+				pointerType : 'filler',
+				ringInset : 1,
+				ringWidth : 20,
+				colors : false,
+				value :747,
+				valueSuffix : 'emails',
+				valueInset : 10
+			});
+			// messages count
+			ReactiveGauge('#example-message-count-gauge', {
+				minAngle : -90,
+				maxAngle : 90,
+				minValue : 0,
+				maxValue : 1000000,
+				labelNumber : 0,
+				pointerType : 'filler',
+				ringInset : 0,
+				ringWidth : 47,
+				colors : false,
+				value :673274,
+				valueSuffix : 'messages in queue',
+				labelDecimalsMax : 2,
+				labelMantissaMax : 3
+			});
+
+			ReactiveGauge('#example-full-gauge', {
+				minAngle : 0,
+				maxAngle : 360,
+				minValue : 0,
+				maxValue : 360,
+				labelNumber :0,
+				labelFormat : (v)=>Math.floor(v)+'°',
+				labelInset : 0,
+				ringInset : 5,
+				ringWidth : 0.5,
+				fillerWidth : 7,
+				fillerInset : 2,
+				pointerType : 'filler',
+				value :225,
+				colors : false
+			});
+		}
+	</script>
+</body>
+</html>

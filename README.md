@@ -16,8 +16,7 @@ Based on D3 and Numbro, uses SVG
  	
 ##CSS classes added to the container
 
-	'gauge-360' for full size gauges
-	'gauge-vertical' for half gauges whose layout are vertical
+	'wide-gauge' for full size gauges
  	
 ##known bugs 
 

@@ -10,15 +10,17 @@ App :
 	add 'mirroring'
 	add pointerSlowness for 'fill'
 	allow horizontal labels? 
-	
+		http://blogs.u2u.be/diederik/post/2013/06/24/A-Modern-UI-radial-gauge-control-for-Windows-8-Store-apps.aspx
 
 Bugs : 
+	see why the full circle gauge value is shifted in example page, not on test page.
 	the "// - 0.5 allow shapes borders collapse" makes color flowing over the border on first sector
 	bug : tests do not shrink on Chr (Chr limitation?)
 
 	
 	
 Release : 
+	0. check params names are ok
 	1. build & test with gulp
 	2. visually check vanilla test.html on FF/Chr/...
 	3. visually check requireJS test.html
