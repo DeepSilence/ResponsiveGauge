@@ -3,14 +3,13 @@ Archi :
 	add to a CDN
 
 App : 
-	choose examples (voltmeters, tweet count...)	
+	add language support for formatters
 	use gradient for filled pointer
-	choose color scheme
-	non linear scale
+	add non linear scale
 	add 'mirroring'
 	add pointerSlowness for 'fill'
-	add language support for formatters
-
+	allow horizontal labels? 
+	
 
 Bugs : 
 	the "// - 0.5 allow shapes borders collapse" makes color flowing over the border on first sector
