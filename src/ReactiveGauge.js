@@ -17,31 +17,31 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	}
 
 	/* PRIVATE CONSTANTS */
-	var PADDING = 6, NEEDLE_RADIUS = 2,
+	var PADDING = 6;
+	var NEEDLE_RADIUS = 2;
 	// diameter of the gauge (including ticks and labels), used only as
 	// reference for drawing; the actual size on screen depends on the size of
 	// the gauge container
-	GAUGE_DIAMETER = 100,
+	var GAUGE_DIAMETER = 100;
 	// Number of parts of gauge to simulate a color gradient
-	GRADIENT_ELT_NUMBER = 40,
+	var GRADIENT_ELT_NUMBER = 40;
 
-	FORMATTER = numbro(),
+	var FORMATTER = numbro();
 	// formatter that will try to optimize the display on labels:
 	// uses SI prefixes (G, M, k, µ, ...), and round values
 	// depending the available space (related to config.labelNumber)
-	DEFAULT_FORMAT = function(value) {
+	var DEFAULT_FORMAT = function(value) {
 		if (this.FORMAT === undefined) {
 			// sets the format regex
 			if (this.labelDecimalsMax === 0) {
 				this.FORMAT = this.labelMantissaMax + '.a';
 			} else {
-				var format = new Array(this.labelDecimalsMax + 1).join('0');
-				this.FORMAT = this.labelMantissaMax + '.[' + format + ']a';
+				var decimals = new Array(this.labelDecimalsMax + 1).join('0');
+				this.FORMAT = this.labelMantissaMax + '.[' + decimals + ']a';
 			}
 		}
 
-		var format = this.FORMAT;
-		return FORMATTER.set(value).format(format);
+		return FORMATTER.set(value).format(this.FORMAT);
 	};
 
 	/* DEFAULT CONFIGURATION, all size/position values are in % */
@@ -103,7 +103,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		valueInset : 22,
 		// suffix for the displayed value
 		valueSuffix : ''
-	}
+	};
 
 	var ReactiveGauge = function(container, configuration) {
 		var config = {};
@@ -179,12 +179,12 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			}
 			for ( var prop in configuration) {
 				config[prop] = configuration[prop];
-				if (defaultConfig[prop] == undefined) {
+				if (defaultConfig[prop] === undefined) {
 					console.warn('Config property ' + prop + ' is unknwon');
 				}
 			}
 			// reset format
-			config.FORMAT == undefined;
+			config.FORMAT = undefined;
 
 			range = config.maxAngle - config.minAngle;
 			computeLayout();
@@ -198,22 +198,22 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			// coloring / gradient
 			if (config.colors.constructor === Array) {
 				colors = d3.range(config.sectorsNumber).map(function() {
-					return 1 / config.sectorsNumber
+					return 1 / config.sectorsNumber;
 				});
 				arcColorFn = function(i) {
 					/* fix me : ugly */
 					var index = Math.floor(i * config.sectorsNumber);
 					index = Math.min(index, config.colors.length - 1);
 					return config.colors[index];
-				}
+				};
 			} else if (config.colors) {
 				if (config.colors === 'gradient') {
 					colors = d3.range(GRADIENT_ELT_NUMBER).map(function() {
-						return 1 / GRADIENT_ELT_NUMBER
+						return 1 / GRADIENT_ELT_NUMBER;
 					});
 				} else {
 					colors = d3.range(config.sectorsNumber).map(function() {
-						return 1 / config.sectorsNumber
+						return 1 / config.sectorsNumber;
 					});
 				}
 				arcColorFn = d3.interpolateHsl(d3.rgb(config.startColor), d3.rgb(config.endColor));
@@ -299,13 +299,9 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			var bottomSpace = 0;
 			// computes axis totally covered by the gauges :
 			// if min and max angles are on both sides of an axis,
-			// then the summit of the arc require all available space
-			var firstCrossedAxisIndex = Math.floor(minAngle / 90); // top of
-			// the
-			// vertical
-			// axis is
-			// at index
-			// 0
+			// then the summit of the arc require all available space.
+			// top of the vertical axis is at index 0
+			var firstCrossedAxisIndex = Math.floor(minAngle / 90);
 			var lastCrossedAxisIndex = Math.floor(maxAngle / 90);
 			for (var crossedAxisIndex = firstCrossedAxisIndex; crossedAxisIndex <= lastCrossedAxisIndex; crossedAxisIndex++) {
 				switch (crossedAxisIndex % 4) { // % 4 to handle angles >= 360
@@ -348,9 +344,10 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			// console.log('ty', ty);
 			// console.log('tx', tx);
 
-			// computes some flags
-			var fullSize = radius * 2 + padding * 2;
-			if (fullSize == height && fullSize == width) {
+			// if more than 2 axis are fully shown
+			// the gauge is considered as 'wide'
+			var fullSize = radius * 3 + padding * 4;
+			if (fullSize < height + width) {
 				isWide = true;
 			}
 		}
@@ -362,7 +359,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			configure(configuration);
 
 			svgContainer = d3.select(container)//
-			.classed('gauge-360', (range === 360));
+			.classed('wide-gauge', isWide);
 
 			svg = svgContainer.append('svg:svg')//
 			.attr('class', 'gauge')//
@@ -399,7 +396,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			var pointerLine = d3.svg.line().interpolate('monotone');
 			var pointerContainer = svg.append('g')//
 			.attr('class', 'gauge-pointer gauge-' + config.pointerType)//
-			.attr('transform', centerTx)//
+			.attr('transform', centerTx);
 			if (config.pointerType === 'filler') {
 				pointer = pointerContainer.append('path');
 
@@ -427,18 +424,13 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			.selectAll('text')//
 			.data(labelData)//
 			.enter()//
-			.append('text')//
+			.append('g')//
 			.attr('transform', function(d) {
 				var ratio = scale(d);
 				var newAngle = config.minAngle + (ratio * range);
-				var transform = 'rotate(' + newAngle + ') translate(0,' + (config.labelInset - radius) + ')';
-				/* more space = zoom out = need bigger font */
-				if (isWide) {
-					transform += ' scale(2,2)';
-				}
-
-				return transform;
+				return 'rotate(' + newAngle + ') translate(0,' + (config.labelInset - radius) + ')';
 			})//
+			.append('text')//
 			.text(config.labelFormat.bind(config));
 
 			// value display
@@ -446,9 +438,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				var valueTx = config.valueInset;
 				// placed between the two bounds
 				var angle = config.minAngle + Math.abs(range) / 2;
-				var fontScale = 3;
 				if (isWide) {
-					fontScale *= 2; /* more space = zoom out = need bigger font */
 					// keep centered
 					valueTx = 0;
 					angle = 0;
@@ -458,10 +448,9 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				var valueZone = svg.append('g')//
 				.attr('class', 'gauge-value')//
 				.attr('transform', centerTx + ' rotate(' + angle + ')')//
-				.append('text')//
-				.attr('transform', translationTf //
-						+ ' scale(' + fontScale + ',' + fontScale + ')' //
-						+ ' rotate(' + -angle + ')');
+				.append('g')//
+				.attr('transform', translationTf + ' rotate(' + -angle + ')')//
+				.append('text');
 				// value
 				valueLabel = valueZone.append('tspan');
 				// value suffix
@@ -472,7 +461,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				.attr('dy', '1em');
 			}
 		}
- 
+
 		/**
 		 * Render the pointer part of the gauge
 		 */
@@ -497,7 +486,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		 * 
 		 */
 		function update(newValue, newConfiguration) {
-			newValue === undefined ? 0 : newValue;
+			newValue = (newValue === undefined ? 0 : newValue);
 
 			// if update is actually the first gauge display or need a full
 			// redraw
@@ -528,16 +517,13 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 		render(configuration);
 		update(0);
-		
-		
 
 		return {
 			isRendered : isRendered,
 			update : update,
 			getConfig : getReadOnlyConfig,
-			container : svgContainer, 
+			container : svgContainer,
 
-			
 			/*
 			 * Expose private functions for testing. Do not change the starting
 			 * and ending comments; they are used to strip private functions
@@ -546,8 +532,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			/* start-test-code */
 			deg2rad : deg2rad,
 			computeTicks : computeTicks
-			/* end-test-code */
-		}
+		/* end-test-code */
+		};
 	}
 
 	/***************************************************************************
@@ -576,9 +562,11 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 // CommonJS : sets the dependencies
 if (typeof module !== 'undefined' && module.exports) {
-	const d3 = require('d3');
-	const numbro = require('numbro');
-	
+	const
+	d3 = require('d3');
+	const
+	numbro = require('numbro');
+
 	ReactiveGaugeFactory(d3, numbro)
 
 	// RequireJS : sets the dependencies url and define the module

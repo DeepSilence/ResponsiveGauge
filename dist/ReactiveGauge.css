@@ -8,7 +8,7 @@
 
 .gauge-container .gauge {
 	display: inline-block;
-    font-size: 4px;
+	font-size: 4px;
 	overflow: visible; /*avoid cutting texts */
 	height: 100%; /* to react to the parent height*/
 	width: 100%; /* to react to the parent width*/
@@ -41,24 +41,35 @@
 }
 
 /* LABELS */
+.wide-gauge text {
+	transform: scale(2, 2);
+}
+
 .gauge-label {
 	text-anchor: middle;
 	font-weight: bold;
 	fill: black;
 }
 /* shifts the first and last labels so that they are not out of the container*/
-.gauge-label text:first-child {
+.gauge-label g:first-child text {
 	text-anchor: start;
 }
 
-.gauge-label text:last-child {
+.gauge-label g:last-child text {
 	text-anchor: end;
 }
 
+/* VALUE */
 .gauge-value text {
 	dominant-baseline: central;
 	text-anchor: middle;
+	transform: scale(3, 3);
 }
+
+.wide-gauge .gauge-value text {
+	transform: scale(6, 6);
+}
+
 .unit {
-    font-size: 60%;
+	font-size: 60%;
 }
