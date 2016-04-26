@@ -27,10 +27,9 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	var GRADIENT_ELT_NUMBER = 40;
 
 	var FORMATTER = numbro();
-	// formatter that will try to optimize the display on labels:
-	// uses SI prefixes (G, M, k, µ, ...), and round values
-	// depending the available space (related to config.labelNumber)
+	// formatter will use SI prefixes (G, M, k, µ, ...), and round values
 	var DEFAULT_FORMAT = function(value) {
+		// build FORMAT only once
 		if (this.FORMAT === undefined) {
 			// sets the format regex
 			if (this.labelDecimalsMax === 0) {
@@ -66,6 +65,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		/* gauge scale */
 		minValue : 0,
 		maxValue : 10,
+		value : 0,
 
 		/* sectors */
 		sectorsNumber : 5,
@@ -349,6 +349,10 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			var fullSize = radius * 3 + padding * 4;
 			if (fullSize < height + width) {
 				isWide = true;
+				width += padding * 2;
+				height += padding * 2;
+				ty += padding;
+				tx += padding;
 			}
 		}
 
@@ -516,7 +520,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		}
 
 		render(configuration);
-		update(0);
+		update(config.value);
 
 		return {
 			isRendered : isRendered,
