@@ -205,28 +205,50 @@ function startTests(){
 	
 	// SPEEDBERRY TESTS
 	// voltage
-	gauges.push(ReactiveGauge('#speedberry-voltage-gauge', {
+	gauges.push(ReactiveGauge('#example-voltage-gauge', {
 		pointerType : 'filament',
 		minAngle : -90,
 		maxAngle : 0,
 		minValue : 10,
 		maxValue : 13,
-		colors : [ '#D50000', '#FF7C88', '#FFF', '#69f0ae', '#00e676'],
+		colors : [ '#D50000', '#FF7C88', '#FFF', '#72FD98', '#2ecc71'],
 		border : true,
 		labelNumber : 4,
 		labelDecimalsMax : 1,
 		valueSuffix : 'volts'
 	}));
-	// temperatures
-	gauges.push(ReactiveGauge('#speedberry-oiltemp-gauge', {
+	// mails count
+	gauges.push(ReactiveGauge('#example-mail-count-gauge', {
+		minAngle : -90,
+		maxAngle : 90,
+		minValue : 0,
+		maxValue : 1000000,
+		labelNumber : 11,
 		pointerType : 'filler',
-		minAngle : 0,
-		maxAngle : 180,
-		minValue : 70,
-		maxValue : 120,
-		labelNumber : 5
+		ringInset : 1,
+		ringWidth : 20,
+		colors : false,
+		valueSuffix : 'mails',
+		valueInset : 10,
+		labelDecimalsMax : 3,
+		labelMantissaMax : 4
 	}));
-	gauges.push(ReactiveGauge('#speedberry-coolanttemp-gauge', getAngleCheckConfig(90, -90)));
+	// tweet count
+	gauges.push(ReactiveGauge('#example-tweet-count-gauge', {
+		minAngle : -90,
+		maxAngle : 90,
+		minValue : 0,
+		maxValue : 100000,
+		labelNumber : 0,
+		labelInset : 20,
+		pointerType : 'filler',
+		ringInset : 0,
+		ringWidth : 45,
+		colors : false,
+		valueSuffix : 'messages in queue',
+		labelMantissaMax : 8
+	}));
+	//gauges.push(ReactiveGauge('#speedberry-coolanttemp-gauge', getAngleCheckConfig(90, -90)));
 	
 	/***************************************************************************
 	 * DISPLAY AND REFRESH THE GAUGES
