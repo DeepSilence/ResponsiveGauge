@@ -225,7 +225,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			arcData = getArcData(function(d, i) {
 				var ratio = d * i;
 				// - 0.5 allow shapes borders collapse, except on first arc
-				var collapsing = (d === 0 ? 0 : 0.5);
+				var collapsing = (i === 0 ? 0 : 0.5);
 				return deg2rad(config.minAngle + (ratio * range) - collapsing);
 			}, function(d, i) {
 				var ratio = d * (i + 1);
