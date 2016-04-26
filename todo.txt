@@ -13,6 +13,7 @@ App :
 
 
 Bugs : 
+	the "// - 0.5 allow shapes borders collapse" makes color flowing over the border on first sector
 	bug : tests do not shrink on Chr (Chr limitation?)
 
 	
