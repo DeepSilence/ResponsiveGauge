@@ -5,6 +5,7 @@ Archi :
 App : 
 	add language support for formatters
 	use gradient for filled pointer
+	allow several pointers together
 	add non linear scale
 	add 'mirroring'
 	add pointerSlowness for 'fill'
