@@ -99,7 +99,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		border : false,
 
 		/* enable value display */
-		showValue : false,
+		showValue : true,
 		valueInset : 22,
 		// suffix for the displayed value
 		valueSuffix : ''
@@ -224,8 +224,9 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			// sectors of the arc
 			arcData = getArcData(function(d, i) {
 				var ratio = d * i;
-				// - 0.5 allow shapes borders collapse
-				return deg2rad(config.minAngle + (ratio * range) - 0.5);
+				// - 0.5 allow shapes borders collapse, except on first arc
+				var collapsing = (d === 0 ? 0 : 0.5);
+				return deg2rad(config.minAngle + (ratio * range) - collapsing);
 			}, function(d, i) {
 				var ratio = d * (i + 1);
 				return deg2rad(config.minAngle + (ratio * range));
