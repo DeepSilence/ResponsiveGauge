@@ -32,11 +32,17 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		// build FORMAT only once
 		if (this.FORMAT === undefined) {
 			// sets the format regex
-			if (this.labelDecimalsMax === 0) {
-				this.FORMAT = (isForLabel ? this.labelMantissaMax : this.valueMantissaMax) + '.a';
+			if (isForLabel) {
+				var mantissaMax = this.labelMantissaMax;
+				var decimalsMax = this.labelDecimalsMax;
 			} else {
-				var decimals = new Array(this.labelDecimalsMax + 1).join('0');
-				this.FORMAT = (isForLabel ? this.labelMantissaMax : this.valueMantissaMax) + '.[' + decimals + ']a';
+				var mantissaMax = this.valueMantissaMax;
+				var decimalsMax = this.valueDecimalsMax;
+			}
+			if (decimalsMax === 0) {
+				this.FORMAT = decimalsMax + '.a';
+			} else {
+				this.FORMAT = +'.[' + new Array(decimalsMax + 1).join('0') + ']a';
 			}
 		}
 
@@ -71,14 +77,18 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		maxValue : 10,
 		value : 0,
 
-
 		/* labels */
 		labelNumber : NaN, /* by default, as many as sectors */
-		/* format function to apply to the labels (can use d3.format). The formater context is the config object*/
-		labelFormater : (v)=>DEFAULT_FORMATER(v, true),
 		/*
-		 * If no custom labelFormater specified, number of mantissa digits before
-		 * using SI units (Mega, Kilo...)
+		 * format function to apply to the labels (can use d3.format). The
+		 * formater context is the config object
+		 */
+		labelFormater : function(v) {
+			return DEFAULT_FORMATER.call(this, v, true);
+		},
+		/*
+		 * If no custom labelFormater specified, number of mantissa digits
+		 * before using SI units (Mega, Kilo...)
 		 */
 		labelMantissaMax : 4,
 		/*
@@ -100,11 +110,16 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		/* enable value display */
 		showValue : true,
 		valueInset : 22,
-		/* format function to apply to the value (can use d3.format). The formater context is the config object */
-		valueFormater : (v)=>DEFAULT_FORMATER(v, false),
 		/*
-		 * If no custom valueFormater specified, number of mantissa digits before
-		 * using SI units (Mega, Kilo...)
+		 * format function to apply to the value (can use d3.format). The
+		 * formater context is the config object
+		 */
+		valueFormater : function(v) {
+			return DEFAULT_FORMATER.call(this, v, false);
+		},
+		/*
+		 * If no custom valueFormater specified, number of mantissa digits
+		 * before using SI units (Mega, Kilo...)
 		 */
 		valueMantissaMax : 4,
 		/*
@@ -197,8 +212,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			// reset format
 			config.FORMAT = undefined;
 			// binds the formater so that it can access config
-			config.labelFormater.bind(config);
-			config.valueFormater.bind(config);
+			config.labelFormater = config.labelFormater.bind(config);
+			config.valueFormater = config.valueFormater.bind(config);
 
 			range = config.maxAngle - config.minAngle;
 			computeLayout();
@@ -581,8 +596,10 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 // CommonJS : sets the dependencies
 if (typeof module !== 'undefined' && module.exports) {
-	const d3 = require('d3');
-	const numbro = require('numbro');
+	const
+	d3 = require('d3');
+	const
+	numbro = require('numbro');
 
 	ReactiveGaugeFactory(d3, numbro)
 

@@ -47,9 +47,8 @@ if (mode === 'requireJS'){
 	var promNumbro = createScript(protocol + "//cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js");
 
 	Promise.all([promD3, promNumbro]).then(()=>{
-			createScript('../../src/ReactiveGauge.js').then(setTimeout(startTests, 100));
-// createScript('../../dist/ReactiveGauge.min.js').then(setTimeout(startTests,
-// 100));
+// createScript('../../src/ReactiveGauge.js').then(setTimeout(startTests, 100));
+		createScript('../../dist/ReactiveGauge.min.js').then(setTimeout(startTests,100));
 	});
 }
 
@@ -88,23 +87,7 @@ function startTests(){
 	 * GAUGES INITIALIZATION
 	 **************************************************************************/
 	
-	var gauges = [];	
-// gauges.push(ReactiveGauge('#fgauge', {
-// minAngle : 0,
-// maxAngle : 360,
-// minValue : 0,
-// maxValue : 360,
-// labelNumber :0,
-// labelFormat : (v)=>Math.floor(v)+'°',
-// labelInset : 0,
-// ringInset : 5,
-// ringWidth : 0.5,
-// fillerWidth : 7,
-// fillerInset : 2,
-// pointerType : 'filler',
-// value :225,
-// colors : false
-// }));
+	var gauges = [];
 	
 	// quarters
 	gauges.push(ReactiveGauge('#qgauge1', getAngleCheckConfig(-90, 0)));
@@ -202,7 +185,7 @@ function startTests(){
 		colors : 'sectors'
 	}))
 	gauges.push(ReactiveGauge('#suffixed-label-gauge', {
-		valueSuffix : 'km/h'
+		valueUnit : 'km/h'
 	}));	
 	
 	
@@ -231,7 +214,7 @@ function startTests(){
 		var value = config.minValue + (Math.random() * range);
 		g.update(value);
 	});		
-// refresh();
+	refresh();
 // setInterval(refresh, 5000);
 	
 	// display gauges options on over

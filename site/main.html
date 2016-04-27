@@ -11,6 +11,7 @@
 <link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="http://cdn.jsdelivr.net/d3js/3.5.16/d3.min.js"></script>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js"></script>
+<!-- <script type="text/javascript" src="../src/ReactiveGauge.js"></script> -->
 <script type="text/javascript" src="../dist/ReactiveGauge.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
@@ -34,11 +35,8 @@
 
 
 	<div id="example">
-		<p>
-			This library allows to create SVG gauges of different flavours, that can grow or shrink depending the gauge container size.
-			<br>
-			Here are some example of gauges:
-		</p>
+		<p>This library allows to create SVG gauges of different flavours, that can grow or shrink depending the gauge container size. Here
+			are some example of gauges:</p>
 
 
 		<div class="examples">
@@ -112,6 +110,7 @@
 				labelMantissaMax : 4
 			});
 			// half gauge
+			var percentFormatter= function(value)  {return value + '%'};
 			ReactiveGauge('#example-half-gauge', {
 				pointerType : 'filament',
 				minAngle : -45,
@@ -123,7 +122,8 @@
 				endColor : '#63c4ca',
 				value : 44,
 				valueInset : 30,
-				labelFormat : (value) => {return value + '%'}
+				labelFormater : percentFormatter,
+				valueFormater : percentFormatter
 			});
 			// voltage
 			ReactiveGauge('#example-voltage-gauge', {
@@ -136,7 +136,7 @@
 				labelNumber : 4,
 				labelDecimalsMax : 1,
 				value:12.2,
-				valueSuffix : 'volts'
+				valueUnit : 'volts'
 			});
 			// mails count
 			ReactiveGauge('#example-mail-count-gauge', {
@@ -150,7 +150,7 @@
 				ringWidth : 20,
 				colors : false,
 				value :747,
-				valueSuffix : 'emails',
+				valueUnit : 'emails',
 				valueInset : 10
 			});
 			// messages count
@@ -165,7 +165,7 @@
 				ringWidth : 47,
 				colors : false,
 				value :673274,
-				valueSuffix : 'messages in queue',
+				valueUnit : 'messages in queue',
 				labelDecimalsMax : 2,
 				labelMantissaMax : 3
 			});
@@ -176,7 +176,7 @@
 				minValue : 0,
 				maxValue : 360,
 				labelNumber :0,
-				labelFormat : (v)=>Math.floor(v)+'°',
+				valueFormater : (v)=>Math.floor(v)+'°',
 				labelInset : 0,
 				ringInset : 5,
 				ringWidth : 0.5,
