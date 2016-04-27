@@ -80,9 +80,9 @@ figcaption {
 
 .gauge-container {
 	height: 200px;
-    border: 1px dashed #ddd;
-    resize: both; 	/* allow to test resizing */
-    vertical-align: top; /* keep gauges aligned when testing sizes */
+	border: 1px dashed #ddd;
+	resize: both; /* allow to test resizing */
+	vertical-align: top; /* keep gauges aligned when testing sizes */
 }
 
 .menu {
@@ -160,4 +160,21 @@ figcaption {
 
 #example-full-gauge .gauge-filler {
 	fill: #47c650;
+}
+
+/**
+ *	CONFIG PAGE STYLES
+ */
+/* config options and tables of parameter  */
+em {
+	margin-left: 30px;
+}
+
+/* font styles */
+#config .code {
+	font-family: 'Roboto', sans-serif;
+}
+
+#config h5 {
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }

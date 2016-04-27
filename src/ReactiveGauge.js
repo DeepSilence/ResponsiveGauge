@@ -17,12 +17,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	}
 
 	/* PRIVATE CONSTANTS */
-	/**
-	 * @description padding around the gauge
-	 * @constant
-	 * @type {int}
-	 * @default
-	 */
+	// padding around the gauge
 	var PADDING = 6;
 	var NEEDLE_RADIUS = 2;
 	// diameter of the gauge (including ticks and labels), used only as
@@ -56,27 +51,39 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	};
 
 	/* DEFAULT CONFIGURATION, all size/position values are in % */
-	/** @namespace */
 	var defaultConfig = {
-		/* ring size */
+		/* RING */
+		// Margin of the ring from the container side (%)
 		ringInset : 3,
+		// Width of the ring (%)
 		ringWidth : 7,
+		// Angle at which the ring starts. -90 is the minimum value, and 0 is at
+		// the top of the vertical axis
 		minAngle : -90,
+		// Angle at which the ring ends.
 		maxAngle : 90,
-		// sectors
+
+		/* SECTORS */
+		// Number of sectors of the ring.
 		sectorsNumber : 5,
-		// enables the border
+		// Enables the border around the ring
 		border : false,
 
-		/* pointer types: 'needle', 'filament', 'filler' */
+		/* POINTERS */
+		// Type of pointer; values are :<br>
+		// 'needle',<br>
+		// 'filament', <br>
+		// 'filler'
 		pointerType : 'needle',
+		// Time (in millis) for the pointer to stabilize at the correct position
 		pointerSlowness : 200,
-		// for 'needle' pointers
+		// Length 'needle' pointers (%)
 		needleLength : 90,
-		// for 'filament'
+		// Overflow of 'filament' pointers over the ring (%)
 		filamentLength : 2,
-		// for 'filler'
+		// Width of 'filled' pointers (%)
 		fillerWidth : NaN, /* by default, as wide as the ring */
+		
 		fillerInset : 0,
 
 		/* gauge values */
@@ -86,16 +93,10 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 		/* labels */
 		labelNumber : NaN, /* by default, as many as sectors */
-		/*
-		 * format function to apply to the labels (can use d3.format). The
-		 * formater context is the config object
-		 */
-		/**
-		 * @description Formatter for the labels
-		 * @param v
-		 *            the value to format
-		 * @example (v)=>v + '/10' // will display '5/10'
-		 */
+
+		// Function used to format the labels (can be d3.format). The
+		// formater context is the config object.
+		// @param v the value to format
 		labelFormater : function(v) {
 			return DEFAULT_FORMATER.call(this, v, true);
 		},
@@ -112,31 +113,19 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		labelInset : 0,
 
 		/**
-		 * @description Color(s) of the gauge; values are <br>
-		 *              <em>'smooth'</em> for a gradient color gradient<br>
-		 *              <em>'sectors'</em> for coloring on each sector
-		 *              (gradient)<br>
-		 *              <em>[#111, #222, ...]</em> for specifying the color of
-		 *              each sector<br>
-		 *              <em>false</em> : no color (CSS color can be used)<br>
-		 * @since 1.0.0
-		 * @default
+		 * Color(s) of the gauge; values are :<br>
+		 * 'smooth' for a gradient color gradient<br>
+		 * 'sectors' for coloring on each sector (gradient)<br>
+		 * [#111, #222, ...] for specifying the color of each sector<br>
+		 * false : no color (CSS color can be used)<br>
 		 */
 		colors : false,
 		/**
-		 * @description If colors = 'smooth' or 'sectors', used as first
-		 *              gradient color
-		 * @type {color}
-		 * @since 1.0.0
-		 * @default
+		 * If colors = 'smooth' or 'sectors', used as first gradient color
 		 */
 		startColor : '#ffebee',
 		/**
-		 * @description If colors = 'smooth' or 'sectors', used as last gradient
-		 *              color
-		 * @type {color}
-		 * @since 1.0.0
-		 * @default
+		 * If colors = 'smooth' or 'sectors', used as last gradient color
 		 */
 		endColor : '#d50000',
 

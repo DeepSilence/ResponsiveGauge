@@ -13,34 +13,31 @@ var paths = {
 	testSrc : 'test',
 	testSrcJs : 'test/*.js',
 	manualTest : '!test/manual/**/*.js'
-		
 };
 
-
-gulp.task("default", function() {	 
+gulp.task("default", function() {
 	gulp.start('buildJs');
+
 	// watch for changes
-	gulp.watch([paths.srcJs], function() {
+	gulp.watch([ paths.srcJs ], function() {
 		gulp.start('buildJs');
 	});
 });
 
-
 /**
  * Build js
  */
-gulp.task('buildJs', () => {
-	 return gulp.src(paths.srcJs)
-     	.pipe(plumber(function (error) { // avoid exiting loop on error
-	         util.log(error.message);
-	     }))
-	 	.pipe(stripCode({ // remove test code
-	      start_comment: "start-test-code",
-	      end_comment: "end-test-code"
-	    }))
-	    .pipe(uglify({preserveComments: 'license'})) // minimize
-        .pipe(rename('ReactiveGauge.min.js'))
-	    .pipe(gulp.dest(paths.destJs));
+gulp.task('buildJs', function() {
+	return gulp.src(paths.srcJs).pipe(plumber(function(error) { // avoid exiting
+		// loop on error
+		util.log(error.message);
+	})).pipe(stripCode({ // remove test code
+		start_comment : "start-test-code",
+		end_comment : "end-test-code"
+	})).pipe(uglify({
+		preserveComments : 'license'
+	})) // minimize
+	.pipe(rename('ReactiveGauge.min.js')).pipe(gulp.dest(paths.destJs));
 });
 
 /**
@@ -49,10 +46,7 @@ gulp.task('buildJs', () => {
 gulp.task('test', function() {
 	gulp.src(paths.testSrcJs).pipe(jest({
 		verbose : true,
-        unmockedModulePathPatterns: [
-            "node_modules/*"
-        ],
-        testDirectoryName: paths.testSrc
-    }));
+		unmockedModulePathPatterns : [ "node_modules/*" ],
+		testDirectoryName : paths.testSrc
+	}));
 });
-

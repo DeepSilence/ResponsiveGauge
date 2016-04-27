@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Responsive gauges</title>
+
+<link href="site.css" type="text/css" rel="stylesheet" />
+<link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
+
+<body>
+	<div id="menu" class="menu">
+		<a href="main.html#examples">Examples</a> <a href="quick-start.html">Quick start</a> <a href="usage.html">Usage</a> <a href="config.html">Configuration</a>
+		<a href="main.html#compatibility">Compatibility</a> <a href="main.html#licence">Licence</a>
+	</div>
+
+
+	<div class="header">
+		<h1>
+			<small>Responsive gauge</small>
+		</h1>
+	</div>
+
+	<span class="TODO">CSS configs</span>
+	<div id="config">
+		<h2>Configuration</h2>
+
+		The gauges can be customized using the following parameters; CSS rules can be used for font-size or colors.
+		<div class="code">
+
+			<h5>colors</h5>
+			<div class="description">
+				Color(s) of the gauge; values are
+				<br>
+				<em>'smooth'</em> for a gradient color gradient
+				<br>
+				<em>'sectors'</em> for coloring on each sector (gradient)
+				<br>
+				<em>[#111, #222, ...]</em> for specifying the color of each sector
+				<br>
+				<em>false</em> : no color (CSS color can be used)
+				<br>
+			</div>
+			<dl class="details">
+				<dt class="tag-default">Default Value:</dt>
+				<dd class="tag-default">false</dd>
+				<dt class="tag-since">Since:</dt>
+				<dd class="tag-since">1.0.0</dd>
+			</dl>
+
+
+			<h5>endColor</h5>
+			<div class="description">If colors = 'smooth' or 'sectors', used as last gradient color</div>
+			<dl class="details">
+				<dt class="tag-type">Type:</dt>
+				<dd class="tag-type">color</dd>
+				<dt class="tag-default">Default Value:</dt>
+				<dd class="tag-default">#d50000</dd>
+				<dt class="tag-since">Since:</dt>
+				<dd class="tag-since">1.0.0</dd>
+			</dl>
+
+
+			<h5>startColor</h5>
+			<div class="description">If colors = 'smooth' or 'sectors', used as first gradient color</div>
+			<dl class="details">
+				<dt class="tag-type">Type:</dt>
+				<dd class="tag-type">color</dd>
+				<dt class="tag-default">Default Value:</dt>
+				<dd class="tag-default">#ffebee</dd>
+				<dt class="tag-since">Since:</dt>
+				<dd class="tag-since">1.0.0</dd>
+			</dl>
+
+
+			<h5>labelFormater</h5>
+			<div class="description">Function used to format the labels (can be d3.format). The formater context is the config object.</div>
+			<dl>
+				<dt>Parameters:</dt>
+				<dd>
+					<dl class="params">
+						<dt class="name">v</dt>
+						<dd class="description last">the value to format</dd>
+					</dl>
+				</dd>
+			</dl>
+			<dl>
+				<dt>Example</dt>
+				<dd>
+					<pre class="prettyprint">(v)=>v + '/10' // will display '5/10'</pre>
+				</dd>
+			</dl>
+
+		</div>
+
+	</div>
+</body>
+</html>
