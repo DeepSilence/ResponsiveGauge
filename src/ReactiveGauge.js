@@ -17,6 +17,12 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	}
 
 	/* PRIVATE CONSTANTS */
+	/**
+	 * @description padding around the gauge
+	 * @constant
+	 * @type {int}
+	 * @default
+	 */
 	var PADDING = 6;
 	var NEEDLE_RADIUS = 2;
 	// diameter of the gauge (including ticks and labels), used only as
@@ -50,6 +56,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	};
 
 	/* DEFAULT CONFIGURATION, all size/position values are in % */
+	/** @namespace */
 	var defaultConfig = {
 		/* ring size */
 		ringInset : 3,
@@ -83,6 +90,12 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		 * format function to apply to the labels (can use d3.format). The
 		 * formater context is the config object
 		 */
+		/**
+		 * @description Formatter for the labels
+		 * @param v
+		 *            the value to format
+		 * @example (v)=>v + '/10' // will display '5/10'
+		 */
 		labelFormater : function(v) {
 			return DEFAULT_FORMATER.call(this, v, true);
 		},
@@ -98,13 +111,33 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		labelDecimalsMax : 0,
 		labelInset : 0,
 
-		/* colors */
-		// 'smooth' for a gradient color gradient
-		// 'sectors' for coloring on each sector (gradient)
-		// [#111, #222, ...] for specifying the color of each sector
-		// false (default) : no color (CSS color can be used)
+		/**
+		 * @description Color(s) of the gauge; values are <br>
+		 *              <em>'smooth'</em> for a gradient color gradient<br>
+		 *              <em>'sectors'</em> for coloring on each sector
+		 *              (gradient)<br>
+		 *              <em>[#111, #222, ...]</em> for specifying the color of
+		 *              each sector<br>
+		 *              <em>false</em> : no color (CSS color can be used)<br>
+		 * @since 1.0.0
+		 * @default
+		 */
 		colors : false,
+		/**
+		 * @description If colors = 'smooth' or 'sectors', used as first
+		 *              gradient color
+		 * @type {color}
+		 * @since 1.0.0
+		 * @default
+		 */
 		startColor : '#ffebee',
+		/**
+		 * @description If colors = 'smooth' or 'sectors', used as last gradient
+		 *              color
+		 * @type {color}
+		 * @since 1.0.0
+		 * @default
+		 */
 		endColor : '#d50000',
 
 		/* enable value display */
@@ -282,13 +315,6 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			.outerRadius(radius - inset)//
 			.startAngle(startAngle)//
 			.endAngle(endAngle);
-		}
-
-		/**
-		 * Return TRUE if the gauge is already rendered
-		 */
-		function isRendered() {
-			return (svg !== undefined);
 		}
 
 		/**
@@ -522,12 +548,6 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		function update(newValue, newConfiguration) {
 			newValue = (newValue === undefined ? 0 : newValue);
 
-			// if update is actually the first gauge display or need a full
-			// redraw
-			if (!isRendered() || newConfiguration) {
-				render(newConfiguration);
-			}
-
 			// update pointer position
 			renderPointer(newValue);
 
@@ -553,7 +573,6 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		update(config.value);
 
 		return {
-			isRendered : isRendered,
 			update : update,
 			getConfig : getReadOnlyConfig,
 			container : svgContainer,

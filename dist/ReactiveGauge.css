@@ -6,7 +6,7 @@
 	overflow: hidden;
 }
 
-.gauge-container .gauge {
+.gauge {
 	display: inline-block;
 	font-size: 4px;
 	overflow: visible; /*avoid cutting texts */
