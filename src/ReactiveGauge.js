@@ -28,15 +28,15 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 	var FORMATTER = numbro();
 	// formatter will use SI prefixes (G, M, k, µ, ...), and round values
-	var DEFAULT_FORMAT = function(value) {
+	var DEFAULT_FORMATER = function(value, isForLabel) {
 		// build FORMAT only once
 		if (this.FORMAT === undefined) {
 			// sets the format regex
 			if (this.labelDecimalsMax === 0) {
-				this.FORMAT = this.labelMantissaMax + '.a';
+				this.FORMAT = (isForLabel ? this.labelMantissaMax : this.valueMantissaMax) + '.a';
 			} else {
 				var decimals = new Array(this.labelDecimalsMax + 1).join('0');
-				this.FORMAT = this.labelMantissaMax + '.[' + decimals + ']a';
+				this.FORMAT = (isForLabel ? this.labelMantissaMax : this.valueMantissaMax) + '.[' + decimals + ']a';
 			}
 		}
 
@@ -50,6 +50,10 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		ringWidth : 7,
 		minAngle : -90,
 		maxAngle : 90,
+		// sectors
+		sectorsNumber : 5,
+		// enables the border
+		border : false,
 
 		/* pointer types: 'needle', 'filament', 'filler' */
 		pointerType : 'needle',
@@ -59,28 +63,26 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		// for 'filament'
 		filamentLength : 2,
 		// for 'filler'
-		fillerWidth : NaN, /* by default, as wide as ring */
+		fillerWidth : NaN, /* by default, as wide as the ring */
 		fillerInset : 0,
 
-		/* gauge scale */
+		/* gauge values */
 		minValue : 0,
 		maxValue : 10,
 		value : 0,
 
-		/* sectors */
-		sectorsNumber : 5,
 
 		/* labels */
 		labelNumber : NaN, /* by default, as many as sectors */
-		/* format function to apply (can use d3.format). context is the config */
-		labelFormat : DEFAULT_FORMAT,
+		/* format function to apply to the labels (can use d3.format). The formater context is the config object*/
+		labelFormater : (v)=>DEFAULT_FORMATER(v, true),
 		/*
-		 * If no custom labelFormat specified, number of mantissa digits before
+		 * If no custom labelFormater specified, number of mantissa digits before
 		 * using SI units (Mega, Kilo...)
 		 */
 		labelMantissaMax : 4,
 		/*
-		 * If no custom labelFormat specified, limits the number of decimal
+		 * If no custom labelFormater specified, limits the number of decimal
 		 * digits of labels
 		 */
 		labelDecimalsMax : 0,
@@ -95,14 +97,23 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		startColor : '#ffebee',
 		endColor : '#d50000',
 
-		/* enables the border */
-		border : false,
-
 		/* enable value display */
 		showValue : true,
 		valueInset : 22,
-		// suffix for the displayed value
-		valueSuffix : ''
+		/* format function to apply to the value (can use d3.format). The formater context is the config object */
+		valueFormater : (v)=>DEFAULT_FORMATER(v, false),
+		/*
+		 * If no custom valueFormater specified, number of mantissa digits before
+		 * using SI units (Mega, Kilo...)
+		 */
+		valueMantissaMax : 4,
+		/*
+		 * If no custom valueFormater specified, limits the number of decimal
+		 * digits of labels
+		 */
+		valueDecimalsMax : 0,
+		// unit of the displayed value
+		valueUnit : ''
 	};
 
 	var ReactiveGauge = function(container, configuration) {
@@ -185,6 +196,9 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			}
 			// reset format
 			config.FORMAT = undefined;
+			// binds the formater so that it can access config
+			config.labelFormater.bind(config);
+			config.valueFormater.bind(config);
 
 			range = config.maxAngle - config.minAngle;
 			computeLayout();
@@ -436,7 +450,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				return 'rotate(' + newAngle + ') translate(0,' + (config.labelInset - radius) + ')';
 			})//
 			.append('text')//
-			.text(config.labelFormat.bind(config));
+			.text(config.labelFormater);
 
 			// value display
 			if (config.showValue) {
@@ -460,7 +474,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				valueLabel = valueZone.append('tspan');
 				// value suffix
 				valueZone.append('tspan')//
-				.text(config.valueSuffix)//
+				.text(config.valueUnit)//
 				.attr('class', 'unit')//
 				.attr('x', 0)//
 				.attr('dy', '1em');
@@ -504,7 +518,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 			// updates value label
 			if (config.showValue) {
-				valueLabel.text(config.labelFormat(newValue));
+				valueLabel.text(config.valueFormater(newValue));
 			}
 		}
 
@@ -567,10 +581,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 // CommonJS : sets the dependencies
 if (typeof module !== 'undefined' && module.exports) {
-	const
-	d3 = require('d3');
-	const
-	numbro = require('numbro');
+	const d3 = require('d3');
+	const numbro = require('numbro');
 
 	ReactiveGaugeFactory(d3, numbro)
 
@@ -593,7 +605,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		return ReactiveGaugeFactory(d3, numbro);
 	});
 
-	// CommonJS and vanilla : start the factory
+	// Vanilla : dependecies must be set on <head> of the page
 } else {
 	ReactiveGaugeFactory.call(typeof window === 'undefined' ? this : window);
 }
