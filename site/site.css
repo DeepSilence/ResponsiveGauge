@@ -73,6 +73,11 @@ figcaption {
 	font-size: 22px;
 }
 
+.header .gauge-container {
+	border: none;
+	resize: none;
+}
+
 .gauge-container {
 	height: 200px;
     border: 1px dashed #ddd;
