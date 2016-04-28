@@ -2,7 +2,7 @@
  * ResponsiveGauge
  * version : 0.1.0
  * license : MIT
- * author : Mikaël Restoux
+ * author : Mikaël Restoux, Matt Magoffin (http://bl.ocks.org/msqr/3202712)
  * 
  */
 var ReactiveGaugeFactory = (function(_d3, _numbro) {
@@ -29,7 +29,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 	var FORMATTER = numbro();
 	// formatter will use SI prefixes (G, M, k, µ, ...), and round values
-	var DEFAULT_FORMATER = function(value, isForLabel) {
+	var DEFAULT_FORMATTER = function(value, isForLabel) {
 		// build FORMAT only once
 		if (this.FORMAT === undefined) {
 			// sets the format regex
@@ -53,7 +53,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	/* DEFAULT CONFIGURATION, all size/position values are in % */
 	var defaultConfig = {
 		/* RING */
-		// Margin of the ring from the container side (%)
+		// Shift of the ring from the container side (%)
 		ringShift : 3,
 		// Width of the ring (%)
 		ringWidth : 7,
@@ -83,30 +83,34 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		filamentLength : 2,
 		// Width of 'filled' pointers (%)
 		fillerWidth : NaN, /* by default, as wide as the ring */
-
+		// Shift of the 'filled' pointers from the container side (%)
 		fillerShift : 0,
 
 		/* gauge values */
+		// minimum value displayed on the gauge
 		minValue : 0,
+		// maximum value displayed on the gauge
 		maxValue : 10,
+		// value displayed on the gauge
 		value : 0,
 
 		/* labels */
+		// Number of labels around the gauges (ticks)
 		labelNumber : NaN, /* by default, as many as sectors */
 
 		// Function used to format the labels (can be d3.format). The
-		// formater context is the config object.
+		// formatter context is the config object.
 		// @param v the value to format
-		labelFormater : function(v) {
-			return DEFAULT_FORMATER.call(this, v, true);
+		labelFormatter : function(v) {
+			return DEFAULT_FORMATTER.call(this, v, true);
 		},
 		/*
-		 * If no custom labelFormater specified, number of mantissa digits
+		 * If no custom labelFormatter specified, number of mantissa digits
 		 * before using SI units (Mega, Kilo...)
 		 */
 		labelMantissaMax : 4,
 		/*
-		 * If no custom labelFormater specified, limits the number of decimal
+		 * If no custom labelFormatter specified, limits the number of decimal
 		 * digits of labels
 		 */
 		labelDecimalsMax : 0,
@@ -134,18 +138,18 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		valueShift : 22,
 		/*
 		 * format function to apply to the value (can use d3.format). The
-		 * formater context is the config object
+		 * formatter context is the config object
 		 */
-		valueFormater : function(v) {
-			return DEFAULT_FORMATER.call(this, v, false);
+		valueFormatter : function(v) {
+			return DEFAULT_FORMATTER.call(this, v, false);
 		},
 		/*
-		 * If no custom valueFormater specified, number of mantissa digits
+		 * If no custom valueFormatter specified, number of mantissa digits
 		 * before using SI units (Mega, Kilo...)
 		 */
 		valueMantissaMax : 4,
 		/*
-		 * If no custom valueFormater specified, limits the number of decimal
+		 * If no custom valueFormatter specified, limits the number of decimal
 		 * digits of labels
 		 */
 		valueDecimalsMax : 0,
@@ -233,9 +237,9 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			}
 			// reset format
 			config.FORMAT = undefined;
-			// binds the formater so that it can access config
-			config.labelFormater = config.labelFormater.bind(config);
-			config.valueFormater = config.valueFormater.bind(config);
+			// binds the formatter so that it can access config
+			config.labelFormatter = config.labelFormatter.bind(config);
+			config.valueFormatter = config.valueFormatter.bind(config);
 
 			range = config.maxAngle - config.minAngle;
 			computeLayout();
@@ -317,8 +321,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		}
 
 		/**
-		 * Note : calculates ideal size of the gauge depending its min&max
-		 * angles along with the required translations to draw it. Assumes
+		 * Calculates ideal size of the gauge depending its min&max angles along
+		 * with the required translations to draw it. Note : assumes
 		 * minAngle>=-90 and maxAngle<=450, and range <=360
 		 */
 		function computeLayout() {
@@ -482,7 +486,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				return 'rotate(' + newAngle + ') translate(0,' + (config.labelShift - radius) + ')';
 			})//
 			.append('text')//
-			.text(config.labelFormater);
+			.text(config.labelFormatter);
 
 			// value display
 			if (config.showValue) {
@@ -544,7 +548,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 			// updates value label
 			if (config.showValue) {
-				valueLabel.text(config.valueFormater(newValue));
+				valueLabel.text(config.valueFormatter(newValue));
 			}
 		}
 
