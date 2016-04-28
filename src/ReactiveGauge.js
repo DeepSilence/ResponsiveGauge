@@ -54,7 +54,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	var defaultConfig = {
 		/* RING */
 		// Margin of the ring from the container side (%)
-		ringInset : 3,
+		ringShift : 3,
 		// Width of the ring (%)
 		ringWidth : 7,
 		// Angle at which the ring starts. -90 is the minimum value, and 0 is at
@@ -83,8 +83,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		filamentLength : 2,
 		// Width of 'filled' pointers (%)
 		fillerWidth : NaN, /* by default, as wide as the ring */
-		
-		fillerInset : 0,
+
+		fillerShift : 0,
 
 		/* gauge values */
 		minValue : 0,
@@ -110,7 +110,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		 * digits of labels
 		 */
 		labelDecimalsMax : 0,
-		labelInset : 0,
+		labelShift : 0,
 
 		/**
 		 * Color(s) of the gauge; values are :<br>
@@ -131,7 +131,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 		/* enable value display */
 		showValue : true,
-		valueInset : 22,
+		valueShift : 22,
 		/*
 		 * format function to apply to the value (can use d3.format). The
 		 * formater context is the config object
@@ -281,27 +281,27 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			}, function(d, i) {
 				var ratio = d * (i + 1);
 				return deg2rad(config.minAngle + (ratio * range));
-			}, config.ringWidth, config.ringInset);
+			}, config.ringWidth, config.ringShift);
 
 			// complete arc for the border drawing
 			if (config.border) {
-				fullArcData = getArcData(deg2rad(config.minAngle), deg2rad(config.maxAngle), config.ringWidth, config.ringInset);
+				fullArcData = getArcData(deg2rad(config.minAngle), deg2rad(config.maxAngle), config.ringWidth, config.ringShift);
 			}
 
 			// Pointer
 			if (config.pointerType === 'filler' && isNaN(config.fillerWidth)) {
 				config.fillerWidth = config.ringWidth;
-				config.fillerInset = config.ringInset;
+				config.fillerShift = config.ringShift;
 			}
 		}
 
 		/**
 		 * Creates an arc data starting and ending at the specified angles
 		 */
-		function getArcData(startAngle, endAngle, width, inset) {
+		function getArcData(startAngle, endAngle, width, shift) {
 			return d3.svg.arc()//
-			.innerRadius(radius - width - inset)//
-			.outerRadius(radius - inset)//
+			.innerRadius(radius - width - shift)//
+			.outerRadius(radius - shift)//
 			.startAngle(startAngle)//
 			.endAngle(endAngle);
 		}
@@ -326,8 +326,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			var padding = PADDING;
 			var minAngle = config.minAngle;
 			var maxAngle = config.maxAngle;
-			// radius may be shrunk	 if all elements have an inset
-			var maxRadius = radius - Math.min(config.ringInset, config.fillerInset, config.labelInset);
+			// radius depends if all elements have are shifted inside the gauge
+			var maxRadius = radius - Math.min(config.ringShift, config.fillerShift, config.labelShift);
 
 			function spaces(angleShift) {
 				// space is the space needed to display the part of
@@ -460,8 +460,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 					.attr('r', NEEDLE_RADIUS);
 
 				} else if (config.pointerType === 'filament') {
-					var top = radius - config.ringInset - config.ringWidth - config.filamentLength;
-					var bottom = radius - config.ringInset + config.filamentLength;
+					var top = radius - config.ringShift - config.ringWidth - config.filamentLength;
+					var bottom = radius - config.ringShift + config.filamentLength;
 					pointer = pointerContainer.data([ [ [ 0, -top ], [ 0, -bottom ] ] ])//
 					.append('path')//
 					.attr('d', pointerLine);
@@ -479,14 +479,14 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			.attr('transform', function(d) {
 				var ratio = scale(d);
 				var newAngle = config.minAngle + (ratio * range);
-				return 'rotate(' + newAngle + ') translate(0,' + (config.labelInset - radius) + ')';
+				return 'rotate(' + newAngle + ') translate(0,' + (config.labelShift - radius) + ')';
 			})//
 			.append('text')//
 			.text(config.labelFormater);
 
 			// value display
 			if (config.showValue) {
-				var valueTx = config.valueInset;
+				var valueTx = config.valueShift;
 				// placed between the two bounds
 				var angle = config.minAngle + Math.abs(range) / 2;
 				if (isWide) {
@@ -521,7 +521,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			if (config.pointerType === 'filler') {
 				var pointerArcData = getArcData(deg2rad(config.minAngle),//
 				deg2rad(getPointerRotation(newValue)),//
-				config.fillerWidth, config.fillerInset);
+				config.fillerWidth, config.fillerShift);
 				pointer.attr('d', pointerArcData);
 			} else {
 				pointer.//

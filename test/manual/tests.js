@@ -150,34 +150,34 @@ function startTests(){
 	
 	// SIZE AND POSITION
 	gauges.push(ReactiveGauge('#wide-gauge', {
-		ringInset : 0,
+		ringShift : 0,
 		ringWidth : 14,
-		labelInset : 8,
+		labelShift : 8,
 		pointerType : 'filament'
 	}));
 	gauges.push(ReactiveGauge('#inner-label-gauge', {
-		ringInset : 0,
+		ringShift : 0,
 		ringWidth : 7,
-		labelInset : 12,
+		labelShift : 12,
 		needleLength : 75
 	}));
 	gauges.push(ReactiveGauge('#no-gauge', {
-		labelInset : 0,
-		ringInset : 5,
+		labelShift : 0,
+		ringShift : 5,
 		ringWidth : 0.5,
 		fillerWidth : 7,
-		fillerInset : 2,
+		fillerShift : 2,
 		pointerType : 'filler',
 		colors : false
 	}));
 	gauges.push(ReactiveGauge('#bi-gauge', {
-		labelInset : 9,
+		labelShift : 9,
 		pointerType : 'filler',
-		fillerInset : 12,
+		fillerShift : 12,
 		fillerWidth : 6,
-		ringInset : 10,
+		ringShift : 10,
 		ringWidth : 2,
-		valueInset : 15,
+		valueShift : 15,
 		colors : false
 	}));
 	
