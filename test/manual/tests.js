@@ -61,7 +61,6 @@ function startTests(){
 	ReactiveGauge.config.colors = 'gradient';
 	ReactiveGauge.config.minAngle = 0;
 	ReactiveGauge.config.maxAngle = 90;
-	ReactiveGauge.config.showValue = true;
 	ReactiveGauge.config.maxValue = 800;
 	
 	/**
@@ -169,6 +168,16 @@ function startTests(){
 		fillerWidth : 7,
 		fillerInset : 2,
 		pointerType : 'filler',
+		colors : false
+	}));
+	gauges.push(ReactiveGauge('#bi-gauge', {
+		labelInset : 9,
+		pointerType : 'filler',
+		fillerInset : 12,
+		fillerWidth : 6,
+		ringInset : 10,
+		ringWidth : 2,
+		valueInset : 15,
 		colors : false
 	}));
 	

@@ -114,20 +114,20 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 		/**
 		 * Color(s) of the gauge; values are :<br>
-		 * 'smooth' for a gradient color gradient<br>
+		 * 'gradient' for a gradient color gradient<br>
 		 * 'sectors' for coloring on each sector (gradient)<br>
 		 * [#111, #222, ...] for specifying the color of each sector<br>
 		 * false : no color (CSS color can be used)<br>
 		 */
 		colors : false,
 		/**
-		 * If colors = 'smooth' or 'sectors', used as first gradient color
+		 * If colors = 'gradient' or 'sectors', used as first gradient color
 		 */
 		startColor : '#ffebee',
 		/**
-		 * If colors = 'smooth' or 'sectors', used as last gradient color
+		 * If colors = 'gradient' or 'sectors', used as last gradient color
 		 */
-		endColor : '#d50000',
+		endColor : '#810301',
 
 		/* enable value display */
 		showValue : true,
@@ -326,6 +326,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			var padding = PADDING;
 			var minAngle = config.minAngle;
 			var maxAngle = config.maxAngle;
+			// radius may be shrunk	 if all elements have an inset
+			var maxRadius = radius - Math.min(config.ringInset, config.fillerInset, config.labelInset);
 
 			function spaces(angleShift) {
 				// space is the space needed to display the part of
@@ -335,7 +337,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 				return [ size(minAngle + angleShift), size(maxAngle + angleShift) ];
 			}
 			function size(angle) {
-				return radius * Math.sin(deg2rad(angle));
+				return maxRadius * Math.sin(deg2rad(angle));
 			}
 
 			var leftSpace = 0;
@@ -351,16 +353,16 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 			for (var crossedAxisIndex = firstCrossedAxisIndex; crossedAxisIndex <= lastCrossedAxisIndex; crossedAxisIndex++) {
 				switch (crossedAxisIndex % 4) { // % 4 to handle angles >= 360
 				case 0:
-					topSpace = radius;
+					topSpace = maxRadius;
 					break;
 				case 1:
-					rightSpace = radius;
+					rightSpace = maxRadius;
 					break;
 				case 2:
-					bottomSpace = radius;
+					bottomSpace = maxRadius;
 					break;
 				case 3:
-					leftSpace = radius;
+					leftSpace = maxRadius;
 					break;
 				}
 			}
@@ -391,7 +393,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 			// if more than 2 axis are fully shown
 			// the gauge is considered as 'wide'
-			var fullSize = radius * 3 + padding * 4;
+			var fullSize = maxRadius * 3 + padding * 4;
 			if (fullSize < height + width) {
 				isWide = true;
 				width += padding * 2;

@@ -45,10 +45,13 @@
 	transform: scale(2, 2);
 }
 
+.gauge text {
+	fill: #333;
+}
+
 .gauge-label {
 	text-anchor: middle;
 	font-weight: bold;
-	fill: black;
 }
 /* shifts the first and last labels so that they are not out of the container*/
 .gauge-label g:first-child text {
