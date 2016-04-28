@@ -81,7 +81,7 @@ figcaption {
 .gauge-container {
 	height: 200px;
 	border: 1px dashed #ddd;
-/* 	resize: both; allow to test resizing */
+	resize: both; /* allow to test resizing */
 	vertical-align: top; /* keep gauges aligned when testing sizes */
 }
 

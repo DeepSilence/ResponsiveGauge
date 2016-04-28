@@ -10,8 +10,10 @@
 	display: inline-block;
 	font-size: 4px;
 	overflow: visible; /*avoid cutting texts */
-	height: 100%; /* to react to the parent height*/
-	width: 100%; /* to react to the parent width*/
+	/* to react to the parent height*/
+	height: 100%;
+	/* to react to the parent width. max-width because of chrome (http://stackoverflow.com/questions/22015867/scale-embedded-svg-without-white-space-in-chrome)*/
+	max-width: 100%;
 }
 
 /* POINTERS */
