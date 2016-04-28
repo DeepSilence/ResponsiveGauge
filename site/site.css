@@ -81,7 +81,7 @@ figcaption {
 .gauge-container {
 	height: 200px;
 	border: 1px dashed #ddd;
-	resize: both; /* allow to test resizing */
+/* 	resize: both; allow to test resizing */
 	vertical-align: top; /* keep gauges aligned when testing sizes */
 }
 
@@ -111,8 +111,8 @@ figcaption {
 	margin: 10px;
 }
 
-.TODO {
-	background-color: yellow;
+.code .comment {
+	color: green;
 }
 
 /**
@@ -162,12 +162,25 @@ figcaption {
 	fill: #47c650;
 }
 
+#example-bi-gauge {
+	height: 150px;
+}
+
+#example-bi-gauge .gauge-arc {
+	fill: #666;
+}
+
+#example-bi-gauge .gauge-filler {
+	fill: #FE0B16;
+}
+
 /**
  *	CONFIG PAGE STYLES
  */
 /* config options and tables of parameter  */
 em {
-	margin-left: 30px;
+	padding-left: 20px;
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 /* font styles */
@@ -175,6 +188,52 @@ em {
 	font-family: 'Roboto', sans-serif;
 }
 
-#config h5 {
+#config h4 {
+	border-bottom: 1px solid #999;
+	margin: 0 0 20px;
+	width: 70%;
+}
+
+/* makes the value name and the description inline */
+#config .parameter {
+	display: table-cell;
 	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	width: 200px;
+}
+
+#config  .description {
+	display: table-cell;
+}
+
+#config .details {
+	margin: 5px 0 30px;
+}
+
+/* makes the definitions inline*/
+#config dd, #config .prettyprint {
+	display: inline;
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 0.9em;
+}
+
+#config dd.param-description {
+	margin: 0 10px 0 0;
+}
+
+#config dt {
+	display: inline-block;
+	width: 100px;
+}
+
+#config dt.param-name {
+	width: 20px;
+}
+
+#config dd::after {
+	content: " ";
+	display: block;
+}
+
+.TODO {
+	background-color: yellow;
 }

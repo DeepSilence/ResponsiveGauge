@@ -7,11 +7,11 @@ Based on D3 and Numbro, uses SVG
 
 * gauge resizes with its container
 * gauge can start and end at any angle
-* different pointers style (needle, filament, filling)
-* different gauge colorations (smooth gradient, gradient by sectors, custom sectors)
+* different pointers style (needle, filament, filler)
+* different gauge colors (smooth gradient, gradient by sectors, custom sectors)
 * borders 
-* different labels vs gauge position
-* default config for not several gauges
+* custom labels, gauge, pointer size and position
+* customizable default config 
 * efficient updates (no full rerender)
  	
 ##CSS classes added to the container

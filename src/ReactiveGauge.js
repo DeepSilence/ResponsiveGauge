@@ -77,7 +77,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		pointerType : 'needle',
 		// Time (in millis) for the pointer to stabilize at the correct position
 		pointerSlowness : 200,
-		// Length 'needle' pointers (%)
+		// Length of 'needle' pointers (%)
 		needleLength : 90,
 		// Overflow of 'filament' pointers over the ring (%)
 		filamentLength : 2,
@@ -87,11 +87,11 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		fillerShift : 0,
 
 		/* gauge values */
-		// minimum value displayed on the gauge
+		// Minimum value displayed on the gauge
 		minValue : 0,
-		// maximum value displayed on the gauge
-		maxValue : 10,
-		// value displayed on the gauge
+		// Maximum value displayed on the gauge
+		maxValue : 100,
+		// Value displayed on the gauge
 		value : 0,
 
 		/* labels */
@@ -104,54 +104,41 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		labelFormatter : function(v) {
 			return DEFAULT_FORMATTER.call(this, v, true);
 		},
-		/*
-		 * If no custom labelFormatter specified, number of mantissa digits
-		 * before using SI units (Mega, Kilo...)
-		 */
+		// If no custom labelFormatter is specified, number of mantissa digits
+		// before using SI units (Mega, Kilo...)
 		labelMantissaMax : 4,
-		/*
-		 * If no custom labelFormatter specified, limits the number of decimal
-		 * digits of labels
-		 */
+		// If no custom labelFormatter is specified, limits the number of
+		// decimal digits of labels
 		labelDecimalsMax : 0,
+		// Shift of the label from the container side (%)
 		labelShift : 0,
 
-		/**
-		 * Color(s) of the gauge; values are :<br>
-		 * 'gradient' for a gradient color gradient<br>
-		 * 'sectors' for coloring on each sector (gradient)<br>
-		 * [#111, #222, ...] for specifying the color of each sector<br>
-		 * false : no color (CSS color can be used)<br>
-		 */
+		// Color(s) of the gauge; values are :<br>
+		// 'gradient' for a gradient color gradient<br>
+		// 'sectors' for coloring on each sector (gradient)<br>
+		// [#111, #222, ...] for specifying the color of each sector<br>
+		// false : no color (CSS color can be used)<br>
 		colors : false,
-		/**
-		 * If colors = 'gradient' or 'sectors', used as first gradient color
-		 */
+		// If colors = 'gradient' or 'sectors', used as first gradient color
 		startColor : '#ffebee',
-		/**
-		 * If colors = 'gradient' or 'sectors', used as last gradient color
-		 */
+		// If colors = 'gradient' or 'sectors', used as last gradient color
 		endColor : '#810301',
 
-		/* enable value display */
+		// enable value display
 		showValue : true,
+		// Shift of the label from the center of the gauge (%)
 		valueShift : 22,
-		/*
-		 * format function to apply to the value (can use d3.format). The
-		 * formatter context is the config object
-		 */
+		// format function to apply to the value (can use d3.format). The
+		// formatter context is the config object
+		// @param v the value to format
 		valueFormatter : function(v) {
 			return DEFAULT_FORMATTER.call(this, v, false);
 		},
-		/*
-		 * If no custom valueFormatter specified, number of mantissa digits
-		 * before using SI units (Mega, Kilo...)
-		 */
+		// If no custom valueFormatter is specified, number of mantissa digits
+		// before using SI units (Mega, Kilo...)
 		valueMantissaMax : 4,
-		/*
-		 * If no custom valueFormatter specified, limits the number of decimal
-		 * digits of labels
-		 */
+		// If no custom valueFormatter is specified, limits the number of
+		// decimal digits of labels
 		valueDecimalsMax : 0,
 		// unit of the displayed value
 		valueUnit : ''
@@ -610,12 +597,10 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 
 // CommonJS : sets the dependencies
 if (typeof module !== 'undefined' && module.exports) {
-	const
-	d3 = require('d3');
-	const
-	numbro = require('numbro');
+	var _d3 = require('d3');
+	var _numbro = require('numbro');
 
-	ReactiveGaugeFactory(d3, numbro)
+	ReactiveGaugeFactory(_d3, _numbro)
 
 	// RequireJS : sets the dependencies url and define the module
 } else if (typeof requirejs !== 'undefined') {

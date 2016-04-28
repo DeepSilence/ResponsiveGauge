@@ -70,7 +70,12 @@
 		<div class="code">
 			var config = gauge.getConfig();
 			<br>
-			config.minAngle = 90; // this will do nothing
+			config.minAngle = 90; <span class="comment">// this will do nothing</span>
+		</div>
+		<br>
+		In case you want several identical gauges, you can set the default configuration (see the <a href="config.html">available configs</a>) :
+		<div class="code">
+			ReactiveGauge.config.minAngle = 0;
 		</div>
 
 	</div>
