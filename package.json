@@ -11,6 +11,7 @@
     "numbro": "^1.7.1"
   },
   "devDependencies": {
+    "gulp-cssmin": "^0.1.7",
     "gulp-jest": "^0.4.0",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
@@ -24,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DeepSilence/ReactiveGauge.git"
+    "url": "git+https://github.com/DeepSilence/ResponsiveGauge.git"
   },
   "keywords": [
     "responsive",
@@ -35,7 +36,7 @@
   "author": "Mikaël Restoux",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DeepSilence/ReactiveGauge/issues"
+    "url": "https://github.com/DeepSilence/ResponsiveGauge/issues"
   },
-  "homepage": "https://github.com/DeepSilence/ReactiveGauge#readme"
+  "homepage": "https://github.com/DeepSilence/ResponsiveGauge#readme"
 }

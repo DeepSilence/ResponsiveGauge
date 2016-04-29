@@ -5,7 +5,7 @@
  * author : Mikaël Restoux, Matt Magoffin (http://bl.ocks.org/msqr/3202712)
  * 
  */
-var ReactiveGaugeFactory = (function(_d3, _numbro) {
+var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	'use strict';
 
 	// handle dependencies injection using requireJS
@@ -148,7 +148,7 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 		valueUnit : ''
 	};
 
-	var ReactiveGauge = function(container, configuration) {
+	var ResponsiveGauge = function(container, configuration) {
 		var config = {};
 
 		/* MISC VALUES */
@@ -576,24 +576,24 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	}
 
 	/***************************************************************************
-	 * Exposing ReactiveGauge
+	 * Exposing ResponsiveGauge
 	 **************************************************************************/
-	ReactiveGauge.config = defaultConfig;
+	ResponsiveGauge.config = defaultConfig;
 
 	// RequireJS : returns the current instance
 	if (typeof requirejs !== 'undefined') {
-		return ReactiveGauge;
+		return ResponsiveGauge;
 
 		// vanilla JS : places the current instance in the root scope
 	} else {
 		// here, `this` means `window` in the browser, or `global` on the
 		// server
-		this.ReactiveGauge = ReactiveGauge;
+		this.ResponsiveGauge = ResponsiveGauge;
 	}
 });
 
 /*******************************************************************************
- * Initializing ReactiveGauge dependencies
+ * Initializing ResponsiveGauge dependencies
  ******************************************************************************/
 
 // RequireJS : sets the dependencies url and define the module
@@ -612,10 +612,10 @@ if (typeof requirejs !== 'undefined') {
 	});
 
 	define([ 'd3', 'numbro' ], function(d3, numbro) {
-		return ReactiveGaugeFactory(d3, numbro);
+		return ResponsiveGaugeFactory(d3, numbro);
 	});
 
-	// Vanilla : dependecies must be set on <head> of the page
+	// Vanilla : dependencies must be set on <head> of the page
 } else {
-	ReactiveGaugeFactory.call(typeof window === 'undefined' ? this : window);
+	ResponsiveGaugeFactory.call(typeof window === 'undefined' ? this : window);
 }

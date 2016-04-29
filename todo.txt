@@ -1,4 +1,5 @@
 Archi : 
+	minimize CSS
 	add CSS to requireJS module
 	add to a CDN
 
@@ -20,7 +21,10 @@ Bugs :
 	
 	
 Release : 
-	0. check params names are ok
 	1. build & test with gulp
 	2. visually check vanilla test.html on FF/Chr/...
 	3. visually check requireJS test.html
+	4. get the CDN url from https://rawgit.com/
+	5. CSS?
+	6. update main.html and quick-start.html
+	

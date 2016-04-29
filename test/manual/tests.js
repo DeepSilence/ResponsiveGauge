@@ -1,6 +1,6 @@
 /*******************************************************************************
  * LOADS THE REQUIRED DEPEDENCIES
- * 		- call the test page with '?requireJS' to test the requireJS definition of ReactiveGauge
+ * 		- call the test page with '?requireJS' to test the requireJS definition of ResponsiveGauge
  * 		- call it without parameter to test it as vanilla js
  * 
  ******************************************************************************/
@@ -29,9 +29,9 @@ var mode = document.location.search.slice(1)
 var head = document.head;
 // requireJS : loads the lib, require the gauges and start the tests
 if (mode === 'requireJS'){
-	createScript('lib/require.min.js', '../../dist/ReactiveGauge.min.js').then(()=>{
-		require(['ReactiveGauge'], (ReactiveGauge)=>{
-			this.ReactiveGauge = ReactiveGauge;
+	createScript('lib/require.min.js', '../../dist/ResponsiveGauge.min.js').then(()=>{
+		require(['ResponsiveGauge'], (ResponsiveGauge)=>{
+			this.ResponsiveGauge = ResponsiveGauge;
 			startTests();
 		});
 	});
@@ -47,8 +47,8 @@ if (mode === 'requireJS'){
 	var promNumbro = createScript(protocol + "//cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js");
 
 	Promise.all([promD3, promNumbro]).then(()=>{
-// createScript('../../src/ReactiveGauge.js').then(setTimeout(startTests, 100));
-		createScript('../../dist/ReactiveGauge.min.js').then(setTimeout(startTests,100));
+// createScript('../../src/ResponsiveGauge.js').then(setTimeout(startTests, 100));
+		createScript('../../dist/ResponsiveGauge.min.js').then(setTimeout(startTests,100));
 	});
 }
 
@@ -58,10 +58,10 @@ function startTests(){
 	 * GAUGES CONFIG
 	 **************************************************************************/
 	// default config for the tests
-	ReactiveGauge.config.colors = 'gradient';
-	ReactiveGauge.config.minAngle = 0;
-	ReactiveGauge.config.maxAngle = 90;
-	ReactiveGauge.config.maxValue = 800;
+	ResponsiveGauge.config.colors = 'gradient';
+	ResponsiveGauge.config.minAngle = 0;
+	ResponsiveGauge.config.maxAngle = 90;
+	ResponsiveGauge.config.maxValue = 800;
 	
 	/**
 	 * Generate configs for angles checks gauges.
@@ -89,79 +89,79 @@ function startTests(){
 	var gauges = [];
 	
 	// quarters
-	gauges.push(ReactiveGauge('#qgauge1', getAngleCheckConfig(-90, 0)));
-	gauges.push(ReactiveGauge('#qgauge2', getAngleCheckConfig(0, 90)));
-	gauges.push(ReactiveGauge('#qgauge3', getAngleCheckConfig(90, 180)));
-	gauges.push(ReactiveGauge('#qgauge4', getAngleCheckConfig(180, 270)));
+	gauges.push(ResponsiveGauge('#qgauge1', getAngleCheckConfig(-90, 0)));
+	gauges.push(ResponsiveGauge('#qgauge2', getAngleCheckConfig(0, 90)));
+	gauges.push(ResponsiveGauge('#qgauge3', getAngleCheckConfig(90, 180)));
+	gauges.push(ResponsiveGauge('#qgauge4', getAngleCheckConfig(180, 270)));
 	
 	// halves
-	gauges.push(ReactiveGauge('#hgauge1', getAngleCheckConfig(-90, 90)));
-	gauges.push(ReactiveGauge('#hgauge2', getAngleCheckConfig(90, 270)));
-	gauges.push(ReactiveGauge('#hgauge3', getAngleCheckConfig(180, 360)));
-	gauges.push(ReactiveGauge('#hgauge4', getAngleCheckConfig(0, 180)));
+	gauges.push(ResponsiveGauge('#hgauge1', getAngleCheckConfig(-90, 90)));
+	gauges.push(ResponsiveGauge('#hgauge2', getAngleCheckConfig(90, 270)));
+	gauges.push(ResponsiveGauge('#hgauge3', getAngleCheckConfig(180, 360)));
+	gauges.push(ResponsiveGauge('#hgauge4', getAngleCheckConfig(0, 180)));
 	
 	// three quarters
-	gauges.push(ReactiveGauge('#tgauge1', getAngleCheckConfig(-90, 180)));
-	gauges.push(ReactiveGauge('#tgauge2', getAngleCheckConfig(0, 270)));
-	gauges.push(ReactiveGauge('#tgauge3', getAngleCheckConfig(90, 360)));
-	gauges.push(ReactiveGauge('#tgauge4', getAngleCheckConfig(180, 450)));
+	gauges.push(ResponsiveGauge('#tgauge1', getAngleCheckConfig(-90, 180)));
+	gauges.push(ResponsiveGauge('#tgauge2', getAngleCheckConfig(0, 270)));
+	gauges.push(ResponsiveGauge('#tgauge3', getAngleCheckConfig(90, 360)));
+	gauges.push(ResponsiveGauge('#tgauge4', getAngleCheckConfig(180, 450)));
 	
 	// full
-	gauges.push(ReactiveGauge('#fgauge', getAngleCheckConfig(0, 360)));
+	gauges.push(ResponsiveGauge('#fgauge', getAngleCheckConfig(0, 360)));
 	
 	// custom angles (quarters)
-	gauges.push(ReactiveGauge('#custom-quarter-gauge1', getAngleCheckConfig(-80, -10)));
-	gauges.push(ReactiveGauge('#custom-quarter-gauge2', getAngleCheckConfig(20, 70)));
-	gauges.push(ReactiveGauge('#custom-quarter-gauge3', getAngleCheckConfig(100, 170)));
-	gauges.push(ReactiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210,  230, {labelNumber : 2})));
+	gauges.push(ResponsiveGauge('#custom-quarter-gauge1', getAngleCheckConfig(-80, -10)));
+	gauges.push(ResponsiveGauge('#custom-quarter-gauge2', getAngleCheckConfig(20, 70)));
+	gauges.push(ResponsiveGauge('#custom-quarter-gauge3', getAngleCheckConfig(100, 170)));
+	gauges.push(ResponsiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210,  230, {labelNumber : 2})));
 	
 	// custom angles (halves)
-	gauges.push(ReactiveGauge('#custom-half-gauge1', getAngleCheckConfig(-45, 45)));
-	gauges.push(ReactiveGauge('#custom-half-gauge2', getAngleCheckConfig(20, 130)));
-	gauges.push(ReactiveGauge('#custom-half-gauge3', getAngleCheckConfig(100, 223)));
-	gauges.push(ReactiveGauge('#custom-half-gauge4', getAngleCheckConfig(210, 300)));
+	gauges.push(ResponsiveGauge('#custom-half-gauge1', getAngleCheckConfig(-45, 45)));
+	gauges.push(ResponsiveGauge('#custom-half-gauge2', getAngleCheckConfig(20, 130)));
+	gauges.push(ResponsiveGauge('#custom-half-gauge3', getAngleCheckConfig(100, 223)));
+	gauges.push(ResponsiveGauge('#custom-half-gauge4', getAngleCheckConfig(210, 300)));
 	
 	// custom angles (three quarters)
-	gauges.push(ReactiveGauge('#custom-three-gauge1', getAngleCheckConfig(260, 550)));
-	gauges.push(ReactiveGauge('#custom-three-gauge2', getAngleCheckConfig(20, 223)));
-	gauges.push(ReactiveGauge('#custom-three-gauge3', getAngleCheckConfig(100, 300)));
-	gauges.push(ReactiveGauge('#custom-three-gauge4', getAngleCheckConfig(210, 390)));
+	gauges.push(ResponsiveGauge('#custom-three-gauge1', getAngleCheckConfig(260, 550)));
+	gauges.push(ResponsiveGauge('#custom-three-gauge2', getAngleCheckConfig(20, 223)));
+	gauges.push(ResponsiveGauge('#custom-three-gauge3', getAngleCheckConfig(100, 300)));
+	gauges.push(ResponsiveGauge('#custom-three-gauge4', getAngleCheckConfig(210, 390)));
 	
 	// COLORS / GRADIENTS
-	gauges.push(ReactiveGauge('#gradient-gauge', {
+	gauges.push(ResponsiveGauge('#gradient-gauge', {
 		colors : 'gradient'
 	}));
-	gauges.push(ReactiveGauge('#sector-gradient-gauge', {
+	gauges.push(ResponsiveGauge('#sector-gradient-gauge', {
 		colors : 'sectors'
 	}));
-	gauges.push(ReactiveGauge('#custom-sectors-gauge', {
+	gauges.push(ResponsiveGauge('#custom-sectors-gauge', {
 		colors : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
 		border : true
 	}));
 	
 	// BORDERS
-	gauges.push(ReactiveGauge('#without-border-gauge', {
+	gauges.push(ResponsiveGauge('#without-border-gauge', {
 		colors : [ '#FFF']
 	}));
-	gauges.push(ReactiveGauge('#with-border-gauge', {
+	gauges.push(ResponsiveGauge('#with-border-gauge', {
 		colors : [ '#FFF'],
 		border : true
 	}));
 	
 	// SIZE AND POSITION
-	gauges.push(ReactiveGauge('#wide-gauge', {
+	gauges.push(ResponsiveGauge('#wide-gauge', {
 		ringShift : 0,
 		ringWidth : 14,
 		labelShift : 8,
 		pointerType : 'filament'
 	}));
-	gauges.push(ReactiveGauge('#inner-label-gauge', {
+	gauges.push(ResponsiveGauge('#inner-label-gauge', {
 		ringShift : 0,
 		ringWidth : 7,
 		labelShift : 12,
 		needleLength : 75
 	}));
-	gauges.push(ReactiveGauge('#no-gauge', {
+	gauges.push(ResponsiveGauge('#no-gauge', {
 		labelShift : 0,
 		ringShift : 5,
 		ringWidth : 0.5,
@@ -170,7 +170,7 @@ function startTests(){
 		pointerType : 'filler',
 		colors : false
 	}));
-	gauges.push(ReactiveGauge('#bi-gauge', {
+	gauges.push(ResponsiveGauge('#bi-gauge', {
 		labelShift : 9,
 		pointerType : 'filler',
 		fillerShift : 12,
@@ -182,34 +182,34 @@ function startTests(){
 	}));
 	
 	// LABELS
-	gauges.push(ReactiveGauge('#no-label-gauge', {
+	gauges.push(ResponsiveGauge('#no-label-gauge', {
 		labelNumber : 0
 	}));
-	gauges.push(ReactiveGauge('#long-label-gauge', {
+	gauges.push(ResponsiveGauge('#long-label-gauge', {
 		labelNumber : 8,
 		maxValue : 100000
 	}));
-	gauges.push(ReactiveGauge('#custom-labels-gauge', {
+	gauges.push(ResponsiveGauge('#custom-labels-gauge', {
 		labelNumber : 2,
 		colors : 'sectors'
 	}))
-	gauges.push(ReactiveGauge('#suffixed-label-gauge', {
+	gauges.push(ResponsiveGauge('#suffixed-label-gauge', {
 		valueUnit : 'km/h'
 	}));	
 	
 	
 	// POINTERS
-	gauges.push(ReactiveGauge('#needle-pointer-gauge', {
+	gauges.push(ResponsiveGauge('#needle-pointer-gauge', {
 		pointerType : 'needle'
 	}));
-	gauges.push(ReactiveGauge('#filament-pointer-gauge', {
+	gauges.push(ResponsiveGauge('#filament-pointer-gauge', {
 		pointerType : 'filament'
 	}));
-	gauges.push(ReactiveGauge('#filler-pointer-gauge', {
+	gauges.push(ResponsiveGauge('#filler-pointer-gauge', {
 		pointerType : 'filler',
 		colors : false
 	}));
-	gauges.push(ReactiveGauge('#slow-pointer-gauge', {
+	gauges.push(ResponsiveGauge('#slow-pointer-gauge', {
 		pointerSlowness : 1000			
 	}));
 	

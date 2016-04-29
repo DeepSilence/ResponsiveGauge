@@ -8,11 +8,11 @@
 <title>Responsive gauges</title>
 
 <link href="site.css" type="text/css" rel="stylesheet" />
-<link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
+<link href="../dist/ResponsiveGauge.min.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="http://cdn.jsdelivr.net/d3js/3.5.16/d3.min.js"></script>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js"></script>
-<script type="text/javascript" src="../src/ReactiveGauge.js"></script>
-<!-- <script type="text/javascript" src="../dist/ReactiveGauge.min.js"></script> -->
+<!-- <script type="text/javascript" src="../src/ResponsiveGauge.js"></script> -->
+<script type="text/javascript" src="https://rawgit.com/DeepSilence/ResponsiveGauge/0a86b83c982665e46021981d490e91271e321cf6/dist/ResponsiveGauge.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 </head>
@@ -93,7 +93,7 @@
 		</h2>
 		<p>
 			Responsive-gauge is distributed under the MIT license; its code can be found <a target="_blank"
-				href="//github.com/DeepSilence/ReactiveGauge"> on GitHub <i class="fa fa-github-square"></i>
+				href="//github.com/DeepSilence/ResponsiveGauge"> on GitHub <i class="fa fa-github-square"></i>
 			</a>
 		</p>
 	</div>
@@ -101,7 +101,7 @@
 	<script type="text/javascript">
 		window.onload = ()=>{
 			// header
-			ReactiveGauge('#example-header-gauge', {
+			ResponsiveGauge('#example-header-gauge', {
 				minAngle : -90,
 				maxAngle : 90,
 				minValue : 0,
@@ -118,7 +118,7 @@
 			});
 			// half gauge
 			var percentFormatter= function(value)  {return value + '%'};
-			ReactiveGauge('#example-half-gauge', {
+			ResponsiveGauge('#example-half-gauge', {
 				pointerType : 'filament',
 				minAngle : -45,
 				maxAngle : 45,
@@ -133,7 +133,7 @@
 				valueFormatter : percentFormatter
 			});
 			// voltage
-			ReactiveGauge('#example-voltage-gauge', {
+			ResponsiveGauge('#example-voltage-gauge', {
 				minAngle : -90,
 				maxAngle : 0,
 				minValue : 10,
@@ -146,7 +146,7 @@
 				valueUnit : 'volts'
 			});
 			// mails count
-			ReactiveGauge('#example-mail-count-gauge', {
+			ResponsiveGauge('#example-mail-count-gauge', {
 				minAngle : -90,
 				maxAngle : 90,
 				minValue : 0,
@@ -161,7 +161,7 @@
 				valueShift : 10
 			});
 			// messages count
-			ReactiveGauge('#example-message-count-gauge', {
+			ResponsiveGauge('#example-message-count-gauge', {
 				minAngle : -90,
 				maxAngle : 90,
 				minValue : 0,
@@ -178,7 +178,7 @@
 			});
 
 			// full circle gauge
-			ReactiveGauge('#example-full-gauge', {
+			ResponsiveGauge('#example-full-gauge', {
 				minAngle : 0,
 				maxAngle : 360,
 				minValue : 0,
@@ -196,7 +196,7 @@
 			});
 
 			// filler under the gauge ring
-			ReactiveGauge('#example-bi-gauge', {
+			ResponsiveGauge('#example-bi-gauge', {
 				minAngle : -90,
 				maxAngle : 90,
 				minValue : 0,

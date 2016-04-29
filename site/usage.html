@@ -8,7 +8,6 @@
 <title>Responsive gauges</title>
 
 <link href="site.css" type="text/css" rel="stylesheet" />
-<link href="../dist/ReactiveGauge.css" type="text/css" rel="stylesheet" />
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 </head>
@@ -33,11 +32,11 @@
 		<div class="code">&lt;span id="my-gauge"&gt;&lt;/span&gt;</div>
 
 		... and some javascript to display the gauge with its default configuration.
-		<div class="code">var gauge = ReactiveGauge('#my-gauge', {value : 50 });</div>
+		<div class="code">var gauge = ResponsiveGauge('#my-gauge', {value : 50 });</div>
 
 		If needed, you can set a custom configuration :
 		<div class="code">
-			var gauge = ReactiveGauge('#my-gauge', {
+			var gauge = ResponsiveGauge('#my-gauge', {
 			<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;value : 50,
 			<br>
@@ -75,7 +74,7 @@
 		<br>
 		In case you want several identical gauges, you can set the default configuration (see the <a href="config.html">available configs</a>) :
 		<div class="code">
-			ReactiveGauge.config.minAngle = 0;
+			ResponsiveGauge.config.minAngle = 0;
 		</div>
 
 	</div>

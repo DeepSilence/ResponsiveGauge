@@ -1,8 +1,8 @@
-jest.dontMock('../src/ReactiveGauge');
+jest.dontMock('../src/ResponsiveGauge');
 var math = require('mathjs');
 
 describe('deg2rad', function() {
-	var gauge = require('../src/ReactiveGauge')();
+	var gauge = require('../src/ResponsiveGauge')();
 
 	it('should be zero', function() {
 		var result = gauge.deg2rad(0);
@@ -21,7 +21,7 @@ describe('deg2rad', function() {
 describe('computeTicks', function() {
 	it('should keep the labelNumber if specified', function() {
 		var labelNumber = 10;
-		var gauge = require('../src/ReactiveGauge')('test', {
+		var gauge = require('../src/ResponsiveGauge')('test', {
 			labelNumber  : labelNumber,
 			sectorsNumber  : 5,
 		});
