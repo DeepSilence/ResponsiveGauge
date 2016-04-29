@@ -7,53 +7,60 @@
 /**
  * Loads a script
  */
-var createScript = (src, data) => {
-	var promise = new Promise((res, rej)=>{
-		var script=document.createElement('script');
+var createScript = function(src, data) {
+	var promise = new Promise(function(res, rej) {
+		var script = document.createElement('script');
 		script.src = src;
-		if (data){
+		if (data) {
 			script.dataset.main = data;
 		}
 		script.onload = res;
 		head.appendChild(script);
 	});
-			
-	
+
 	return promise;
 };
 
 /**
  * Loads the required scripts depending the environment tested
  */
-var mode = document.location.search.slice(1)
+var mode = document.location.search.slice(1);
 var head = document.head;
 // requireJS : loads the lib, require the gauges and start the tests
-if (mode === 'requireJS'){
-	createScript('lib/require.min.js', '../../dist/ResponsiveGauge.min.js').then(()=>{
-		require(['ResponsiveGauge'], (ResponsiveGauge)=>{
+if (mode === 'requireJS') {
+	createScript('lib/require.min.js', '../../dist/ResponsiveGauge.min').then(function() {
+		require([ 'ResponsiveGauge.min' ], function(ResponsiveGauge) {
 			this.ResponsiveGauge = ResponsiveGauge;
 			startTests();
 		});
 	});
-	
+
 	// vanilla : sets the dependencies in <HEAD> then start the tests
 } else {
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
-	// required when testing locally
-	protocol = (protocol === 'file:' ? 'http:' : protocol);
+	protocol = (protocol === 'file:' ? 'http:' : protocol); // for local test
 
+	// load css
+	var head = document.getElementsByTagName('head')[0];
+	var link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = '../../dist/ResponsiveGauge.min.css';
+	head.appendChild(link);
+
+	// load dependencies
 	var promD3 = createScript(protocol + "//cdn.jsdelivr.net/d3js/3.5.16/d3.min.js");
 	var promNumbro = createScript(protocol + "//cdnjs.cloudflare.com/ajax/libs/numbro/1.7.1/numbro.min.js");
 
-	Promise.all([promD3, promNumbro]).then(()=>{
-// createScript('../../src/ResponsiveGauge.js').then(setTimeout(startTests, 100));
-		createScript('../../dist/ResponsiveGauge.min.js').then(setTimeout(startTests,100));
+	Promise.all([ promD3, promNumbro ]).then(function() {
+		// createScript('../../src/ResponsiveGauge.js').then(setTimeout(startTests,
+		// 100));
+		createScript('../../dist/ResponsiveGauge.min.js').then(setTimeout(startTests, 100));
 	});
 }
 
-
-function startTests(){
+function startTests() {
 	/***************************************************************************
 	 * GAUGES CONFIG
 	 **************************************************************************/
@@ -62,71 +69,72 @@ function startTests(){
 	ResponsiveGauge.config.minAngle = 0;
 	ResponsiveGauge.config.maxAngle = 90;
 	ResponsiveGauge.config.maxValue = 800;
-	
+
 	/**
 	 * Generate configs for angles checks gauges.
 	 */
-	function getAngleCheckConfig(minAngle, maxAngle, otherConfig){
+	function getAngleCheckConfig(minAngle, maxAngle, otherConfig) {
 		var config = {
 			minAngle : minAngle,
 			maxAngle : maxAngle,
 			minValue : minAngle,
 			maxValue : maxAngle
 		};
-	
+
 		for ( var prop in otherConfig) {
 			config[prop] = otherConfig[prop];
 		}
-	
+
 		return config;
 	}
-	
-	
+
 	/***************************************************************************
 	 * GAUGES INITIALIZATION
 	 **************************************************************************/
-	
+
 	var gauges = [];
-	
+
 	// quarters
 	gauges.push(ResponsiveGauge('#qgauge1', getAngleCheckConfig(-90, 0)));
 	gauges.push(ResponsiveGauge('#qgauge2', getAngleCheckConfig(0, 90)));
 	gauges.push(ResponsiveGauge('#qgauge3', getAngleCheckConfig(90, 180)));
 	gauges.push(ResponsiveGauge('#qgauge4', getAngleCheckConfig(180, 270)));
-	
+
 	// halves
 	gauges.push(ResponsiveGauge('#hgauge1', getAngleCheckConfig(-90, 90)));
 	gauges.push(ResponsiveGauge('#hgauge2', getAngleCheckConfig(90, 270)));
 	gauges.push(ResponsiveGauge('#hgauge3', getAngleCheckConfig(180, 360)));
 	gauges.push(ResponsiveGauge('#hgauge4', getAngleCheckConfig(0, 180)));
-	
+
 	// three quarters
 	gauges.push(ResponsiveGauge('#tgauge1', getAngleCheckConfig(-90, 180)));
 	gauges.push(ResponsiveGauge('#tgauge2', getAngleCheckConfig(0, 270)));
 	gauges.push(ResponsiveGauge('#tgauge3', getAngleCheckConfig(90, 360)));
 	gauges.push(ResponsiveGauge('#tgauge4', getAngleCheckConfig(180, 450)));
-	
+
 	// full
 	gauges.push(ResponsiveGauge('#fgauge', getAngleCheckConfig(0, 360)));
-	
+
 	// custom angles (quarters)
 	gauges.push(ResponsiveGauge('#custom-quarter-gauge1', getAngleCheckConfig(-80, -10)));
 	gauges.push(ResponsiveGauge('#custom-quarter-gauge2', getAngleCheckConfig(20, 70)));
 	gauges.push(ResponsiveGauge('#custom-quarter-gauge3', getAngleCheckConfig(100, 170)));
-	gauges.push(ResponsiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210,  230, {labelNumber : 2})));
-	
+	gauges.push(ResponsiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210, 230, {
+		labelNumber : 2
+	})));
+
 	// custom angles (halves)
 	gauges.push(ResponsiveGauge('#custom-half-gauge1', getAngleCheckConfig(-45, 45)));
 	gauges.push(ResponsiveGauge('#custom-half-gauge2', getAngleCheckConfig(20, 130)));
 	gauges.push(ResponsiveGauge('#custom-half-gauge3', getAngleCheckConfig(100, 223)));
 	gauges.push(ResponsiveGauge('#custom-half-gauge4', getAngleCheckConfig(210, 300)));
-	
+
 	// custom angles (three quarters)
 	gauges.push(ResponsiveGauge('#custom-three-gauge1', getAngleCheckConfig(260, 550)));
 	gauges.push(ResponsiveGauge('#custom-three-gauge2', getAngleCheckConfig(20, 223)));
 	gauges.push(ResponsiveGauge('#custom-three-gauge3', getAngleCheckConfig(100, 300)));
 	gauges.push(ResponsiveGauge('#custom-three-gauge4', getAngleCheckConfig(210, 390)));
-	
+
 	// COLORS / GRADIENTS
 	gauges.push(ResponsiveGauge('#gradient-gauge', {
 		colors : 'gradient'
@@ -138,16 +146,16 @@ function startTests(){
 		colors : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
 		border : true
 	}));
-	
+
 	// BORDERS
 	gauges.push(ResponsiveGauge('#without-border-gauge', {
-		colors : [ '#FFF']
+		colors : [ '#FFF' ]
 	}));
 	gauges.push(ResponsiveGauge('#with-border-gauge', {
-		colors : [ '#FFF'],
+		colors : [ '#FFF' ],
 		border : true
 	}));
-	
+
 	// SIZE AND POSITION
 	gauges.push(ResponsiveGauge('#wide-gauge', {
 		ringShift : 0,
@@ -180,7 +188,7 @@ function startTests(){
 		valueShift : 15,
 		colors : false
 	}));
-	
+
 	// LABELS
 	gauges.push(ResponsiveGauge('#no-label-gauge', {
 		labelNumber : 0
@@ -195,9 +203,8 @@ function startTests(){
 	}))
 	gauges.push(ResponsiveGauge('#suffixed-label-gauge', {
 		valueUnit : 'km/h'
-	}));	
-	
-	
+	}));
+
 	// POINTERS
 	gauges.push(ResponsiveGauge('#needle-pointer-gauge', {
 		pointerType : 'needle'
@@ -210,32 +217,32 @@ function startTests(){
 		colors : false
 	}));
 	gauges.push(ResponsiveGauge('#slow-pointer-gauge', {
-		pointerSlowness : 1000			
+		pointerSlowness : 1000
 	}));
-	
-	
+
 	/***************************************************************************
 	 * DISPLAY AND REFRESH THE GAUGES
 	 **************************************************************************/
-	var refresh = ()=>gauges.forEach(g=>{
-		var config = g.getConfig();
-		var range = config.maxValue - config.minValue;
-		var value = config.minValue + (Math.random() * range);
-		g.update(value);
-	});		
+	var refresh = function() {
+		gauges.forEach(function(g) {
+			var config = g.getConfig();
+			var range = config.maxValue - config.minValue;
+			var value = config.minValue + (Math.random() * range);
+			g.update(value);
+		})
+	};
 	refresh();
-// setInterval(refresh, 5000);
-	
+	// setInterval(refresh, 5000);
+
 	// display gauges options on over
-	gauges.forEach(g=>{
+	gauges.forEach(function(g) {
 		var cont = g.container;
 		cont.append('div')//
-			.attr('class', 'gauge-config')
-			.text(JSON.stringify(g.getConfig(), null, 4));
-		cont.on('mouseover', ()=>{
+		.attr('class', 'gauge-config').text(JSON.stringify(g.getConfig(), null, 4));
+		cont.on('mouseover', function() {
 			d3.select(d3.event.currentTarget).select('div').classed('visible', true);
 		});
-		cont.on('mouseout', ()=>{
+		cont.on('mouseout', function() {
 			d3.select(d3.event.currentTarget).select('div').classed('visible', false);
 		});
 	});

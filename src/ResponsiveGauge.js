@@ -2,7 +2,7 @@
  * ResponsiveGauge
  * version : 0.1.0
  * license : MIT
- * author : Mikaël Restoux, Matt Magoffin (http://bl.ocks.org/msqr/3202712)
+ * authors : Mikaël Restoux, Matt Magoffin (http://bl.ocks.org/msqr/3202712)
  * 
  */
 var ResponsiveGaugeFactory = (function(_d3, _numbro) {
@@ -596,14 +596,27 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
  * Initializing ResponsiveGauge dependencies
  ******************************************************************************/
 
+// loads JS dependencies
 // RequireJS : sets the dependencies url and define the module
 if (typeof requirejs !== 'undefined') {
 
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
-	// required when testing locally
-	protocol = (protocol === 'file:' ? 'http:' : protocol);
+	protocol = (protocol === 'file:' ? 'http:' : protocol); // for local tests
 
+	// loads CSS
+	var cssId = 'responsive-gauge-css';
+	if (!document.getElementById(cssId)) {
+		var head = document.getElementsByTagName('head')[0];
+		var link = document.createElement('link');
+		link.id = cssId;
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = protocol + '//cdn.rawgit.com/DeepSilence/ResponsiveGauge/69b33feebb300834edaa535df95fae1e68de59e9/dist/ResponsiveGauge.min.css';
+		link.media = 'all';
+		head.appendChild(link);
+	}
+	
 	requirejs.config({
 		"paths" : {
 			"d3" : protocol + "//cdn.jsdelivr.net/d3js/3.5.16/d3.min",

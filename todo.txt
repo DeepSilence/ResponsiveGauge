@@ -1,8 +1,3 @@
-Archi : 
-	minimize CSS
-	add CSS to requireJS module
-	add to a CDN
-
 App : 
 	add language support for formatters
 	use gradient for filled pointer
@@ -14,8 +9,6 @@ App :
 		http://blogs.u2u.be/diederik/post/2013/06/24/A-Modern-UI-radial-gauge-control-for-Windows-8-Store-apps.aspx
 
 Bugs : 
-	see why the full circle gauge value is shifted in example page, not on test page.
-	the "// - 0.5 allow shapes borders collapse" makes color flowing over the border on first sector
 	bug : tests do not shrink on Chr (Chr limitation?)
 
 	
@@ -24,7 +17,7 @@ Release :
 	1. build & test with gulp
 	2. visually check vanilla test.html on FF/Chr/...
 	3. visually check requireJS test.html
-	4. get the CDN url from https://rawgit.com/
-	5. CSS?
+	4. get the CDN url for JS from https://rawgit.com/
+	5. get the CDN url for CSS, IF CHANGED
 	6. update main.html and quick-start.html
 	
