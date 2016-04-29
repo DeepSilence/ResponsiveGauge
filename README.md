@@ -1,29 +1,25 @@
-# WORK IN PROGRESS
+Responsive gauge is a Javascript library to create gauges of custom styles, that adapts to theirs container's available space.
+The lib is based on D3, numbro and generates SVG.
 
-Based on D3 and Numbro, uses SVG
-
+[See the demos and documentation.](https://www.google.com "Responsive gauge demo and documentation")
 
 ## Capabilities
-
 * gauge resizes with its container
 * gauge can start and end at any angle
-* different pointers style (needle, filament, filler)
-* different gauge colors (smooth gradient, gradient by sectors, custom sectors)
-* borders 
-* custom labels, gauge, pointer size and position
-* customizable default config 
-* efficient updates (no full rerender)
- 	
-##CSS classes added to the container
+* pointer can be of different styles (needle, filament, filler)
+* gauge can have different colorizations (smooth gradient, gradient by sectors, monochrome)
+* gauges can have borders 
+* labels, gauge and pointer can have different size, position and colorization
+* labels and value can be formated, and their unit given
+* a default configuration can be set for common gauges
+* values updates are efficient (no full rerender)
+* pointer stabilization at the correct position can be animated 
 
-	'wide-gauge' for full size gauges
- 	
 ##known bugs 
-
-* pointerSlowness not implmented for 'filled' pointers
+* pointerSlowness is not yet implemented for 'filled' pointers
 	
 	
 ---
 Based on Matt Magoffin (http://bl.ocks.org/msqr/3202712) work
 
-Released under the MIT license
+Released under the MIT license (see the LICENSE file for details)
