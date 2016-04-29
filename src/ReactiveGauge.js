@@ -30,24 +30,28 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	var FORMATTER = numbro();
 	// formatter will use SI prefixes (G, M, k, µ, ...), and round values
 	var DEFAULT_FORMATTER = function(value, isForLabel) {
-		// build FORMAT only once
-		if (this.FORMAT === undefined) {
-			// sets the format regex
-			if (isForLabel) {
-				var mantissaMax = this.labelMantissaMax;
-				var decimalsMax = this.labelDecimalsMax;
-			} else {
-				var mantissaMax = this.valueMantissaMax;
-				var decimalsMax = this.valueDecimalsMax;
-			}
+		function buildFormat(mantissaMax, decimalsMax, formatName) {
 			if (decimalsMax === 0) {
-				this.FORMAT = decimalsMax + '.a';
+				this[formatName] = mantissaMax + '.a';
 			} else {
-				this.FORMAT = +'.[' + new Array(decimalsMax + 1).join('0') + ']a';
+				this[formatName] = mantissaMax + '.[' + new Array(decimalsMax + 1).join('0') + ']a';
 			}
 		}
 
-		return FORMATTER.set(value).format(this.FORMAT);
+		// build FORMAT only once
+		if (isForLabel) {
+			var formatName = 'LABEL_FORMAT';
+			if (this.LABEL_FORMAT === undefined) {
+				buildFormat.call(this, this.labelMantissaMax, this.labelDecimalsMax, formatName);
+			}
+		} else {
+			var formatName = 'VALUE_FORMAT';
+			if (this.VALUE_FORMAT === undefined) {
+				buildFormat.call(this, this.valueMantissaMax, this.valueDecimalsMax, formatName);
+			}
+		}
+
+		return FORMATTER.set(value).format(this[formatName]);
 	};
 
 	/* DEFAULT CONFIGURATION, all size/position values are in % */

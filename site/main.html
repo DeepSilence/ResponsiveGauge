@@ -113,7 +113,8 @@
 				colors : false,
 				value : 318093,
 				valueShift : 4,
-				labelMantissaMax : 4
+				labelMantissaMax : 4,
+				valueDecimalsMax : 0
 			});
 			// half gauge
 			var percentFormatter= function(value)  {return value + '%'};
@@ -140,7 +141,7 @@
 				colors : ['#E14C4C', '#FFA3AC', '#FFE4E4', '#FFF', '#FFF'],
 				border : true,
 				labelNumber : 4,
-				labelDecimalsMax : 1,
+				valueDecimalsMax : 1,
 				value:12.2,
 				valueUnit : 'volts'
 			});
@@ -172,8 +173,8 @@
 				colors : false,
 				value :673274,
 				valueUnit : 'messages in queue',
-				labelDecimalsMax : 2,
-				labelMantissaMax : 3
+				valueDecimalsMax : 2,
+				valueMantissaMax : 3
 			});
 
 			// full circle gauge
