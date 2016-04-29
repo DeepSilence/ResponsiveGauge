@@ -1,7 +1,9 @@
+#[Responsive gauge](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
+
 Responsive gauge is a Javascript library to create gauges of custom styles, that adapts to theirs container's available space.
 The lib is based on D3, numbro and generates SVG.
 
-[See the demos and documentation.](https://www.google.com "Responsive gauge demo and documentation")
+[See the demos and documentation.](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
 
 ## Capabilities
 * gauge resizes with its container
