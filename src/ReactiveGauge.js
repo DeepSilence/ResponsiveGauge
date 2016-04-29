@@ -580,14 +580,11 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
 	 **************************************************************************/
 	ReactiveGauge.config = defaultConfig;
 
-	// CommonJS module is defined
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = ReactiveGauge;
-
-	} else if (typeof requirejs !== 'undefined') {
+	// RequireJS : returns the current instance
+	if (typeof requirejs !== 'undefined') {
 		return ReactiveGauge;
 
-		// vanilla JS
+		// vanilla JS : places the current instance in the root scope
 	} else {
 		// here, `this` means `window` in the browser, or `global` on the
 		// server
@@ -599,15 +596,8 @@ var ReactiveGaugeFactory = (function(_d3, _numbro) {
  * Initializing ReactiveGauge dependencies
  ******************************************************************************/
 
-// CommonJS : sets the dependencies
-if (typeof module !== 'undefined' && module.exports) {
-	var _d3 = require('d3');
-	var _numbro = require('numbro');
-
-	ReactiveGaugeFactory(_d3, _numbro)
-
-	// RequireJS : sets the dependencies url and define the module
-} else if (typeof requirejs !== 'undefined') {
+// RequireJS : sets the dependencies url and define the module
+if (typeof requirejs !== 'undefined') {
 
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
