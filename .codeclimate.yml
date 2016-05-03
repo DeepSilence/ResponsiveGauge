@@ -1,6 +1,9 @@
 engines:
   csslint:
     enabled: true
+    checks:
+      known-properties:
+        enabled: false
   duplication:
     enabled: true
     config:
