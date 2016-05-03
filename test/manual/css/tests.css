@@ -14,17 +14,17 @@ h2 {
 	margin-right: 50px;
 }
 
-figcaption {
-	text-align: center;
-}
-
-.gauge-container {
+.example-container {
 	display: inline-block;
 	height: 200px;
     border: 1px dashed #ddd;
     resize: both; 	/* allow to test resizing */
 	overflow: hidden;
     vertical-align: top; /* keep gauges aligned when testing sizes */
+}
+
+figcaption {
+	text-align: center;
 }
 
 .gauge-vertical {
@@ -37,7 +37,7 @@ figcaption {
 	display: inline-block;
 }
 
-.vertical-layout .gauge-container {
+.vertical-layout figure {
 	display: block;
 }
 

@@ -178,8 +178,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		/**
 		 * Translation of the gauge so that is stays inside the layout
 		 */
-		var tx = 0;
-		var ty = 0;
+		var centerTranslation;
 
 		/**
 		 * Transfom degree angles to radian
@@ -312,7 +311,6 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		 */
 		function computeLayout() {
 			// manage space for long labels
-			var padding = PADDING;
 			var minAngle = config.minAngle;
 			var maxAngle = config.maxAngle;
 			// radius depends if all elements have are shifted inside the gauge
@@ -365,31 +363,24 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			rightSpace = Math.max(rightSpace, horizontalSpaces[0], horizontalSpaces[1]);
 			topSpace = Math.abs(Math.min(-topSpace, verticalSpaces[0], verticalSpaces[1]));
 			bottomSpace = Math.max(bottomSpace, verticalSpaces[0], verticalSpaces[1]);
-			// console.log('leftSpace', leftSpace);
-			// console.log('topSpace', topSpace);
-			// console.log('rightSpace', rightSpace);
-			// console.log('bottomSpace', bottomSpace);
 
-			width = leftSpace + rightSpace + padding * 2;
-			height = topSpace + bottomSpace + padding * 2;
-			// console.log('width', width);
-			// console.log('height', height);
+			width = leftSpace + rightSpace + PADDING * 2;
+			height = topSpace + bottomSpace + PADDING * 2;
 
-			ty = topSpace + padding;
-			tx = leftSpace + padding;
-			// console.log('ty', ty);
-			// console.log('tx', tx);
-
+			var ty = topSpace + PADDING;
+			var tx = leftSpace + PADDING;
 			// if more than 2 axis are fully shown
 			// the gauge is considered as 'wide'
-			var fullSize = maxRadius * 3 + padding * 4;
+			var fullSize = maxRadius * 3 + PADDING * 4;
 			if (fullSize < height + width) {
 				isWide = true;
-				width += padding * 2;
-				height += padding * 2;
-				ty += padding;
-				tx += padding;
+				width += PADDING * 2;
+				height += PADDING * 2;
+				ty += PADDING;
+				tx += PADDING;
 			}
+
+			centerTranslation = 'translate(' + tx + ',' + ty + ')';
 		}
 
 		/**
@@ -398,20 +389,12 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		function render(configuration) {
 			configure(configuration);
 
-			svgContainer = d3.select(container)//
-			.classed('wide-gauge', isWide);
-
-			svg = svgContainer.append('svg:svg')//
-			.attr('class', 'gauge')//
-			.attr('viewBox', '0 0 ' + width + ' ' + height)//
-			.attr('preserveAspectRatio', 'xMinYMin meet');
-
-			var centerTx = 'translate(' + tx + ',' + ty + ')';
+			renderContainer();
 
 			// gauge arc
 			var arcs = svg.append('g')//
 			.attr('class', 'gauge-arc')//
-			.attr('transform', centerTx);
+			.attr('transform', centerTranslation);
 
 			// gauge sectors
 			var sectors = arcs.selectAll('path')//
@@ -436,7 +419,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			var pointerLine = d3.svg.line().interpolate('monotone');
 			var pointerContainer = svg.append('g')//
 			.attr('class', 'gauge-pointer gauge-' + config.pointerType)//
-			.attr('transform', centerTx);
+			.attr('transform', centerTranslation);
 			if (config.pointerType === 'filler') {
 				pointer = pointerContainer.append('path');
 
@@ -460,7 +443,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			// labels
 			var lg = svg.append('g')//
 			.attr('class', 'gauge-label')//
-			.attr('transform', centerTx)//
+			.attr('transform', centerTranslation)//
 			.selectAll('text')//
 			.data(labelData)//
 			.enter()//
@@ -487,13 +470,14 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 				var valueZone = svg.append('g')//
 				.attr('class', 'gauge-value')//
-				.attr('transform', centerTx + ' rotate(' + angle + ')')//
+				.attr('transform', centerTranslation + ' rotate(' + angle + ')')//
 				.append('g')//
 				.attr('transform', translationTf + ' rotate(' + -angle + ')')//
 				.append('text');
-				// value
-				valueLabel = valueZone.append('tspan')
-				.attr('dy', '0.4em');// dominant-baseline not supported by IE
+
+				// value (dy required by IE that do not support
+				// dominant-baseline
+				valueLabel = valueZone.append('tspan').attr('dy', '0.4em');// 
 				// value suffix
 				valueZone.append('tspan')//
 				.text(config.valueUnit)//
@@ -501,6 +485,35 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				.attr('x', 0)//
 				.attr('dy', '1em');
 			}
+		}
+
+		/**
+		 * Creates the gauge containers.<br>
+		 * Mainly required by IE inefficiency
+		 * (http://nicolasgallagher.com/canvas-fix-svg-scaling-in-internet-explorer/)
+		 */
+		function renderContainer() {
+			svgContainer = d3.select(container)//
+
+			// only for ie
+			if (window.navigator.userAgent.match(/(MSIE|Trident|Edge)/)) {
+				svgContainer = svgContainer.append('span')//
+				.attr('class', 'gauge-container');
+
+				svgContainer.append('canvas')//
+				.attr({
+					'class' : 'gauge-ie-fix',
+					width : width,
+					height : height
+				});
+			}
+
+			// sufficient for other browsers
+			svg = svgContainer.classed('wide-gauge', isWide)//
+			.append('svg:svg')//
+			.attr('class', 'gauge')//
+			.attr('viewBox', '0 0 ' + width + ' ' + height)//
+			.attr('preserveAspectRatio', 'xMinYMin meet');
 		}
 
 		/**

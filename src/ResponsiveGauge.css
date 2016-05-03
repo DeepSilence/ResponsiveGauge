@@ -1,4 +1,26 @@
 /* LAYOUT */
+/* hack for IE (http://nicolasgallagher.com/canvas-fix-svg-scaling-in-internet-explorer/) */
+.gauge-container {
+	display: inline-block;
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+.gauge-container .gauge {
+	/* hack for IE */
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.gauge-ie-fix {
+	display: block;
+	height: 100%;
+	width: 100%;
+	visibility: hidden;
+}
+
 .gauge {
 	display: inline-block;
 	overflow: visible; /*avoid cutting texts */
