@@ -1,4 +1,5 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+[![Code Climate](https://codeclimate.com/github/DeepSilence/ResponsiveGauge/badges/gpa.svg)](https://codeclimate.com/github/DeepSilence/ResponsiveGauge)
 
 #[Responsive gauge](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
 
