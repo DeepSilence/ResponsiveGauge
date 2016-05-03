@@ -17,8 +17,11 @@ The lib is based on D3, numbro and generates SVG.
 * values updates are efficient (no full rerender)
 * pointer stabilization at the correct position can be animated 
 
-##known bugs 
-* pointerSlowness is not yet implemented for 'filled' pointers
+##Compatibility
+* Opera 36+, FF 43+, Chrome 45+, IE9 (?)
+	
+## Known bugs 
+* 'pointerSlowness' is not yet implemented for 'filled' pointers
 	
 	
 ---

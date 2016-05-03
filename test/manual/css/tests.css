@@ -19,9 +19,11 @@ figcaption {
 }
 
 .gauge-container {
+	display: inline-block;
 	height: 200px;
     border: 1px dashed #ddd;
     resize: both; 	/* allow to test resizing */
+	overflow: hidden;
     vertical-align: top; /* keep gauges aligned when testing sizes */
 }
 

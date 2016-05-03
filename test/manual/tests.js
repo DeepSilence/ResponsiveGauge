@@ -219,6 +219,124 @@ function startTests() {
 	gauges.push(ResponsiveGauge('#slow-pointer-gauge', {
 		pointerSlowness : 1000
 	}));
+	
+	// DEMO PAGE 
+	// header
+	ResponsiveGauge('#example-header-gauge', {
+		minAngle : -90,
+		maxAngle : 90,
+		minValue : 0,
+		maxValue : 1000000,
+		labelNumber : 11,
+		pointerType : 'filler',
+		ringShift : 1,
+		ringWidth : 20,
+		colors : false,
+		value : 318093,
+		valueShift : 4,
+		labelMantissaMax : 4,
+		valueDecimalsMax : 0
+	});
+	// half gauge
+	var percentFormatter = function(value) {
+		return value + '%'
+	};
+	ResponsiveGauge('#example-half-gauge', {
+		pointerType : 'filament',
+		minAngle : -45,
+		maxAngle : 45,
+		minValue : 0,
+		maxValue : 100,
+		colors : 'gradient',
+		startColor : '#FFF',
+		endColor : '#63c4ca',
+		value : 44,
+		valueShift : 30,
+		labelFormatter : percentFormatter,
+		valueFormatter : percentFormatter
+	});
+	// voltage
+	ResponsiveGauge('#example-voltage-gauge', {
+		minAngle : -90,
+		maxAngle : 0,
+		minValue : 10,
+		maxValue : 13,
+		colors : [ '#E14C4C', '#FFA3AC', '#FFE4E4', '#FFF', '#FFF' ],
+		border : true,
+		labelNumber : 4,
+		valueDecimalsMax : 1,
+		value : 12.2,
+		valueUnit : 'volts'
+	});
+	// mails count
+	ResponsiveGauge('#example-mail-count-gauge', {
+		minAngle : -90,
+		maxAngle : 90,
+		minValue : 0,
+		maxValue : 1000,
+		labelNumber : 5,
+		pointerType : 'filler',
+		ringShift : 1,
+		ringWidth : 20,
+		colors : false,
+		value : 747,
+		valueUnit : 'emails',
+		valueShift : 10
+	});
+	// messages count
+	ResponsiveGauge('#example-message-count-gauge', {
+		minAngle : -90,
+		maxAngle : 90,
+		minValue : 0,
+		maxValue : 1000000,
+		labelNumber : 0,
+		pointerType : 'filler',
+		ringShift : 0,
+		ringWidth : 47,
+		colors : false,
+		value : 673274,
+		valueUnit : 'messages in queue',
+		valueDecimalsMax : 2,
+		valueMantissaMax : 3
+	});
+
+	// full circle gauge
+	ResponsiveGauge('#example-full-gauge', {
+		minAngle : 0,
+		maxAngle : 360,
+		minValue : 0,
+		maxValue : 360,
+		labelNumber : 0,
+		valueFormatter : function(v) {
+			return Math.floor(v) + '°'
+		},
+		labelShift : 0,
+		ringShift : 5,
+		ringWidth : 0.5,
+		fillerWidth : 7,
+		fillerShift : 2,
+		pointerType : 'filler',
+		value : 225,
+		colors : false
+	});
+
+	// filler under the gauge ring
+	ResponsiveGauge('#example-bi-gauge', {
+		minAngle : -90,
+		maxAngle : 90,
+		minValue : 0,
+		maxValue : 300,
+		labelNumber : 11,
+		labelShift : 9,
+		pointerType : 'filler',
+		fillerShift : 12,
+		fillerWidth : 6,
+		ringShift : 10,
+		ringWidth : 2,
+		value : 120,
+		valueUnit : 'km/h',
+		valueShift : 15
+	});
 
 	/***************************************************************************
 	 * DISPLAY AND REFRESH THE GAUGES

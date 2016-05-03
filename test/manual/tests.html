@@ -3,8 +3,7 @@
 <head>
 <meta charset=" UTF-8" />
 <!-- Tries to allow fullscreen in browser -->
-<meta name="viewport"
-	content="minimal-ui, width=device-width, initial-scale=1">
+<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1">
 
 <title>Responsive-gauge test page</title>
 
@@ -14,30 +13,30 @@
 <body>
 	<h1>VISUAL CHECK PAGE</h1>
 
+	<h2>Demo page gauges</h2>
+	<div>
+		<span class="gauge-container" id="example-voltage-gauge"></span> <span class="gauge-container" id="example-half-gauge"></span> <span
+			class="gauge-container wide-gauge" id="example-full-gauge"><canvas height="1" width="1"></canvas></span> <span class="gauge-container" id="example-mail-count-gauge"></span> <span
+			class="gauge-container" id="example-message-count-gauge"></span> <span class="gauge-container wide-gauge" id="example-bi-gauge"></span>
+
+	</div>
+
 	<h2>Quarters of gauges</h2>
 	<div>
-		<span id="qgauge1" class="gauge-container"></span> <span id="qgauge2"
-			class="gauge-container"> </span> <span id="qgauge3"
-			class="gauge-container"> </span> <span id="qgauge4"
-			class="gauge-container"> </span>
+		<span id="qgauge1" class="gauge-container"></span> <span id="qgauge2" class="gauge-container"> </span> <span id="qgauge3"
+			class="gauge-container"> </span> <span id="qgauge4" class="gauge-container"> </span>
 	</div>
 
 	<h2>Halves of gauges</h2>
 	<div>
-		<span class="vertical-layout"> <span id="hgauge1"
-			class="gauge-container"></span> <span id="hgauge2"
-			class="gauge-container"></span>
-		</span> 
-		<span id="hgauge3" class="gauge-container gauge-vertical"></span> 
-		<span id="hgauge4" class="gauge-container gauge-vertical"></span>
+		<span class="vertical-layout"> <span id="hgauge1" class="gauge-container"></span> <span id="hgauge2" class="gauge-container"></span>
+		</span> <span id="hgauge3" class="gauge-container gauge-vertical"></span> <span id="hgauge4" class="gauge-container gauge-vertical"></span>
 	</div>
 
 	<h2>Three quarters gauges</h2>
 	<div>
-		<span id="tgauge1" class="gauge-container"></span> <span id="tgauge2"
-			class="gauge-container"> </span> <span id="tgauge3"
-			class="gauge-container"> </span> <span id="tgauge4"
-			class="gauge-container"> </span>
+		<span id="tgauge1" class="gauge-container"></span> <span id="tgauge2" class="gauge-container"> </span> <span id="tgauge3"
+			class="gauge-container"> </span> <span id="tgauge4" class="gauge-container"> </span>
 	</div>
 
 	<h2>Full gauges</h2>
@@ -47,26 +46,20 @@
 
 	<h2>Random quarter gauges</h2>
 	<div>
-		<span id="custom-quarter-gauge1" class="gauge-container"></span> <span id="custom-quarter-gauge2"
-			class="gauge-container"> </span> <span id="custom-quarter-gauge3"
-			class="gauge-container"> </span> <span id="custom-quarter-gauge4"
-			class="gauge-container"> </span>
+		<span id="custom-quarter-gauge1" class="gauge-container"></span> <span id="custom-quarter-gauge2" class="gauge-container"> </span> <span
+			id="custom-quarter-gauge3" class="gauge-container"> </span> <span id="custom-quarter-gauge4" class="gauge-container"> </span>
 	</div>
 
 	<h2>Random halves of gauges</h2>
 	<div>
-		<span id="custom-half-gauge1" class="gauge-container"></span> <span id="custom-half-gauge2"
-			class="gauge-container"> </span> <span id="custom-half-gauge3"
-			class="gauge-container"> </span> <span id="custom-half-gauge4"
-			class="gauge-container"> </span>
+		<span id="custom-half-gauge1" class="gauge-container"></span> <span id="custom-half-gauge2" class="gauge-container"> </span> <span
+			id="custom-half-gauge3" class="gauge-container"> </span> <span id="custom-half-gauge4" class="gauge-container"> </span>
 	</div>
 
 	<h2>Random three quarters gauges</h2>
 	<div>
-		<span id="custom-three-gauge1" class="gauge-container"></span> <span id="custom-three-gauge2"
-			class="gauge-container"> </span> <span id="custom-three-gauge3"
-			class="gauge-container"> </span> <span id="custom-three-gauge4"
-			class="gauge-container"> </span>
+		<span id="custom-three-gauge1" class="gauge-container"></span> <span id="custom-three-gauge2" class="gauge-container"> </span> <span
+			id="custom-three-gauge3" class="gauge-container"> </span> <span id="custom-three-gauge4" class="gauge-container"> </span>
 	</div>
 
 	<hr>
@@ -157,6 +150,9 @@
 			<span id="suffixed-label-gauge" class="gauge-container"> </span>
 		</figure>
 	</div>
+
+	<!-- to be able to test on IE -->
+	<script src="lib/promisesPolyfill.js"></script>
 
 	<script src="tests.js"></script>
 </body>

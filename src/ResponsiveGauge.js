@@ -498,7 +498,8 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				.attr('transform', translationTf + ' rotate(' + -angle + ')')//
 				.append('text');
 				// value
-				valueLabel = valueZone.append('tspan');
+				valueLabel = valueZone.append('tspan')
+				.attr('dy', '0.4em');// dominant-baseline not supported by IE
 				// value suffix
 				valueZone.append('tspan')//
 				.text(config.valueUnit)//
@@ -616,7 +617,7 @@ if (typeof requirejs !== 'undefined') {
 		link.media = 'all';
 		head.appendChild(link);
 	}
-	
+
 	requirejs.config({
 		"paths" : {
 			"d3" : protocol + "//cdn.jsdelivr.net/d3js/3.5.16/d3.min",
