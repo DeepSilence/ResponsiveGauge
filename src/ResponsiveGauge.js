@@ -39,13 +39,14 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		}
 
 		// build FORMAT only once
+		var formatName;
 		if (isForLabel) {
-			var formatName = 'LABEL_FORMAT';
+			formatName = 'LABEL_FORMAT';
 			if (this.LABEL_FORMAT === undefined) {
 				buildFormat.call(this, this.labelMantissaMax, this.labelDecimalsMax, formatName);
 			}
 		} else {
-			var formatName = 'VALUE_FORMAT';
+			formatName = 'VALUE_FORMAT';
 			if (this.VALUE_FORMAT === undefined) {
 				buildFormat.call(this, this.valueMantissaMax, this.valueDecimalsMax, formatName);
 			}
@@ -153,23 +154,16 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 		/* MISC VALUES */
 		var radius = GAUGE_DIAMETER / 2;
-		var range = undefined;
-		var scale = undefined;
+		var range, scale;
 
 		/* ELEMENTS */
-		var valueLabel = undefined;
-		var svgContainer = undefined;
-		var svg = undefined;
-		var pointer = undefined;
+		var valueLabel, svgContainer, svg, pointer;
 
 		/* DATA */
-		var arcData = undefined;
-		var fullArcData = undefined;
-		var labelData = undefined;
+		var arcData, fullArcData, labelData;
 
 		/* COLORS */
-		var colors = undefined;
-		var arcColorFn = undefined;
+		var colors, arcColorFn;
 
 		/**
 		 * Indicates the gauge size is wide (more than an half circle)
