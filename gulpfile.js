@@ -9,14 +9,23 @@ var cssmin = require('gulp-cssmin');
 var plumber = require("gulp-plumber");
 
 var paths = {
-		srcJs : 'src/**/*.js',
-		destJs : 'dist',
-		srcCss : 'src/**/*.css',
-		destCss : 'dist',
+	srcJs : 'src/**/*.js',
+	destJs : 'dist',
+	srcCss : 'src/**/*.css',
+	destCss : 'dist',
 	testSrc : 'test',
 	testSrcJs : 'test/*.js',
 	manualTest : '!test/manual/**/*.js'
 };
+
+/**
+ * Function to avoid exiting on errors
+ */
+function writeErrors() {
+	return plumber(function(error) {
+		util.log(error.message);
+	});
+}
 
 gulp.task("default", function() {
 	gulp.start('buildJs');
@@ -34,9 +43,8 @@ gulp.task("default", function() {
  */
 gulp.task('buildJs', function() {
 	return gulp.src(paths.srcJs)//
-	.pipe(plumber(function(error) { // avoid exiting
-		util.log(error.message);
-	})).pipe(stripCode({ // remove test code
+	.pipe(writeErrors())//
+	.pipe(stripCode({ // remove test code
 		start_comment : "start-test-code",
 		end_comment : "end-test-code"
 	})).pipe(uglify({
@@ -50,9 +58,8 @@ gulp.task('buildJs', function() {
  */
 gulp.task('buildCss', function() {
 	return gulp.src(paths.srcCss)//
-	.pipe(plumber(function(error) { // avoid exiting
-		util.log(error.message);
-	})).pipe(cssmin()) // minimize
+	.pipe(writeErrors())//
+	.pipe(cssmin()) // minimize
 	.pipe(rename('ResponsiveGauge.min.css')).pipe(gulp.dest(paths.destCss));
 });
 
