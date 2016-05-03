@@ -1,3 +1,5 @@
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+
 #[Responsive gauge](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
 
 Responsive gauge is a Javascript library to create gauges of custom styles, that adapts to theirs container's available space.
