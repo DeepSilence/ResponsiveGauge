@@ -497,8 +497,8 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 			// only for ie
 			if (window.navigator.userAgent.match(/(MSIE|Trident|Edge)/)) {
-				svgContainer = svgContainer.append('span')//
-				.attr('class', 'gauge-container');
+				svgContainer//
+				.classed('gauge-container', true);
 
 				svgContainer.append('canvas')//
 				.attr({
