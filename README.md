@@ -8,6 +8,10 @@ The lib is based on D3, numbro and generates SVG.
 
 [See the demos and documentation.](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
 
+<span style="text-align:center;">
+	<img src="https://raw.githubusercontent.com/DeepSilence/ResponsiveGauge/master/examples.png"/>
+</span>
+
 ## Capabilities
 * lightweigth library
 * gauges are responsive to their containers size changes
