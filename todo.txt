@@ -1,5 +1,3 @@
-Add screenshots to the github page
-
 App : 
 	add language support for formatters
 	use gradient for filled pointer
@@ -12,7 +10,6 @@ App :
 
 Bugs : 
 	bug : tests do not shrink on Chr (Chr limitation?)
-	do not work on IE... (http://nicolasgallagher.com/canvas-fix-svg-scaling-in-internet-explorer/)
 
 	
 	

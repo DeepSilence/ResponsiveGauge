@@ -65,20 +65,24 @@ function startTests() {
 	 * GAUGES CONFIG
 	 **************************************************************************/
 	// default config for the tests
-	ResponsiveGauge.config.colors = 'gradient';
-	ResponsiveGauge.config.minAngle = 0;
-	ResponsiveGauge.config.maxAngle = 90;
-	ResponsiveGauge.config.maxValue = 800;
+	ResponsiveGauge.config.ring.colors = 'gradient';
+	ResponsiveGauge.config.ring.minAngle = 0;
+	ResponsiveGauge.config.ring.maxAngle = 90;
+	ResponsiveGauge.config.data.max = 800;
 
 	/**
 	 * Generate configs for angles checks gauges.
 	 */
 	function getAngleCheckConfig(minAngle, maxAngle, otherConfig) {
 		var config = {
-			minAngle : minAngle,
-			maxAngle : maxAngle,
-			minValue : minAngle,
-			maxValue : maxAngle
+			ring : {
+				minAngle : minAngle,
+				maxAngle : maxAngle,
+			},
+			data : {
+				min : minAngle,
+				max : maxAngle
+			}
 		};
 
 		for ( var prop in otherConfig) {
@@ -120,7 +124,9 @@ function startTests() {
 	gauges.push(ResponsiveGauge('#custom-quarter-gauge2', getAngleCheckConfig(20, 70)));
 	gauges.push(ResponsiveGauge('#custom-quarter-gauge3', getAngleCheckConfig(100, 170)));
 	gauges.push(ResponsiveGauge('#custom-quarter-gauge4', getAngleCheckConfig(210, 230, {
-		labelNumber : 2
+		labels : {
+			number : 2
+		}
 	})));
 
 	// custom angles (halves)
@@ -137,205 +143,332 @@ function startTests() {
 
 	// COLORS / GRADIENTS
 	gauges.push(ResponsiveGauge('#gradient-gauge', {
-		colors : 'gradient'
+		ring : {
+			colors : 'gradient'
+		}
 	}));
 	gauges.push(ResponsiveGauge('#sector-gradient-gauge', {
-		colors : 'sectors'
+		ring : {
+			colors : 'sectors'
+		}
 	}));
 	gauges.push(ResponsiveGauge('#custom-sectors-gauge', {
-		colors : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
-		border : true
+		ring : {
+			colors : [ '#FFF', '#FFF', '#FFF', '#FF7C88', '#D50000' ],
+			border : true
+		}
 	}));
 
 	// BORDERS
 	gauges.push(ResponsiveGauge('#without-border-gauge', {
-		colors : [ '#FFF' ]
+		ring : {
+			colors : [ '#FFF' ]
+		}
 	}));
 	gauges.push(ResponsiveGauge('#with-border-gauge', {
-		colors : [ '#FFF' ],
-		border : true
+		ring : {
+			colors : [ '#FFF' ],
+			border : true
+		}
 	}));
 
 	// SIZE AND POSITION
 	gauges.push(ResponsiveGauge('#wide-gauge', {
-		ringShift : 0,
-		ringWidth : 14,
-		labelShift : 8,
-		pointerType : 'filament'
+		ring : {
+			shift : 0,
+			width : 14
+		},
+		labels : {
+			shift : 8
+		},
+		pointer : {
+			type : 'filament'
+		}
 	}));
 	gauges.push(ResponsiveGauge('#inner-label-gauge', {
-		ringShift : 0,
-		ringWidth : 7,
-		labelShift : 12,
-		needleLength : 75
+		ring : {
+			shift : 0,
+			width : 7
+		},
+		labels : {
+			shift : 12
+		},
+		pointer : {
+			needleLength : 75
+		}
 	}));
 	gauges.push(ResponsiveGauge('#no-gauge', {
-		labelShift : 0,
-		ringShift : 5,
-		ringWidth : 0.5,
-		fillerWidth : 7,
-		fillerShift : 2,
-		pointerType : 'filler',
-		colors : false
+		labels : {
+			shift : 0
+		},
+		ring : {
+			shift : 5,
+			width : 0.5,
+			colors : false
+		},
+		pointer : {
+			fillerWidth : 7,
+			fillerShift : 2,
+			type : 'filler'
+		}
 	}));
 	gauges.push(ResponsiveGauge('#bi-gauge', {
-		labelShift : 9,
-		pointerType : 'filler',
-		fillerShift : 12,
-		fillerWidth : 6,
-		ringShift : 10,
-		ringWidth : 2,
-		valueShift : 15,
-		colors : false
+		labels : {
+			shift : 9
+		},
+		pointer : {
+			type : 'filler',
+			fillerShift : 12,
+			fillerWidth : 6
+		},
+		ring : {
+			shift : 10,
+			width : 2,
+			colors : false
+		},
+		value : {
+			shift : 15
+		}
 	}));
 
 	// LABELS
 	gauges.push(ResponsiveGauge('#no-label-gauge', {
-		labelNumber : 0
+		labels : {
+			number : 0
+		}
 	}));
 	gauges.push(ResponsiveGauge('#long-label-gauge', {
-		labelNumber : 8,
-		maxValue : 100000
+		labels : {
+			number : 8
+		},
+		data : {
+			max : 100000
+		}
 	}));
 	gauges.push(ResponsiveGauge('#custom-labels-gauge', {
-		labelNumber : 2,
-		colors : 'sectors'
+		labels : {
+			number : 2
+		},
+		ring : {
+			colors : 'sectors'
+		}
 	}))
 	gauges.push(ResponsiveGauge('#suffixed-label-gauge', {
-		valueUnit : 'km/h'
+		value : {
+			unit : 'km/h'
+		}
 	}));
 
 	// POINTERS
 	gauges.push(ResponsiveGauge('#needle-pointer-gauge', {
-		pointerType : 'needle'
+		pointer : {
+			type : 'needle'
+		}
 	}));
 	gauges.push(ResponsiveGauge('#filament-pointer-gauge', {
-		pointerType : 'filament'
+		pointer : {
+			type : 'filament'
+		}
 	}));
 	gauges.push(ResponsiveGauge('#filler-pointer-gauge', {
-		pointerType : 'filler',
-		colors : false
+		pointer : {
+			type : 'filler',
+		},
+		ring : {
+			colors : false
+		}
 	}));
 	gauges.push(ResponsiveGauge('#slow-pointer-gauge', {
-		pointerSlowness : 1000
+		pointer : {
+			slowness : 1000
+		}
 	}));
-	
-	// DEMO PAGE 
+
+	// DEMO PAGE
 	// header
 	ResponsiveGauge('#example-header-gauge', {
-		minAngle : -90,
-		maxAngle : 90,
-		minValue : 0,
-		maxValue : 1000000,
-		labelNumber : 11,
-		pointerType : 'filler',
-		ringShift : 1,
-		ringWidth : 20,
-		colors : false,
-		value : 318093,
-		valueShift : 4,
-		labelMantissaMax : 4,
-		valueDecimalsMax : 0
+		ring : {
+			minAngle : -90,
+			maxAngle : 90,
+			shift : 1,
+			width : 20,
+			colors : false
+		},
+		data : {
+			min : 0,
+			max : 1000000,
+			value : 318093
+		},
+		labels : {
+			mantissaMax : 4,
+			number : 11
+		},
+		pointer : {
+			type : 'filler'
+
+		},
+		value : {
+			shift : 4,
+			decimalsMax : 0
+		}
 	});
 	// half gauge
 	var percentFormatter = function(value) {
 		return value + '%'
 	};
 	ResponsiveGauge('#example-half-gauge', {
-		pointerType : 'filament',
-		minAngle : -45,
-		maxAngle : 45,
-		minValue : 0,
-		maxValue : 100,
-		colors : 'gradient',
-		startColor : '#FFF',
-		endColor : '#63c4ca',
-		value : 44,
-		valueShift : 30,
-		labelFormatter : percentFormatter,
-		valueFormatter : percentFormatter
+		pointer : {
+			type : 'filament'
+		},
+		ring : {
+			minAngle : -45,
+			maxAngle : 45,
+			colors : 'gradient',
+			startColor : '#FFF',
+			endColor : '#63c4ca'
+		},
+		data : {
+			value : 44,
+			min : 0,
+			max : 100
+		},
+		value : {
+			shift : 30,
+			formatter : percentFormatter
+		},
+		labels : {
+			formatter : percentFormatter
+		}
 	});
 	// voltage
 	ResponsiveGauge('#example-voltage-gauge', {
-		minAngle : -90,
-		maxAngle : 0,
-		minValue : 10,
-		maxValue : 13,
-		colors : [ '#E14C4C', '#FFA3AC', '#FFE4E4', '#FFF', '#FFF' ],
-		border : true,
-		labelNumber : 4,
-		valueDecimalsMax : 1,
-		value : 12.2,
-		valueUnit : 'volts'
+		ring : {
+			minAngle : -90,
+			maxAngle : 0,
+			colors : [ '#E14C4C', '#FFA3AC', '#FFE4E4', '#FFF', '#FFF' ],
+			border : true
+		},
+		data : {
+			min : 10,
+			max : 13,
+			value : 12.2
+		},
+		labels : {
+			number : 4
+		},
+		value : {
+			decimalsMax : 1,
+			unit : 'volts'
+		}
 	});
 	// mails count
 	ResponsiveGauge('#example-mail-count-gauge', {
-		minAngle : -90,
-		maxAngle : 90,
-		minValue : 0,
-		maxValue : 1000,
-		labelNumber : 5,
-		pointerType : 'filler',
-		ringShift : 1,
-		ringWidth : 20,
-		colors : false,
-		value : 747,
-		valueUnit : 'emails',
-		valueShift : 10
+		ring : {
+			minAngle : -90,
+			maxAngle : 90,
+			shift : 1,
+			width : 20,
+			colors : false
+		},
+		data : {
+			min : 0,
+			max : 1000,
+			value : 747
+		},
+		labels : {
+			number : 5
+		},
+		pointer : {
+			type : 'filler'
+		},
+		value : {
+			unit : 'emails',
+			shift : 10
+		}
 	});
 	// messages count
 	ResponsiveGauge('#example-message-count-gauge', {
-		minAngle : -90,
-		maxAngle : 90,
-		minValue : 0,
-		maxValue : 1000000,
-		labelNumber : 0,
-		pointerType : 'filler',
-		ringShift : 0,
-		ringWidth : 47,
-		colors : false,
-		value : 673274,
-		valueUnit : 'messages in queue',
-		valueDecimalsMax : 2,
-		valueMantissaMax : 3
+		ring : {
+			minAngle : -90,
+			maxAngle : 90,
+			shift : 0,
+			width : 47,
+			colors : false
+		},
+		data : {
+			min : 0,
+			max : 1000000,
+			value : 673274
+		},
+		labels : {
+			number : 0
+		},
+		pointer : {
+			type : 'filler'
+		},
+		value : {
+			unit : 'messages in queue',
+			decimalsMax : 2,
+			mantissaMax : 3
+		}
 	});
 
 	// full circle gauge
 	ResponsiveGauge('#example-full-gauge', {
-		minAngle : 0,
-		maxAngle : 360,
-		minValue : 0,
-		maxValue : 360,
-		labelNumber : 0,
-		valueFormatter : function(v) {
-			return Math.floor(v) + '°'
+		ring : {
+			minAngle : 0,
+			maxAngle : 360,
+			shift : 5,
+			width : 0.5,
+			colors : false
 		},
-		labelShift : 0,
-		ringShift : 5,
-		ringWidth : 0.5,
-		fillerWidth : 7,
-		fillerShift : 2,
-		pointerType : 'filler',
-		value : 225,
-		colors : false
+		data : {
+			min : 0,
+			max : 360,
+			value : 225
+		},
+		labels : {
+			number : 0,
+			shift : 0
+		},
+		value : {
+			formatter : function(v) {
+				return Math.floor(v) + '°'
+			}
+		},
+		pointer : {
+			fillerWidth : 7,
+			fillerShift : 2,
+			type : 'filler'
+		}
 	});
 
 	// filler under the gauge ring
 	ResponsiveGauge('#example-bi-gauge', {
-		minAngle : -90,
-		maxAngle : 90,
-		minValue : 0,
-		maxValue : 300,
-		labelNumber : 11,
-		labelShift : 9,
-		pointerType : 'filler',
-		fillerShift : 12,
-		fillerWidth : 6,
-		ringShift : 10,
-		ringWidth : 2,
-		value : 120,
-		valueUnit : 'km/h',
-		valueShift : 15
+		ring : {
+			minAngle : -90,
+			maxAngle : 90,
+			shift : 10,
+			width : 2
+		},
+		data : {
+			min : 0,
+			max : 300,
+			value : 120
+		},
+		labels : {
+			number : 11,
+			shift : 9
+		},
+		pointer : {
+			type : 'filler',
+			fillerShift : 12,
+			fillerWidth : 6
+		},
+		value : {
+			unit : 'km/h',
+			shift : 15
+		}
 	});
 
 	/***************************************************************************
@@ -344,8 +477,8 @@ function startTests() {
 	var refresh = function() {
 		gauges.forEach(function(g) {
 			var config = g.getConfig();
-			var range = config.maxValue - config.minValue;
-			var value = config.minValue + (Math.random() * range);
+			var range = config.data.max - config.data.min;
+			var value = config.data.min + (Math.random() * range);
 			g.update(value);
 		})
 	};

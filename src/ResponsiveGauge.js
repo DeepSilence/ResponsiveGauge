@@ -30,123 +30,135 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	var FORMATTER = numbro();
 	// formatter will use SI prefixes (G, M, k, µ, ...), and round values
 	var DEFAULT_FORMATTER = function(value, isForLabel) {
-		function buildFormat(mantissaMax, decimalsMax, formatName) {
-			if (decimalsMax === 0) {
-				this[formatName] = mantissaMax + '.a';
+		function buildFormat(formatOptions, formatName) {
+			if (formatOptions.decimalsMax === 0) {
+				this[formatName] = formatOptions.mantissaMax + '.a';
 			} else {
-				this[formatName] = mantissaMax + '.[' + new Array(decimalsMax + 1).join('0') + ']a';
+				this[formatName] = formatOptions.mantissaMax + '.[' + new Array(formatOptions.decimalsMax + 1).join('0') + ']a';
 			}
 		}
 
 		// build FORMAT only once
-		var formatName;
+		var formatName, formatOptions;
 		if (isForLabel) {
 			formatName = 'LABEL_FORMAT';
+			formatOptions = this.labels;
 			if (this.LABEL_FORMAT === undefined) {
-				buildFormat.call(this, this.labelMantissaMax, this.labelDecimalsMax, formatName);
+				buildFormat.call(this, formatOptions, formatName);
 			}
 		} else {
 			formatName = 'VALUE_FORMAT';
+			formatOptions = this.value;
 			if (this.VALUE_FORMAT === undefined) {
-				buildFormat.call(this, this.valueMantissaMax, this.valueDecimalsMax, formatName);
+				buildFormat.call(this, formatOptions, formatName);
 			}
 		}
 
 		return FORMATTER.set(value).format(this[formatName]);
 	};
 
-	/* DEFAULT CONFIGURATION, all size/position values are in % */
+	/* DEFAULT CONFIGURATION */
 	var defaultConfig = {
-		/* RING */
-		// Shift of the ring from the container side (%)
-		ringShift : 3,
-		// Width of the ring (%)
-		ringWidth : 7,
-		// Angle at which the ring starts. -90 is the minimum value, and 0 is at
-		// the top of the vertical axis
-		minAngle : -90,
-		// Angle at which the ring ends.
-		maxAngle : 90,
+		ring : {
+			// Shift of the ring from the container side (%)
+			shift : 3,
+			// Width of the ring (%)
+			width : 7,
+			// Angle at which the ring starts. -90 is the minimum value, and 0
+			// is at
+			// the top of the vertical axis
+			minAngle : -90,
+			// Angle at which the ring ends.
+			maxAngle : 90,
 
-		/* SECTORS */
-		// Number of sectors of the ring.
-		sectorsNumber : 5,
-		// Enables the border around the ring
-		border : false,
+			/* SECTORS */
+			// Number of sectors of the ring.
+			sectorsNumber : 5,
+			// Enables the border around the ring
+			border : false,
 
-		/* POINTERS */
-		// Type of pointer; values are :<br>
-		// 'needle',<br>
-		// 'filament', <br>
-		// 'filler'
-		pointerType : 'needle',
-		// Time (in millis) for the pointer to stabilize at the correct position
-		pointerSlowness : 200,
-		// Length of 'needle' pointers (%)
-		needleLength : 90,
-		// Overflow of 'filament' pointers over the ring (%)
-		filamentLength : 2,
-		// Width of 'filled' pointers (%)
-		fillerWidth : NaN, /* by default, as wide as the ring */
-		// Shift of the 'filled' pointers from the container side (%)
-		fillerShift : 0,
-
-		/* gauge values */
-		// Minimum value displayed on the gauge
-		minValue : 0,
-		// Maximum value displayed on the gauge
-		maxValue : 100,
-		// Value displayed on the gauge
-		value : 0,
-
-		/* labels */
-		// Number of labels around the gauges (ticks)
-		labelNumber : NaN, /* by default, as many as sectors */
-
-		// Function used to format the labels (can be d3.format). The
-		// formatter context is the config object.
-		// @param v the value to format
-		labelFormatter : function(v) {
-			return DEFAULT_FORMATTER.call(this, v, true);
+			// Color(s) of the gauge; values are :<br>
+			// 'gradient' for a gradient color gradient<br>
+			// 'sectors' for coloring on each sector (gradient)<br>
+			// [#111, #222, ...] for specifying the color of each sector<br>
+			// false : no color (CSS color can be used)<br>
+			colors : false,
+			// If colors = 'gradient' or 'sectors', used as first gradient color
+			startColor : '#ffebee',
+			// If colors = 'gradient' or 'sectors', used as last gradient color
+			endColor : '#810301'
 		},
-		// If no custom labelFormatter is specified, number of mantissa digits
-		// before using SI units (Mega, Kilo...)
-		labelMantissaMax : 4,
-		// If no custom labelFormatter is specified, limits the number of
-		// decimal digits of labels
-		labelDecimalsMax : 0,
-		// Shift of the label from the container side (%)
-		labelShift : 0,
 
-		// Color(s) of the gauge; values are :<br>
-		// 'gradient' for a gradient color gradient<br>
-		// 'sectors' for coloring on each sector (gradient)<br>
-		// [#111, #222, ...] for specifying the color of each sector<br>
-		// false : no color (CSS color can be used)<br>
-		colors : false,
-		// If colors = 'gradient' or 'sectors', used as first gradient color
-		startColor : '#ffebee',
-		// If colors = 'gradient' or 'sectors', used as last gradient color
-		endColor : '#810301',
-
-		// enable value display
-		showValue : true,
-		// Shift of the label from the center of the gauge (%)
-		valueShift : 22,
-		// format function to apply to the value (can use d3.format). The
-		// formatter context is the config object
-		// @param v the value to format
-		valueFormatter : function(v) {
-			return DEFAULT_FORMATTER.call(this, v, false);
+		pointer : {
+			// Type of pointer; values are :<br>
+			// 'needle',<br>
+			// 'filament', <br>
+			// 'filler'
+			type : 'needle',
+			// Time (in millis) for the pointer to stabilize at the correct
+			// position
+			slowness : 200,
+			// Length of 'needle' pointers (%)
+			needleLength : 90,
+			// Overflow of 'filament' pointers over the ring (%)
+			filamentLength : 2,
+			// Width of 'filled' pointers (%)
+			fillerWidth : null, /* by default, as wide as the ring */
+			// Shift of the 'filled' pointers from the container side (%)
+			fillerShift : 0
 		},
-		// If no custom valueFormatter is specified, number of mantissa digits
-		// before using SI units (Mega, Kilo...)
-		valueMantissaMax : 4,
-		// If no custom valueFormatter is specified, limits the number of
-		// decimal digits of labels
-		valueDecimalsMax : 0,
-		// unit of the displayed value
-		valueUnit : ''
+
+		data : {
+			// Minimum value displayed on the gauge
+			min : 0,
+			// Maximum value displayed on the gauge
+			max : 100,
+			// Value displayed on the gauge
+			value : 0
+		},
+
+		labels : {
+			// Number of labels around the gauges (ticks)
+			number : null, /* by default, as many as sectors */
+
+			// Function used to format the labels (can be d3.format). The
+			// formatter context is the config object.
+			// @param v the value to format
+			formatter : function(v) {
+				return DEFAULT_FORMATTER.call(this, v, true);
+			},
+			// If no custom labelFormatter is specified, number of mantissa
+			// digits
+			// before using SI units (Mega, Kilo...)
+			mantissaMax : 4,
+			// If no custom labelFormatter is specified, limits the number of
+			// decimal digits of labels
+			decimalsMax : 0,
+			// Shift of the label from the container side (%)
+			shift : 0
+		},
+
+		value : {
+			// enable value display
+			show : true,
+			// Shift of the label from the center of the gauge (%)
+			shift : 22,
+			// format function to apply to the value (can use d3.format). The
+			// formatter context is the config object
+			// @param v the value to format
+			formatter : function(v) {
+				return DEFAULT_FORMATTER.call(this, v, false);
+			},
+			// If no custom valueFormatter is specified, number of mantissa
+			// digits
+			// before using SI units (Mega, Kilo...)
+			mantissaMax : 4,
+			// If no custom valueFormatter is specified, limits the number of
+			// decimal digits of labels
+			decimalsMax : 0,
+			// unit of the displayed value
+			unit : ''
+		}
 	};
 
 	var ResponsiveGauge = function(container, configuration) {
@@ -192,70 +204,97 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		 * this...
 		 */
 		function computeTicks() {
-			if (isNaN(config.labelNumber)) {
-				config.labelNumber = config.sectorsNumber;
+			if (config.labels.number === null) {
+				config.labels.number = config.ring.sectorsNumber;
 			}
-			if (config.labelNumber === 0) {
+			if (config.labels.number === 0) {
 				return [];
 			}
 
-			var step = (config.maxValue - config.minValue) / (config.labelNumber - 1);
-			var ticks = d3.range(config.minValue, config.maxValue, step);
-			ticks.push(config.maxValue);
+			var step = (config.data.max - config.data.min) / (config.labels.number - 1);
+			var ticks = d3.range(config.data.min, config.data.max, step);
+			ticks.push(config.data.max);
 			return ticks;
+		}
+
+		/**
+		 * Merges the source object into the target object. The reference is
+		 * used to check whether source do contain unknown properties
+		 */
+		function merge(target, source, reference) {
+			for ( var prop in source) {
+				if (source.hasOwnProperty(prop)) {
+					var data = source[prop];
+					if (typeof data === 'object' && data.constructor !== Array) {
+						merge(target[prop], data, reference[prop]);
+					} else {
+						// scalar data
+						target[prop] = data;
+						if (reference[prop] === undefined) {
+							console.warn('Config property ' + prop + ' is unknwon');
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Creates the actual gauge configuration using default values and user
+		 * values
+		 * 
+		 */
+		function createConfig(configuration) {
+			// inits with default config
+			config = JSON.parse(JSON.stringify(defaultConfig));
+			config.labels.formatter = defaultConfig.labels.formatter;
+			config.value.formatter = defaultConfig.value.formatter;
+			// adds the users config
+			merge(config, configuration, defaultConfig);
+			// reset format
+			config.FORMAT = undefined;
+			// binds the formatter so that it can access config
+			config.labels.formatter = config.labels.formatter.bind(config);
+			config.value.formatter = config.value.formatter.bind(config);
+
 		}
 
 		/**
 		 * Do config related computations
 		 */
 		function configure(configuration) {
-			// merge default config and custom config
-			for ( var prop in defaultConfig) {
-				config[prop] = defaultConfig[prop];
-			}
-			for ( var prop in configuration) {
-				config[prop] = configuration[prop];
-				if (defaultConfig[prop] === undefined) {
-					console.warn('Config property ' + prop + ' is unknwon');
-				}
-			}
-			// reset format
-			config.FORMAT = undefined;
-			// binds the formatter so that it can access config
-			config.labelFormatter = config.labelFormatter.bind(config);
-			config.valueFormatter = config.valueFormatter.bind(config);
+			createConfig(configuration);
 
-			range = config.maxAngle - config.minAngle;
+			range = config.ring.maxAngle - config.ring.minAngle;
 			computeLayout();
 
 			// a linear scale that maps domain values to a percent from 0..1
-			scale = d3.scale.linear().range([ 0, 1 ]).domain([ config.minValue, config.maxValue ]);
+			scale = d3.scale.linear().range([ 0, 1 ]).domain([ config.data.min, config.data.max ]);
 
 			// label ticks
 			labelData = computeTicks();
 
 			// coloring / gradient
-			if (config.colors.constructor === Array) {
-				colors = d3.range(config.sectorsNumber).map(function() {
-					return 1 / config.sectorsNumber;
+			if (config.ring.colors.constructor === Array) {
+				colors = d3.range(config.ring.sectorsNumber).map(function() {
+					return 1 / config.ring.sectorsNumber;
 				});
 				arcColorFn = function(i) {
 					/* fix me : ugly */
-					var index = Math.floor(i * config.sectorsNumber);
-					index = Math.min(index, config.colors.length - 1);
-					return config.colors[index];
+					var index = Math.floor(i * config.ring.sectorsNumber);
+					index = Math.min(index, config.ring.colors.length - 1);
+					return config.ring.colors[index];
 				};
-			} else if (config.colors) {
-				if (config.colors === 'gradient') {
+			} else if (config.ring.colors) {
+				if (config.ring.colors === 'gradient') {
 					colors = d3.range(GRADIENT_ELT_NUMBER).map(function() {
 						return 1 / GRADIENT_ELT_NUMBER;
 					});
 				} else {
-					colors = d3.range(config.sectorsNumber).map(function() {
-						return 1 / config.sectorsNumber;
+					colors = d3.range(config.ring.sectorsNumber).map(function() {
+						return 1 / config.ring.sectorsNumber;
 					});
 				}
-				arcColorFn = d3.interpolateHsl(d3.rgb(config.startColor), d3.rgb(config.endColor));
+				arcColorFn = d3.interpolateHsl(d3.rgb(config.ring.startColor), d3.rgb(config.ring.endColor));
 			} else {
 				colors = [ 1 ];
 			}
@@ -265,21 +304,21 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				var ratio = d * i;
 				// - 0.5 allow shapes borders collapse, except on first arc
 				var collapsing = (i === 0 ? 0 : 0.5);
-				return deg2rad(config.minAngle + (ratio * range) - collapsing);
+				return deg2rad(config.ring.minAngle + (ratio * range) - collapsing);
 			}, function(d, i) {
 				var ratio = d * (i + 1);
-				return deg2rad(config.minAngle + (ratio * range));
-			}, config.ringWidth, config.ringShift);
+				return deg2rad(config.ring.minAngle + (ratio * range));
+			}, config.ring.width, config.ring.shift);
 
 			// complete arc for the border drawing
-			if (config.border) {
-				fullArcData = getArcData(deg2rad(config.minAngle), deg2rad(config.maxAngle), config.ringWidth, config.ringShift);
+			if (config.ring.border) {
+				fullArcData = getArcData(deg2rad(config.ring.minAngle), deg2rad(config.ring.maxAngle), config.ring.width, config.ring.shift);
 			}
 
 			// Pointer
-			if (config.pointerType === 'filler' && isNaN(config.fillerWidth)) {
-				config.fillerWidth = config.ringWidth;
-				config.fillerShift = config.ringShift;
+			if (config.pointer.type === 'filler' && config.pointer.fillerWidth === null) {
+				config.pointer.fillerWidth = config.ring.width;
+				config.pointer.fillerShift = config.ring.shift;
 			}
 		}
 
@@ -311,10 +350,10 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		 */
 		function computeLayout() {
 			// manage space for long labels
-			var minAngle = config.minAngle;
-			var maxAngle = config.maxAngle;
+			var minAngle = config.ring.minAngle;
+			var maxAngle = config.ring.maxAngle;
 			// radius depends if all elements have are shifted inside the gauge
-			var maxRadius = radius - Math.min(config.ringShift, config.fillerShift, config.labelShift);
+			var maxRadius = radius - Math.min(config.ring.shift, config.pointer.fillerShift, config.labels.shift);
 
 			function spaces(angleShift) {
 				// space is the space needed to display the part of
@@ -401,14 +440,14 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			.data(colors).enter()//
 			.append('path')//
 			.attr('d', arcData);
-			if (config.colors) {
+			if (config.ring.colors) {
 				sectors.attr('fill', function(d, i) {
 					return arcColorFn(d * i);
 				});
 			}
 
 			// gauge border
-			if (config.border) {
+			if (config.ring.border) {
 				arcs.append('path')//
 				.attr('fill', 'none')//
 				.attr('class', 'gauge-arc-border')//
@@ -418,22 +457,22 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			// pointer
 			var pointerLine = d3.svg.line().interpolate('monotone');
 			var pointerContainer = svg.append('g')//
-			.attr('class', 'gauge-pointer gauge-' + config.pointerType)//
+			.attr('class', 'gauge-pointer gauge-' + config.pointer.type)//
 			.attr('transform', centerTranslation);
-			if (config.pointerType === 'filler') {
+			if (config.pointer.type === 'filler') {
 				pointer = pointerContainer.append('path');
 
 			} else {
-				if (config.pointerType === 'needle') {
-					pointer = pointerContainer.data([ [ [ 0, -NEEDLE_RADIUS ], [ 0, -config.needleLength / 2 ] ] ])//
+				if (config.pointer.type === 'needle') {
+					pointer = pointerContainer.data([ [ [ 0, -NEEDLE_RADIUS ], [ 0, -config.pointer.needleLength / 2 ] ] ])//
 					.append('path')//
 					.attr('d', pointerLine);
 					pointerContainer.append('circle')//
 					.attr('r', NEEDLE_RADIUS);
 
-				} else if (config.pointerType === 'filament') {
-					var top = radius - config.ringShift - config.ringWidth - config.filamentLength;
-					var bottom = radius - config.ringShift + config.filamentLength;
+				} else if (config.pointer.type === 'filament') {
+					var top = radius - config.ring.shift - config.ring.width - config.pointer.filamentLength;
+					var bottom = radius - config.ring.shift + config.pointer.filamentLength;
 					pointer = pointerContainer.data([ [ [ 0, -top ], [ 0, -bottom ] ] ])//
 					.append('path')//
 					.attr('d', pointerLine);
@@ -450,17 +489,17 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			.append('g')//
 			.attr('transform', function(d) {
 				var ratio = scale(d);
-				var newAngle = config.minAngle + (ratio * range);
-				return 'rotate(' + newAngle + ') translate(0,' + (config.labelShift - radius) + ')';
+				var newAngle = config.ring.minAngle + (ratio * range);
+				return 'rotate(' + newAngle + ') translate(0,' + (config.labels.shift - radius) + ')';
 			})//
 			.append('text')//
-			.text(config.labelFormatter);
+			.text(config.labels.formatter);
 
 			// value display
-			if (config.showValue) {
-				var valueTx = config.valueShift;
+			if (config.value.show) {
+				var valueTx = config.value.shift;
 				// placed between the two bounds
-				var angle = config.minAngle + Math.abs(range) / 2;
+				var angle = config.ring.minAngle + Math.abs(range) / 2;
 				if (isWide) {
 					// keep centered
 					valueTx = 0;
@@ -480,7 +519,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				valueLabel = valueZone.append('tspan').attr('dy', '0.4em');// 
 				// value suffix
 				valueZone.append('tspan')//
-				.text(config.valueUnit)//
+				.text(config.value.unit)//
 				.attr('class', 'unit')//
 				.attr('x', 0)//
 				.attr('dy', '1em');
@@ -521,18 +560,30 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		 */
 		function renderPointer(newValue) {
 			// pointer
-			if (config.pointerType === 'filler') {
-				var pointerArcData = getArcData(deg2rad(config.minAngle),//
+			if (config.pointer.type === 'filler') {
+				var pointerArcData = getArcData(deg2rad(config.ring.minAngle),//
 				deg2rad(getPointerRotation(newValue)),//
-				config.fillerWidth, config.fillerShift);
+				config.pointer.fillerWidth, config.pointer.fillerShift);
 				pointer.attr('d', pointerArcData);
 			} else {
 				pointer.//
 				transition()//
-				.duration(config.pointerSlowness)//
+				.duration(config.pointer.slowness)//
 				.ease('elastic')//
 				.attr('transform', 'rotate(' + getPointerRotation(newValue) + ')');
 			}
+		}
+
+		/**
+		 * Returns the angle of the pointer.
+		 */
+		function getPointerRotation(newValue) {
+			// forces the value into the gauge's bounds
+			var value = Math.max(newValue, config.data.min);
+			value = Math.min(value, config.data.max);
+
+			var ratio = scale(value);
+			return config.ring.minAngle + (ratio * range);
 		}
 
 		/**
@@ -546,25 +597,13 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			renderPointer(newValue);
 
 			// updates value label
-			if (config.showValue) {
-				valueLabel.text(config.valueFormatter(newValue));
+			if (config.value.show) {
+				valueLabel.text(config.value.formatter(newValue));
 			}
 		}
 
-		/**
-		 * Returns the angle of the pointer.
-		 */
-		function getPointerRotation(newValue) {
-			// forces the value into the gauge's bounds
-			var value = Math.max(newValue, config.minValue);
-			value = Math.min(value, config.maxValue);
-
-			var ratio = scale(value);
-			return config.minAngle + (ratio * range);
-		}
-
 		render(configuration);
-		update(config.value);
+		update(config.data.value);
 
 		return {
 			update : update,

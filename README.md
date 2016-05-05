@@ -27,11 +27,11 @@ The lib is based on D3, numbro and generates SVG.
 * animation of the pointer stabilization
 
 ##Compatibility
-* Opera 36+, FF 43+, Chrome 45+, IE10 (still buggy)
+* Opera 36+, FF 43+, Chrome 45+, IE11+
 	
 ## Known bugs 
 * 'pointerSlowness' is not yet implemented for 'filled' pointers
-* on IE, the container resize do not always cause the repaint
+* on IE, the container must have a relative positioning for the gauge to be repaint on resize
 	
 ---
 Based on Matt Magoffin (http://bl.ocks.org/msqr/3202712) work
