@@ -14,11 +14,11 @@ Bugs :
 	
 	
 Release : 
-	Set tag/realease for d/l button on demo page
 	1. build & test with gulp
 	2. visually check vanilla test.html on FF/Chr/...
 	3. visually check requireJS test.html
-	4. get the CDN url for JS from https://rawgit.com/
-	5. get the CDN url for CSS, IF CHANGED
-	6. update main.html and quick-start.html
+	4. get the CDN url for CSS, IF CHANGED, and set it in .js lib	
+	5. get the CDN url for JS from https://rawgit.com/ 
+	6. set tag/realease for d/l button on demo page
+	7. update main.html and quick-start.html with CDN paths and release link
 	

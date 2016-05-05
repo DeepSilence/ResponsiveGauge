@@ -30,7 +30,7 @@ The lib is based on D3, numbro and generates SVG.
 * Opera 36+, FF 43+, Chrome 45+, IE11+
 	
 ## Known bugs 
-* 'pointerSlowness' is not yet implemented for 'filled' pointers
+* 'pointer.slowness' is not yet implemented for 'filled' pointers
 * on IE, the container must have a relative positioning for the gauge to be repaint on resize
 	
 ---
