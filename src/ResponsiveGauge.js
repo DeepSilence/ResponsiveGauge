@@ -659,7 +659,7 @@ if (typeof requirejs !== 'undefined') {
 		link.id = cssId;
 		link.rel = 'stylesheet';
 		link.type = 'text/css';
-		link.href = protocol + '//cdn.rawgit.com/DeepSilence/ResponsiveGauge/69b33feebb300834edaa535df95fae1e68de59e9/dist/ResponsiveGauge.min.css';
+		link.href = protocol + '//cdn.rawgit.com/DeepSilence/ResponsiveGauge/9c2fa1bdced20a59f84d9385eebefae489e2dce0/dist/ResponsiveGauge.min.css';
 		link.media = 'all';
 		head.appendChild(link);
 	}

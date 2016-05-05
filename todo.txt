@@ -14,7 +14,7 @@ Bugs :
 	
 	
 Release : 
-	Add d/l button on demo page
+	Set tag/realease for d/l button on demo page
 	1. build & test with gulp
 	2. visually check vanilla test.html on FF/Chr/...
 	3. visually check requireJS test.html
