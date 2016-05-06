@@ -1,12 +1,12 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![Code Climate](https://codeclimate.com/github/DeepSilence/ResponsiveGauge/badges/gpa.svg)](https://codeclimate.com/github/DeepSilence/ResponsiveGauge)
 
-#[Responsive gauge](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
+#[Responsive gauge](http://deepsilence.github.io/ResponsiveGauge "Responsive gauge demo and documentation")
 
 Responsive gauge is a lightweight js library to create customizable gauges, that adapts to theirs container's available space.
 The lib is based on D3, numbro and generates SVG.
 
-[See the demos and documentation.](http://deepsilence.github.io/ResponsiveGauge/main.html "Responsive gauge demo and documentation")
+[See the demos and documentation.](http://deepsilence.github.io/ResponsiveGauge "Responsive gauge demo and documentation")
 
 <span style="text-align:center;">
 	<img src="https://raw.githubusercontent.com/DeepSilence/ResponsiveGauge/master/examples.png"/>
