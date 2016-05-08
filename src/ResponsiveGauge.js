@@ -226,6 +226,9 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				if (source.hasOwnProperty(prop)) {
 					var data = source[prop];
 					if (typeof data === 'object' && data.constructor !== Array) {
+						if (target[prop] === undefined) {
+							target[prop] = {};
+						}
 						merge(target[prop], data, reference[prop]);
 					} else {
 						// scalar data
@@ -545,6 +548,8 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 					width : width,
 					height : height
 				});
+
+				ieHandleResizing();
 			}
 
 			// sufficient for other browsers
@@ -553,6 +558,35 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			.attr('class', 'gauge')//
 			.attr('viewBox', '0 0 ' + width + ' ' + height)//
 			.attr('preserveAspectRatio', 'xMinYMin meet');
+		}
+
+		/**
+		 * IE does not always repaint gauges once resized, so we have to force
+		 * it...
+		 */
+		function ieHandleResizing() {
+			function debounce(callback, delay) {
+				var timer = null;
+				return function() {
+					clearTimeout(timer);
+					timer = setTimeout(function() {
+						callback();
+					}, delay);
+				};
+			}
+
+			if (!ResponsiveGauge.ieListenerSet) {
+				// force repaint by changing the height to the same height...
+				window.addEventListener('resize', debounce(function() {
+					var canvas = document.querySelectorAll('canvas');
+					for (var i = 0; i < canvas.length; ++i) {
+						var c = canvas[i];
+						c.setAttribute('height', c.getAttribute('height'));
+					}
+				}, 250));
+				// sets only one listener for the whole page
+				ResponsiveGauge.ieListenerSet = true;
+			}
 		}
 
 		/**
@@ -617,7 +651,13 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			 */
 			/* start-test-code */
 			deg2rad : deg2rad,
-			computeTicks : computeTicks
+			computeTicks : computeTicks,
+			merge : merge,
+			createConfig : createConfig,
+			computeLayout : computeLayout,
+			width : width,
+			height : height,
+			centerTranslation : centerTranslation
 		/* end-test-code */
 		};
 	}
@@ -627,8 +667,12 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	 **************************************************************************/
 	ResponsiveGauge.config = defaultConfig;
 
-	// RequireJS : returns the current instance
-	if (typeof requirejs !== 'undefined') {
+	// CommonJS module is defined
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = ResponsiveGauge;
+
+		// RequireJS : returns the current instance
+	} else if (typeof requirejs !== 'undefined') {
 		return ResponsiveGauge;
 
 		// vanilla JS : places the current instance in the root scope
@@ -642,10 +686,15 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 /*******************************************************************************
  * Initializing ResponsiveGauge dependencies
  ******************************************************************************/
+// CommonJS : sets the dependencies
+if (typeof module !== 'undefined' && module.exports) {
+	var _d3 = require('d3');
+	var _numbro = require('numbro');
 
-// loads JS dependencies
-// RequireJS : sets the dependencies url and define the module
-if (typeof requirejs !== 'undefined') {
+	ResponsiveGaugeFactory(_d3, _numbro)
+
+	// RequireJS : sets the dependencies url and define the module
+} else if (typeof requirejs !== 'undefined') {
 
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;

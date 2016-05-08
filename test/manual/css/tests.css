@@ -14,6 +14,10 @@ h2 {
 	margin-right: 50px;
 }
 
+/* html, body, div, figure { */
+/* 	height : 100%; */
+/* } */
+
 .example-container {
 	display: inline-block;
 	height: 200px;
