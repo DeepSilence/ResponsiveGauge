@@ -50,7 +50,7 @@
 }
 
 .gauge-arc-border {
-	stroke: black;
+	stroke: #ccc;
 	stroke-width: 0.3px;
 }
 

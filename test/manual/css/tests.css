@@ -65,3 +65,52 @@ figcaption {
 .gauge-config.visible {
 	display : block;
 }
+
+
+
+/**
+ *	GAUGES EXAMPLE STYLES
+ */
+#example-header-gauge .gauge-arc {
+	fill: #345050;
+}
+
+#example-header-gauge .gauge-filler {
+	fill: #8FBC8F;
+}
+
+#example-speed-gauge .gauge-arc {
+	fill: #efefef;
+}
+
+#example-message-count-gauge .gauge-filler {
+	fill: #FCA419;
+}
+
+#example-message-count-gauge .gauge-arc {
+	fill: #88461B;
+}
+
+#example-half-gauge .gauge {
+	margin-top: 40px;
+}
+
+#example-half-gauge  .gauge-filament {
+	stroke: #20585b;
+}
+
+#example-full-gauge .gauge-filler {
+	fill: #47c650;
+}
+
+#example-bi-gauge {
+	height: 150px;
+}
+
+#example-bi-gauge .gauge-arc {
+	fill: #666;
+}
+
+#example-bi-gauge .gauge-filler {
+	fill: #FE0B16;
+}

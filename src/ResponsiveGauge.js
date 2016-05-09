@@ -106,7 +106,17 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			// Width of 'filled' pointers (%)
 			fillerWidth : null, /* by default, as wide as the ring */
 			// Shift of the 'filled' pointers from the container side (%)
-			fillerShift : 0
+			fillerShift : 0,
+			// Color(s) of the filler pointer; values are :<br>
+			// 'gradient' for a gradual color change of the pointer <br>
+			// [#111, #222, ...] for specifying the color change of the
+			// pointer<br>
+			// false : no color (CSS color can be used)<br>
+			colors : false,
+			// If colors = 'gradient' used as first gradient color
+			startColor : '#ffebee',
+			// If colors = 'gradient' used as last gradient color
+			endColor : '#810301'
 		},
 
 		data : {
@@ -173,10 +183,10 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		var valueLabel, svgContainer, svg, pointer;
 
 		/* DATA */
-		var arcData, fullArcData, labelData;
+		var arcPath, fullArcPath, labelData;
 
 		/* COLORS */
-		var colors, arcColorFn;
+		var arcColorData, arcColorFn;
 
 		/**
 		 * Indicates the gauge size is wide (more than an half circle)
@@ -277,34 +287,11 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			// label ticks
 			labelData = computeTicks();
 
-			// coloring / gradient
-			if (config.ring.colors.constructor === Array) {
-				colors = d3.range(config.ring.sectorsNumber).map(function() {
-					return 1 / config.ring.sectorsNumber;
-				});
-				arcColorFn = function(i) {
-					/* fix me : ugly */
-					var index = Math.floor(i * config.ring.sectorsNumber);
-					index = Math.min(index, config.ring.colors.length - 1);
-					return config.ring.colors[index];
-				};
-			} else if (config.ring.colors) {
-				if (config.ring.colors === 'gradient') {
-					colors = d3.range(GRADIENT_ELT_NUMBER).map(function() {
-						return 1 / GRADIENT_ELT_NUMBER;
-					});
-				} else {
-					colors = d3.range(config.ring.sectorsNumber).map(function() {
-						return 1 / config.ring.sectorsNumber;
-					});
-				}
-				arcColorFn = d3.interpolateHsl(d3.rgb(config.ring.startColor), d3.rgb(config.ring.endColor));
-			} else {
-				colors = [ 1 ];
-			}
+			// coloring / gradient of the ring
+			createRingColorData();
 
 			// sectors of the arc
-			arcData = getArcData(function(d, i) {
+			arcPath = createArcPath(function(d, i) {
 				var ratio = d * i;
 				// - 0.5 allow shapes borders collapse, except on first arc
 				var collapsing = (i === 0 ? 0 : 0.5);
@@ -316,7 +303,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 			// complete arc for the border drawing
 			if (config.ring.border) {
-				fullArcData = getArcData(deg2rad(config.ring.minAngle), deg2rad(config.ring.maxAngle), config.ring.width, config.ring.shift);
+				fullArcPath = createArcPath(config.ring.minAngle, config.ring.maxAngle, config.ring.width, config.ring.shift);
 			}
 
 			// Pointer
@@ -327,14 +314,49 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		}
 
 		/**
-		 * Creates an arc data starting and ending at the specified angles
+		 * Returns an array containing n values of 1/n
 		 */
-		function getArcData(startAngle, endAngle, width, shift) {
+		function createSectorData(n) {
+			return Array.apply(null, Array(n)).map(Number.prototype.valueOf, 1 / n);
+		}
+
+		/**
+		 * Creates an arc path starting and ending at the specified angles
+		 */
+		function createArcPath(startAngle, endAngle, width, shift) {
+			startAngle = (typeof startAngle === 'number' ? deg2rad(startAngle) : startAngle);
+			endAngle = (typeof endAngle === 'number' ? deg2rad(endAngle) : endAngle);
+
 			return d3.svg.arc()//
 			.innerRadius(radius - width - shift)//
 			.outerRadius(radius - shift)//
 			.startAngle(startAngle)//
 			.endAngle(endAngle);
+		}
+
+		/**
+		 * Creates the data and the colors for each sector of an arc
+		 * 
+		 */
+		function createRingColorData() {
+			var ringConf = config.ring;
+			if (ringConf.colors.constructor === Array) {
+				arcColorData = createSectorData(ringConf.colors.length);
+				arcColorFn = function(i) {
+					/* fix me : ugly */
+					var index = Math.floor(i * ringConf.colors.length);
+					return ringConf.colors[index];
+				};
+			} else if (ringConf.colors) {
+				if (ringConf.colors === 'gradient') {
+					arcColorData = createSectorData(GRADIENT_ELT_NUMBER);
+				} else {
+					arcColorData = createSectorData(ringConf.sectorsNumber);
+				}
+				arcColorFn = d3.interpolateHsl(d3.rgb(ringConf.startColor), d3.rgb(ringConf.endColor));
+			} else {
+				arcColorData = createSectorData(1);
+			}
 		}
 
 		/**
@@ -441,9 +463,9 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 			// gauge sectors
 			var sectors = arcs.selectAll('path')//
-			.data(colors).enter()//
+			.data(arcColorData).enter()//
 			.append('path')//
-			.attr('d', arcData);
+			.attr('d', arcPath);
 			if (config.ring.colors) {
 				sectors.attr('fill', function(d, i) {
 					return arcColorFn(d * i);
@@ -455,7 +477,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				arcs.append('path')//
 				.attr('fill', 'none')//
 				.attr('class', 'gauge-arc-border')//
-				.attr('d', fullArcData);
+				.attr('d', fullArcPath);
 			}
 
 			// pointer
@@ -593,32 +615,42 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		/**
 		 * Render the pointer part of the gauge
 		 */
-		function renderPointer(newValue) {
+		function renderPointer() {
+			var pointerConf = config.pointer;
+
+			// forces the value into the gauge's bounds
+			var value = Math.max(config.data.value, config.data.min);
+			value = Math.min(value, config.data.max);
+
+			// value as an angle between the min and max angles.
+			var scaledValue = scale(value);
+			var pointerAngle = config.ring.minAngle + scaledValue * range;
+
 			// pointer
-			if (config.pointer.type === 'filler') {
-				var pointerArcData = getArcData(deg2rad(config.ring.minAngle),//
-				deg2rad(getPointerRotation(newValue)),//
-				config.pointer.fillerWidth, config.pointer.fillerShift);
-				pointer.attr('d', pointerArcData);
+			if (pointerConf.type === 'filler') {
+
+				var pointerColor = null;
+				if (pointerConf.constructor === Array) {
+					/* fix me : ugly */
+					var index = Math.floor(scaledValue * pointerConf.colors.length);
+					pointerColor = pointerConf.colors[index];
+
+				} else if (pointerConf.colors === 'gradient') {
+					pointerColor = d3.interpolateHsl(d3.rgb(pointerConf.startColor), d3.rgb(pointerConf.endColor))(scaledValue);
+				}
+
+				var pointerArcData = createArcPath(config.ring.minAngle, pointerAngle,//
+				pointerConf.fillerWidth, pointerConf.fillerShift);
+
+				pointer.attr('d', pointerArcData).attr('fill', pointerColor);
+
 			} else {
 				pointer.//
 				transition()//
-				.duration(config.pointer.slowness)//
+				.duration(pointerConf.slowness)//
 				.ease('elastic')//
-				.attr('transform', 'rotate(' + getPointerRotation(newValue) + ')');
+				.attr('transform', 'rotate(' + pointerAngle + ')');
 			}
-		}
-
-		/**
-		 * Returns the angle of the pointer.
-		 */
-		function getPointerRotation(newValue) {
-			// forces the value into the gauge's bounds
-			var value = Math.max(newValue, config.data.min);
-			value = Math.min(value, config.data.max);
-
-			var ratio = scale(value);
-			return config.ring.minAngle + (ratio * range);
 		}
 
 		/**
@@ -626,14 +658,14 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		 * 
 		 */
 		function update(newValue, newConfiguration) {
-			newValue = (newValue === undefined ? 0 : newValue);
+			config.data.value = (newValue === undefined ? 0 : newValue);
 
 			// update pointer position
-			renderPointer(newValue);
+			renderPointer();
 
 			// updates value label
 			if (config.value.show) {
-				valueLabel.text(config.value.formatter(newValue));
+				valueLabel.text(config.value.formatter(config.data.value));
 			}
 		}
 
@@ -668,13 +700,13 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	 **************************************************************************/
 	// Exposes the default config
 	ResponsiveGauge.config = defaultConfig;
-	
-    // Exposes the CSS
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerHTML = STYLE;
-    document.getElementsByTagName('head')[0].appendChild(style);
-    
+
+	// Exposes the CSS
+	var style = document.createElement('style');
+	style.type = 'text/css';
+	style.innerHTML = STYLE;
+	document.getElementsByTagName('head')[0].appendChild(style);
+
 	// CommonJS module is defined
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = ResponsiveGauge;

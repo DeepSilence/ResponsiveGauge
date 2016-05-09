@@ -29,7 +29,7 @@ var head = document.head;
 // requireJS : loads the lib, require the gauges and start the tests
 if (mode === 'requireJS') {
 	console.log('Starting ResponsiveGauge in RequireJS mode');
-	
+
 	createScript('lib/require.min.js', '../../dist/ResponsiveGauge.min').then(function() {
 		require([ 'ResponsiveGauge.min' ], function(ResponsiveGauge) {
 			this.ResponsiveGauge = ResponsiveGauge;
@@ -40,7 +40,7 @@ if (mode === 'requireJS') {
 	// vanilla : sets the dependencies in <HEAD> then start the tests
 } else {
 	console.log('Starting ResponsiveGauge in vanilla JS mode');
-	
+
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
 	protocol = (protocol === 'file:' ? 'http:' : protocol); // for local test
@@ -304,7 +304,7 @@ function startTests() {
 
 		},
 		value : {
-			shift : 4,
+			shift : 8,
 			decimalsMax : 0
 		}
 	});
@@ -321,7 +321,8 @@ function startTests() {
 			maxAngle : 45,
 			colors : 'gradient',
 			startColor : '#FFF',
-			endColor : '#63c4ca'
+			endColor : '#63c4ca',
+			border : true
 		},
 		data : {
 			value : 44,
@@ -353,12 +354,13 @@ function startTests() {
 			number : 4
 		},
 		value : {
+			show : false,
 			decimalsMax : 1,
 			unit : 'volts'
 		}
 	});
-	// mails count
-	ResponsiveGauge('#example-mail-count-gauge', {
+	// messages count
+	ResponsiveGauge('#example-message-count-gauge', {
 		ring : {
 			minAngle : -90,
 			maxAngle : 90,
@@ -368,8 +370,8 @@ function startTests() {
 		},
 		data : {
 			min : 0,
-			max : 1000,
-			value : 747
+			max : 1000000,
+			value : 673274
 		},
 		labels : {
 			number : 5
@@ -378,34 +380,36 @@ function startTests() {
 			type : 'filler'
 		},
 		value : {
-			unit : 'emails',
-			shift : 10
+			unit : 'messages',
+			decimalsMax : 0,
+			mantissaMax : 3,
+			shift : 15
 		}
 	});
-	// messages count
-	ResponsiveGauge('#example-message-count-gauge', {
+	// speed
+	var speedGauge = ResponsiveGauge('#example-speed-gauge', {
 		ring : {
 			minAngle : -90,
 			maxAngle : 90,
 			shift : 0,
-			width : 47,
 			colors : false
 		},
 		data : {
 			min : 0,
-			max : 1000000,
-			value : 673274
+			max : 300,
+			value : 50
 		},
 		labels : {
 			number : 0
 		},
 		pointer : {
-			type : 'filler'
+			type : 'filler',
+			colors : 'gradient',
+			startColor : '#ffebee',
+			endColor : '#810301'
 		},
 		value : {
-			unit : 'messages in queue',
-			decimalsMax : 2,
-			mantissaMax : 3
+			unit : 'km/h'
 		}
 	});
 
@@ -445,7 +449,8 @@ function startTests() {
 			minAngle : -90,
 			maxAngle : 90,
 			shift : 10,
-			width : 2
+			width : 2,
+			colors : false
 		},
 		data : {
 			min : 0,
@@ -453,7 +458,7 @@ function startTests() {
 			value : 120
 		},
 		labels : {
-			number : 11,
+			number : 8,
 			shift : 9
 		},
 		pointer : {
@@ -462,7 +467,6 @@ function startTests() {
 			fillerWidth : 6
 		},
 		value : {
-			unit : 'km/h',
 			shift : 15
 		}
 	});
@@ -471,15 +475,29 @@ function startTests() {
 	 * DISPLAY AND REFRESH THE GAUGES
 	 **************************************************************************/
 	var refresh = function() {
+		var stepNumber = 5;
 		gauges.forEach(function(g) {
+			if (typeof g.reverse === 'undefined') {
+				g.reverse = false; // for init
+			}
+
 			var config = g.getConfig();
 			var range = config.data.max - config.data.min;
-			var value = config.data.min + (Math.random() * range);
+			var value = config.data.min + config.data.value + (g.reverse ? -1 : 1) * range / stepNumber;
+			if (value <= config.data.min) {
+				value = config.data.min;
+				g.reverse = false;
+			}
+			if (value >= config.data.max) {
+				value = config.data.max;
+				g.reverse = true;
+			}
 			g.update(value);
 		})
 	};
 	refresh();
-	// setInterval(refresh, 5000);
+	gauges = [ speedGauge ];
+	setInterval(refresh, 3000);
 
 	// display gauges options on over
 	gauges.forEach(function(g) {

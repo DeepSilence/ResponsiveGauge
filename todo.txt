@@ -1,6 +1,5 @@
 App : 
 	add language support for formatters
-	use gradient for filled pointer
 	allow several pointers together
 	add non linear scale
 	add 'mirroring'
@@ -9,15 +8,12 @@ App :
 		http://blogs.u2u.be/diederik/post/2013/06/24/A-Modern-UI-radial-gauge-control-for-Windows-8-Store-apps.aspx
 
 Bugs : 
-	bug : tests do not shrink on Chr (Chr limitation?)
-
 	
 	
 Release : 
 	1. build & test with gulp
 	2. visually check vanilla test.html on FF/Chr/...
-	3. visually check requireJS test.html
-	4. get the CDN url for CSS, IF CHANGED, and set it in .js lib	
+	3. visually check requireJS test.html	
 	5. get the CDN url for JS from https://rawgit.com/ 
 	6. set tag/realease for d/l button on demo page
 	7. update main.html and quick-start.html with CDN paths and release link
