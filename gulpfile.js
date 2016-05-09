@@ -18,6 +18,7 @@ var paths = {
 	testSrcJs : 'test/*.js',
 	distribution : 'dist/',
 	minifiedCss : 'ResponsiveGauge.min.css',
+	tempFile : 'ResponsiveGauge.tmp.js',
 	minifiedJs : 'ResponsiveGauge.min.js',
 	manualTest : '!test/manual/**/*.js'
 };
@@ -32,27 +33,24 @@ function writeErrors() {
 }
 
 gulp.task("default", function() {
-	gulp.start('buildJs');
+	gulp.start('buildAll');
 
 	// watch for changes
 	gulp.watch([ paths.srcJs, paths.srcCss ], function() {
-		gulp.start('buildJs');
+		gulp.start('buildAll');
 	});
 });
 
 /**
  * Build js, css, and merge everything into a single file
  */
-gulp.task('buildJs', function() {
-	var dist = paths.distribution;
-	var tempFile = 'ResponsiveGauge.tmp.js';
-	var finalFile = dist + paths.minifiedJs;
+gulp.task('buildAll', [ 'buildCss', 'buildJs', 'merge' ]);
 
-	// Build Css
-	gulp.start('buildCss');
-
-	// Build Js
-	gulp.src(paths.srcJs)//
+/**
+ * Build js
+ */
+gulp.task('buildJs', [ 'buildCss' ], function() {
+	return gulp.src(paths.srcJs)//
 	.pipe(writeErrors())//
 	.pipe(stripCode({ // remove test code
 		start_comment : "start-test-code",
@@ -60,20 +58,7 @@ gulp.task('buildJs', function() {
 	})).pipe(uglify({
 		preserveComments : 'license'
 	})) // minimize
-	.pipe(rename(tempFile)).pipe(gulp.dest(dist));
-
-	// Merge Js and CSS in final file
-	var css = fs.readFileSync(dist + paths.minifiedCss);
-	replace({
-		regex : '#!#CSS#!#',
-		replacement : css,
-		silent : true,
-		paths : [ dist + tempFile ]
-	});
-	fs.writeFileSync(finalFile, fs.readFileSync(dist + tempFile));
-
-	fs.unlinkSync(dist + tempFile);
-	fs.unlinkSync(dist + paths.minifiedCss);
+	.pipe(rename(paths.tempFile)).pipe(gulp.dest(paths.distribution));
 });
 
 /**
@@ -84,6 +69,26 @@ gulp.task('buildCss', function() {
 	.pipe(writeErrors())//
 	.pipe(cssmin()) // minimize
 	.pipe(rename(paths.minifiedCss)).pipe(gulp.dest(paths.destCss));
+});
+
+/**
+ * Merge everything into a single file
+ */
+gulp.task('merge', [ 'buildJs' ], function() {
+	var dist = paths.distribution;
+
+	// Merge Js and CSS in final file
+	var css = fs.readFileSync(dist + paths.minifiedCss);
+	replace({
+		regex : '#!#CSS#!#',
+		replacement : css,
+		silent : true,
+		paths : [ dist + paths.tempFile ]
+	});
+	fs.writeFileSync(dist + paths.minifiedJs, fs.readFileSync(dist + paths.tempFile));
+
+	fs.unlinkSync(dist + paths.tempFile);
+	fs.unlinkSync(dist + paths.minifiedCss);
 });
 
 /**
