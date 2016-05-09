@@ -17,6 +17,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	}
 
 	/* PRIVATE CONSTANTS */
+	var STYLE = '#!#CSS#!#';
 	// padding around the gauge
 	var PADDING = 6;
 	var NEEDLE_RADIUS = 2;
@@ -665,8 +666,15 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	/***************************************************************************
 	 * Exposing ResponsiveGauge
 	 **************************************************************************/
+	// Exposes the default config
 	ResponsiveGauge.config = defaultConfig;
-
+	
+    // Exposes the CSS
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = STYLE;
+    document.getElementsByTagName('head')[0].appendChild(style);
+    
 	// CommonJS module is defined
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = ResponsiveGauge;
@@ -699,19 +707,6 @@ if (typeof module !== 'undefined' && module.exports) {
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
 	protocol = (protocol === 'file:' ? 'http:' : protocol); // for local tests
-
-	// loads CSS
-	var cssId = 'responsive-gauge-css';
-	if (!document.getElementById(cssId)) {
-		var head = document.getElementsByTagName('head')[0];
-		var link = document.createElement('link');
-		link.id = cssId;
-		link.rel = 'stylesheet';
-		link.type = 'text/css';
-		link.href = protocol + '//cdn.rawgit.com/DeepSilence/ResponsiveGauge/9c2fa1bdced20a59f84d9385eebefae489e2dce0/dist/ResponsiveGauge.min.css';
-		link.media = 'all';
-		head.appendChild(link);
-	}
 
 	requirejs.config({
 		"paths" : {

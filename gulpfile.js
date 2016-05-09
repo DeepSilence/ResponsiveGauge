@@ -7,14 +7,18 @@ var stripCode = require('gulp-strip-code');
 var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
 var plumber = require("gulp-plumber");
+var fs = require('fs');
+var replace = require("replace");
 
 var paths = {
 	srcJs : 'src/**/*.js',
-	destJs : 'dist',
 	srcCss : 'src/**/*.css',
 	destCss : 'dist',
 	testSrc : 'test',
 	testSrcJs : 'test/*.js',
+	distribution : 'dist/',
+	minifiedCss : 'ResponsiveGauge.min.css',
+	minifiedJs : 'ResponsiveGauge.min.js',
 	manualTest : '!test/manual/**/*.js'
 };
 
@@ -29,20 +33,26 @@ function writeErrors() {
 
 gulp.task("default", function() {
 	gulp.start('buildJs');
-	gulp.start('buildCss');
 
 	// watch for changes
 	gulp.watch([ paths.srcJs, paths.srcCss ], function() {
 		gulp.start('buildJs');
-		gulp.start('buildCss');
 	});
 });
 
 /**
- * Build js
+ * Build js, css, and merge everything into a single file
  */
 gulp.task('buildJs', function() {
-	return gulp.src(paths.srcJs)//
+	var dist = paths.distribution;
+	var tempFile = 'ResponsiveGauge.tmp.js';
+	var finalFile = dist + paths.minifiedJs;
+
+	// Build Css
+	gulp.start('buildCss');
+
+	// Build Js
+	gulp.src(paths.srcJs)//
 	.pipe(writeErrors())//
 	.pipe(stripCode({ // remove test code
 		start_comment : "start-test-code",
@@ -50,7 +60,20 @@ gulp.task('buildJs', function() {
 	})).pipe(uglify({
 		preserveComments : 'license'
 	})) // minimize
-	.pipe(rename('ResponsiveGauge.min.js')).pipe(gulp.dest(paths.destJs));
+	.pipe(rename(tempFile)).pipe(gulp.dest(dist));
+
+	// Merge Js and CSS in final file
+	var css = fs.readFileSync(dist + paths.minifiedCss);
+	replace({
+		regex : '#!#CSS#!#',
+		replacement : css,
+		silent : true,
+		paths : [ dist + tempFile ]
+	});
+	fs.writeFileSync(finalFile, fs.readFileSync(dist + tempFile));
+
+	fs.unlinkSync(dist + tempFile);
+	fs.unlinkSync(dist + paths.minifiedCss);
 });
 
 /**
@@ -60,7 +83,7 @@ gulp.task('buildCss', function() {
 	return gulp.src(paths.srcCss)//
 	.pipe(writeErrors())//
 	.pipe(cssmin()) // minimize
-	.pipe(rename('ResponsiveGauge.min.css')).pipe(gulp.dest(paths.destCss));
+	.pipe(rename(paths.minifiedCss)).pipe(gulp.dest(paths.destCss));
 });
 
 /**

@@ -18,7 +18,8 @@
     "gulp-strip-code": "^0.1.4",
     "gulp-uglify": "^1.5.3",
     "jest": "^0.1.40",
-    "mathjs": "^3.2.0"
+    "mathjs": "^3.2.0",
+    "replace": "^0.3.0"
   },
   "scripts": {
     "test": "gulp test"

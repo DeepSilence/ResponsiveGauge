@@ -28,6 +28,8 @@ var mode = document.location.search.slice(1);
 var head = document.head;
 // requireJS : loads the lib, require the gauges and start the tests
 if (mode === 'requireJS') {
+	console.log('Starting ResponsiveGauge in RequireJS mode');
+	
 	createScript('lib/require.min.js', '../../dist/ResponsiveGauge.min').then(function() {
 		require([ 'ResponsiveGauge.min' ], function(ResponsiveGauge) {
 			this.ResponsiveGauge = ResponsiveGauge;
@@ -37,17 +39,11 @@ if (mode === 'requireJS') {
 
 	// vanilla : sets the dependencies in <HEAD> then start the tests
 } else {
+	console.log('Starting ResponsiveGauge in vanilla JS mode');
+	
 	// retrieve the protocol to allow use in a https page
 	var protocol = document.location.protocol;
 	protocol = (protocol === 'file:' ? 'http:' : protocol); // for local test
-
-	// load css
-	var head = document.getElementsByTagName('head')[0];
-	var link = document.createElement('link');
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
-	link.href = '../../dist/ResponsiveGauge.min.css';
-	head.appendChild(link);
 
 	// load dependencies
 	var promD3 = createScript(protocol + "//cdn.jsdelivr.net/d3js/3.5.16/d3.min.js");
