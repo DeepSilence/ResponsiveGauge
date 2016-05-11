@@ -16,6 +16,17 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		numbro = _numbro;
 	}
 
+	// sets some locale dependent format for numbro
+	var culture = numbro.cultureData();
+	var separators = {thousands : 1000, decimal : 1.1};
+	for (var key in separators) {
+		// uses the browser's formatter and guess which separator it used
+		var result = separators[key].toLocaleString().replace(/\d/g, '');
+		if (result.length !== 0){
+			culture.delimiters[key] = result;
+		}
+	}
+
 	/* PRIVATE CONSTANTS */
 	var STYLE = '#!#CSS#!#';
 	// padding around the gauge
@@ -57,6 +68,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 		return FORMATTER.set(value).format(this[formatName]);
 	};
+
 
 	/* DEFAULT CONFIGURATION */
 	var defaultConfig = {
@@ -252,6 +264,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			}
 		}
 
+
 		/**
 		 * Creates the actual gauge configuration using default values and user
 		 * values
@@ -269,7 +282,6 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			// binds the formatter so that it can access config
 			config.labels.formatter = config.labels.formatter.bind(config);
 			config.value.formatter = config.value.formatter.bind(config);
-
 		}
 
 		/**
