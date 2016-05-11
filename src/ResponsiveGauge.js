@@ -18,17 +18,20 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 	// sets some locale dependent format for numbro
 	var culture = numbro.cultureData();
-	var separators = {thousands : 1000, decimal : 1.1};
-	for (var key in separators) {
+	var separators = {
+		thousands : 1000,
+		decimal : 1.1
+	};
+	for ( var key in separators) {
 		// uses the browser's formatter and guess which separator it used
 		var result = separators[key].toLocaleString().replace(/\d/g, '');
-		if (result.length !== 0){
+		if (result.length !== 0) {
 			culture.delimiters[key] = result;
 		}
 	}
 
 	/* PRIVATE CONSTANTS */
--	var STYLE = '#!#CSS#!#';
+	var STYLE = '#!#CSS#!#';
 	// padding around the gauge
 	var PADDING = 6;
 	var NEEDLE_RADIUS = 2;
@@ -44,9 +47,9 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	var DEFAULT_FORMATTER = function(value, isForLabel) {
 		function buildFormat(formatOptions, formatName) {
 			if (formatOptions.decimalsMax === 0) {
-				this[formatName] = formatOptions.mantissaMax + '.a';
+				this[formatName] = formatOptions.mantissaMax + ',.a';
 			} else {
-				this[formatName] = formatOptions.mantissaMax + '.[' + new Array(formatOptions.decimalsMax + 1).join('0') + ']a';
+				this[formatName] = formatOptions.mantissaMax + ',.[' + new Array(formatOptions.decimalsMax + 1).join('0') + ']a';
 			}
 		}
 
@@ -68,7 +71,6 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 		return FORMATTER.set(value).format(this[formatName]);
 	};
-
 
 	/* DEFAULT CONFIGURATION */
 	var defaultConfig = {
@@ -264,7 +266,6 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			}
 		}
 
-
 		/**
 		 * Creates the actual gauge configuration using default values and user
 		 * values
@@ -319,7 +320,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			}
 
 			// Pointer
-			if (config.pointer.type === 'filler'){
+			if (config.pointer.type === 'filler') {
 				if (config.pointer.fillerWidth === null) {
 					config.pointer.fillerWidth = config.ring.width;
 				}
