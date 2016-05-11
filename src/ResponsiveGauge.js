@@ -28,7 +28,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 	}
 
 	/* PRIVATE CONSTANTS */
-	var STYLE = '#!#CSS#!#';
+-	var STYLE = '#!#CSS#!#';
 	// padding around the gauge
 	var PADDING = 6;
 	var NEEDLE_RADIUS = 2;
@@ -118,7 +118,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			// Width of 'filled' pointers (%)
 			fillerWidth : null, /* by default, as wide as the ring */
 			// Shift of the 'filled' pointers from the container side (%)
-			fillerShift : 0,
+			fillerShift : null, /* by default, as shifted as the ring */
 			// Color(s) of the filler pointer; values are :<br>
 			// 'gradient' for a gradual color change of the pointer <br>
 			// [#111, #222, ...] for specifying the color change of the
@@ -319,9 +319,13 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			}
 
 			// Pointer
-			if (config.pointer.type === 'filler' && config.pointer.fillerWidth === null) {
-				config.pointer.fillerWidth = config.ring.width;
-				config.pointer.fillerShift = config.ring.shift;
+			if (config.pointer.type === 'filler'){
+				if (config.pointer.fillerWidth === null) {
+					config.pointer.fillerWidth = config.ring.width;
+				}
+				if (config.pointer.fillerShift === null) {
+					config.pointer.fillerShift = config.ring.shift;
+				}
 			}
 		}
 
