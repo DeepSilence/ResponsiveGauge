@@ -557,9 +557,9 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 				.attr('transform', translationTf + ' rotate(' + -angle + ')')//
 				.append('text');
 
-				// value (dy required by IE that do not support
-				// dominant-baseline
-				valueLabel = valueZone.append('tspan').attr('dy', '0.4em');// 
+				// value dy required by IE that do not support dominant-baseline
+				var shift = (config.value.unit ? '0' : '0.4em');
+				valueLabel = valueZone.append('tspan').attr('dy', shift);// 
 				// value suffix
 				valueZone.append('tspan')//
 				.text(config.value.unit)//
@@ -647,7 +647,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			if (pointerConf.type === 'filler') {
 
 				var pointerColor = null;
-				if (pointerConf.constructor === Array) {
+				if (pointerConf.colors.constructor === Array) {
 					/* fix me : ugly */
 					var index = Math.floor(scaledValue * pointerConf.colors.length);
 					pointerColor = pointerConf.colors[index];

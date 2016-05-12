@@ -1,5 +1,4 @@
 App : 
-	add language support for formatters
 	allow several pointers together
 	add non linear scale
 	add 'mirroring'
