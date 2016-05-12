@@ -10,10 +10,10 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 
 	// handle dependencies injection using requireJS
 	if (typeof d3 === 'undefined') {
-		d3 = _d3;
+		this.d3 = _d3;
 	}
 	if (typeof numbro === 'undefined') {
-		numbro = _numbro;
+		this.numbro = _numbro;
 	}
 
 	// sets some locale dependent format for numbro
@@ -743,12 +743,14 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 /*******************************************************************************
  * Initializing ResponsiveGauge dependencies
  ******************************************************************************/
-// CommonJS : sets the dependencies
+var localThis = typeof window === 'undefined' ? this : window;
+
+//CommonJS : sets the dependencies
 if (typeof module !== 'undefined' && module.exports) {
 	var _d3 = require('d3');
 	var _numbro = require('numbro');
 
-	ResponsiveGaugeFactory(_d3, _numbro)
+	ResponsiveGaugeFactory.call(localThis, _d3, _numbro)
 
 	// RequireJS : sets the dependencies url and define the module
 } else if (typeof requirejs !== 'undefined') {
@@ -765,10 +767,10 @@ if (typeof module !== 'undefined' && module.exports) {
 	});
 
 	define([ 'd3', 'numbro' ], function(d3, numbro) {
-		return ResponsiveGaugeFactory(d3, numbro);
+		return ResponsiveGaugeFactory.call(localThis, d3, numbro);
 	});
 
 	// Vanilla : dependencies must be set on <head> of the page
 } else {
-	ResponsiveGaugeFactory.call(typeof window === 'undefined' ? this : window);
+	ResponsiveGaugeFactory.call(localThis);
 }

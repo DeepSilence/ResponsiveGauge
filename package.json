@@ -1,8 +1,8 @@
 {
   "name": "responsive-gauge",
-  "version": "0.1.0",
+  "version": "0.9.1",
   "description": "JS lib to create responsive gauges, based on D3 and SVG",
-  "main": "gulpfile.js",
+  "main": "dist/ResponsiveGauge.min.js",
   "directories": {
     "test": "test"
   },
