@@ -677,13 +677,27 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 		function update(newValue, newConfiguration) {
 			config.data.value = (newValue === undefined ? 0 : newValue);
 
-			// update pointer position
-			renderPointer();
+			if(!newConfiguration) {
 
-			// updates value label
-			if (config.value.show) {
-				valueLabel.text(config.value.formatter(config.data.value));
-			}
+			    // update pointer position
+			    renderPointer();
+
+			    // updates value label
+			    if (config.value.show) {
+			       valueLabel.text(config.value.formatter(config.data.value));
+			    }
+			 } else {
+			    // we remove the old SVG element and re-init from scratch
+			    // decomposing the 'render' function does not solve anything
+			    // since some old elements remain displayed
+			    var containerElement = document.getElementById(container.slice(1));
+			    var gaugeSVG = containerElement.getElementsByTagName("svg")[0];
+			    containerElement.removeChild(gaugeSVG);
+
+			    render(newConfiguration);
+			    update(config.data.value);
+			 }
+						
 		}
 
 		render(configuration);
