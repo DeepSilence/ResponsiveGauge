@@ -295,7 +295,8 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			computeLayout();
 
 			// a linear scale that maps domain values to a percent from 0..1
-			scale = d3.scale.linear().range([ 0, 1 ]).domain([ config.data.min, config.data.max ]);
+            //scale = d3.scale.linear().range([0, 1]).domain([config.data.min, config.data.max]);
+            scale = d3.scaleLinear().domain([config.data.min, config.data.max]).range([0, 1]);
 
 			// label ticks
 			labelData = computeTicks();
@@ -344,7 +345,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			startAngle = (typeof startAngle === 'number' ? deg2rad(startAngle) : startAngle);
 			endAngle = (typeof endAngle === 'number' ? deg2rad(endAngle) : endAngle);
 
-			return d3.svg.arc()//
+			return d3.arc()//
 			.innerRadius(radius - width - shift)//
 			.outerRadius(radius - shift)//
 			.startAngle(startAngle)//
@@ -498,7 +499,7 @@ var ResponsiveGaugeFactory = (function(_d3, _numbro) {
 			}
 
 			// pointer
-			var pointerLine = d3.svg.line().interpolate('monotone');
+            var pointerLine = d3.line().curve(d3.curveMonotoneX);
 			var pointerContainer = svg.append('g')//
 			.attr('class', 'gauge-pointer gauge-' + config.pointer.type)//
 			.attr('transform', centerTranslation);
